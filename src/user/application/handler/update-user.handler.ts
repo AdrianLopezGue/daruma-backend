@@ -2,7 +2,7 @@ import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { UserIdNotFoundError } from '../../domain/exception';
-import { Username, Useremail, UserId } from '../../domain/model';
+import { UserName, UserEmail, UserId } from '../../domain/model';
 import { USERS, Users } from '../../domain/repository';
 import { UpdateUserCommand } from '../command/update-user.command';
 
@@ -19,8 +19,8 @@ export class UpdateUserHandler
       throw UserIdNotFoundError.withUserId(userId);
     }
 
-    user.changeUsername(Username.fromString(command.username));
-    user.changeUseremail(Useremail.fromString(command.useremail));
+    user.changeUsername(UserName.fromString(command.username));
+    user.changeUseremail(UserEmail.fromString(command.useremail));
 
     this.users.save(user);
   }
