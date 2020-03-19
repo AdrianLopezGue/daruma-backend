@@ -5,8 +5,8 @@ interface Props {
   value: string;
 }
 
-export class Username extends ValueObject<Props> {
-  static fromString(value: string): Username {
+export class UserName extends ValueObject<Props> {
+  static fromString(value: string): UserName {
     if (value.length === 0) {
       throw new EmptyUsernameError();
     }

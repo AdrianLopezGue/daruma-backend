@@ -1,7 +1,7 @@
 import { AggregateRoot } from '../../../core/domain/models/aggregate-root';
 import { UserId } from './user-id';
-import { Username } from './username';
-import { Useremail } from './useremail';
+import { UserName } from './user-name';
+import { UserEmail } from './user-email';
 
 import { UserWasRegistered } from '../event/user-was-registered.event';
 import { UsernameWasChanged } from '../event/username-was-changed.event';
@@ -9,8 +9,8 @@ import { UseremailWasChanged } from '../event/useremail-was-changed.event';
 
 export class User extends AggregateRoot {
   private _userId: UserId;
-  private _username: Username;
-  private _useremail: Useremail;
+  private _username: UserName;
+  private _useremail: UserEmail;
 
   private constructor() {
     super();
@@ -18,8 +18,8 @@ export class User extends AggregateRoot {
 
   public static add(
     userId: UserId,
-    name: Username,
-    email: Useremail,
+    name: UserName,
+    email: UserEmail,
   ): User {
     const user = new User();
 
@@ -36,15 +36,15 @@ export class User extends AggregateRoot {
     return this._userId;
   }
 
-  get name(): Username{
+  get name(): UserName{
     return this._username;
   }
 
-  get email(): Useremail{
+  get email(): UserEmail{
     return this._useremail;
   }
 
-  changeUsername(username: Username) {
+  changeUsername(username: UserName) {
     if (username.equals(this._username)) {
       return;
     }
@@ -52,25 +52,25 @@ export class User extends AggregateRoot {
     this.apply(new UsernameWasChanged(this.id.value, username.value));
   }
 
-  changeUseremail(useremail: Useremail) {
-    if (useremail.equals(this._username)) {
+  changeUseremail(useremail: UserEmail) {
+    if (useremail.equals(this._useremail)) {
       return;
     }
 
-    this.apply(new UsernameWasChanged(this.id.value, useremail.value));
+    this.apply(new UseremailWasChanged(this.id.value, useremail.value));
   }
 
   private onUserWasRegistered(event: UserWasRegistered) {
     this._userId = UserId.fromString(event.id);
-    this._username = Username.fromString(event.username);
-    this._useremail = Useremail.fromString(event.useremail);
+    this._username = UserName.fromString(event.username);
+    this._useremail = UserEmail.fromString(event.useremail);
   }
 
   private onUsernameWasChanged(event: UsernameWasChanged) {
-    this._username = Username.fromString(event.username);
+    this._username = UserName.fromString(event.username);
   }
 
   private onUseremailWasChanged(event: UseremailWasChanged) {
-    this._useremail = Username.fromString(event.useremail);
-  }alias
+    this._useremail = UserName.fromString(event.useremail);
+  }
 }

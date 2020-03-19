@@ -1,14 +1,14 @@
 import { EmptyUsernameError } from '../exception/empty-username.error';
-import { Username } from './username';
+import { UserName } from './user-name';
 
 describe('Fullname', () => {
   it('creates a new fullname', () => {
-    const fullname = Username.fromString('john');
+    const fullname = UserName.fromString('john');
 
     expect(fullname.value).toBe('john');
   });
 
   it('expects the fullname', () => {
-    expect(() => Username.fromString('')).toThrow(EmptyUsernameError);
+    expect(() => UserName.fromString('')).toThrow(EmptyUsernameError);
   });
 });
