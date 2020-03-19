@@ -65,12 +65,9 @@ describe('User', () => {
 
   it('can change email', () => {
     const newEmail = UserEmail.fromString('New email');
-    console.log(user.email);
     user = eventPublisher$.mergeObjectContext(user);
     user.changeUseremail(newEmail);
     user.commit();
-
-    console.log(user.email);
 
     expect(eventBus$.publish).toHaveBeenCalledTimes(1);
     expect(eventBus$.publish).toHaveBeenCalledWith(

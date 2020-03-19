@@ -71,6 +71,6 @@ export class User extends AggregateRoot {
   }
 
   private onUseremailWasChanged(event: UseremailWasChanged) {
-    this._useremail = UserName.fromString(event.useremail);
+    this._useremail = UserEmail.fromString(event.useremail);
   }
 }
