@@ -3,7 +3,6 @@ import {
     Body,
     ConflictException,
     Controller,
-    Delete,
     Get,
     HttpCode,
     NotFoundException,
@@ -11,49 +10,44 @@ import {
     Put,
     Query,
   } from '@nestjs/common';
-  import { ApiOperation, ApiResponse, ApiUseTags } from '@nestjs/swagger';
+  import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
   
   import {
-    ScopeIdAlreadyRegisteredError,
-    ScopeIdNotFoundError,
+    UserIdAlreadyRegisteredError,
+    UserEmailAlreadyRegisteredError,
+    UserIdNotFoundError
   } from '../../domain/exception';
-  import {
-    ScopeAliasAlreadyRegisteredError,
-  } from '../../domain/exception/scope-alias-already-registered.error';
-  import { RenameScopeDto, ScopeDto } from '../dto';
-  import { ScopeView } from '../read-model/schema/scope.schema';
-  import { ScopeService } from '../service/scope.service';
-
-
+  import { UserDto } from '../dto/user.dto';
+  import { UserView } from '../read-model/schema/user.schema';
+  import { UserService } from '../service/user.service';  
   
+  @ApiTags('Users')
+  @Controller('users')
+  export class UserController {
+    constructor(private readonly userService: UserService) {}
   
-  @ApiUseTags('Scopes')
-  @Controller('scopes')
-  export class ScopeController {
-    constructor(private readonly scopeService: ScopeService) {}
-  
-    @ApiOperation({ title: 'Get Scopes' })
-    @ApiResponse({ status: 200, description: 'Get Scopes.' })
+    @ApiOperation({ summary: 'Get Users' })
+    @ApiResponse({ status: 200, description: 'Get Users.' })
     @Get()
-    async getScopes(): Promise<ScopeView[]> {
-      return this.scopeService.getScopes();
+    async getUsers(): Promise<UserView[]> {
+      return this.userService.getUsers();
     }
   
-    @ApiOperation({ title: 'Create Scope' })
-    @ApiResponse({ status: 204, description: 'Create Scope.' })
+    @ApiOperation({ summary: 'Register User' })
+    @ApiResponse({ status: 204, description: 'Register User.' })
     @HttpCode(204)
     @Post()
-    async createScope(@Body() scopeDto: ScopeDto): Promise<ScopeDto> {
+    async registerUser(@Body() userDto: UserDto): Promise<UserDto> {
       try {
-        return await this.scopeService.createScope(
-          scopeDto.id,
-          scopeDto.name,
-          scopeDto.alias,
+        return await this.userService.registerUser(
+          userDto.id,
+          userDto.name,
+          userDto.email,
         );
       } catch (e) {
-        if (e instanceof ScopeIdAlreadyRegisteredError) {
+        if (e instanceof UserIdAlreadyRegisteredError) {
           throw new ConflictException(e.message);
-        } else if (e instanceof ScopeAliasAlreadyRegisteredError) {
+        } else if (e instanceof UserEmailAlreadyRegisteredError) {
           throw new ConflictException(e.message);
         } else if (e instanceof Error) {
           throw new BadRequestException(`Unexpected error: ${e.message}`);
@@ -63,16 +57,16 @@ import {
       }
     }
   
-    @ApiOperation({ title: 'Get Scope' })
-    @ApiResponse({ status: 204, description: 'Get Scope.' })
+    @ApiOperation({ summary: 'Get User' })
+    @ApiResponse({ status: 204, description: 'Get User.' })
     @ApiResponse({ status: 404, description: 'Not found' })
     @Get(':id')
-    async getScope(@Query('id') id: string): Promise<ScopeView> {
+    async getUser(@Query('id') id: string): Promise<UserView> {
       try {
-        return await this.scopeService.getScope(id);
+        return await this.userService.getUser(id);
       } catch (e) {
-        if (e instanceof ScopeIdNotFoundError) {
-          throw new NotFoundException('Scope not found');
+        if (e instanceof UserIdNotFoundError) {
+          throw new NotFoundException('User not found');
         } else if (e instanceof Error) {
           throw new BadRequestException(`Unexpected error: ${e.message}`);
         } else {
@@ -81,36 +75,17 @@ import {
       }
     }
   
-    @ApiOperation({ title: 'Rename Scope' })
-    @ApiResponse({ status: 204, description: 'Rename scope' })
+    @ApiOperation({ summary: 'Update User' })
+    @ApiResponse({ status: 204, description: 'UpdateUser' })
     @ApiResponse({ status: 404, description: 'Not found' })
     @HttpCode(204)
     @Put(':id')
-    async renameScope(@Query('id') id: string, @Body() scopeDto: RenameScopeDto) {
+    async udpateUser(@Query('id') id: string, @Body() userDto: UserDto) {
       try {
-        return await this.scopeService.renameScope(id, scopeDto.name);
+        return await this.userService.updateUser(id, userDto.name, userDto.email);
       } catch (e) {
-        if (e instanceof ScopeIdNotFoundError) {
-          throw new NotFoundException('Scope not found');
-        } else if (e instanceof Error) {
-          throw new BadRequestException(`Unexpected error: ${e.message}`);
-        } else {
-          throw new BadRequestException('Server error');
-        }
-      }
-    }
-  
-    @ApiOperation({ title: 'Delete Scope' })
-    @ApiResponse({ status: 204, description: 'Delete scope' })
-    @ApiResponse({ status: 404, description: 'Not found' })
-    @HttpCode(204)
-    @Delete(':id')
-    async removeScope(@Query('id') id: string) {
-      try {
-        return await this.scopeService.removeScope(id);
-      } catch (e) {
-        if (e instanceof ScopeIdNotFoundError) {
-          throw new NotFoundException('Scope not found');
+        if (e instanceof UserIdNotFoundError) {
+          throw new NotFoundException('User not found');
         } else if (e instanceof Error) {
           throw new BadRequestException(`Unexpected error: ${e.message}`);
         } else {
