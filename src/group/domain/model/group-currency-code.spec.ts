@@ -17,5 +17,4 @@ describe('GroupCurrencyCode', () => {
       GroupCurrencyCode.fromString('EURO');
     }).toThrow(GroupCurrencyCodeLengthError);
   });
-  
 });

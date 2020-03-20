@@ -30,12 +30,19 @@ describe('Group', () => {
   });
 
   it('can be created', () => {
-    group = eventPublisher$.mergeObjectContext(Group.add(groupId, name, currencyCode, idOwner));
+    group = eventPublisher$.mergeObjectContext(
+      Group.add(groupId, name, currencyCode, idOwner),
+    );
     group.commit();
 
     expect(eventBus$.publish).toHaveBeenCalledTimes(1);
     expect(eventBus$.publish).toHaveBeenCalledWith(
-      new GroupWasCreated(groupId.value, name.value, currencyCode.value, idOwner.value),
+      new GroupWasCreated(
+        groupId.value,
+        name.value,
+        currencyCode.value,
+        idOwner.value,
+      ),
     );
   });
 

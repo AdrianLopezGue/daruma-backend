@@ -19,11 +19,18 @@ export class Group extends AggregateRoot {
     scopeId: GroupId,
     name: GroupName,
     currencyCode: GroupCurrencyCode,
-    idOwner: UserId
+    idOwner: UserId,
   ): Group {
     const group = new Group();
 
-    group.apply(new GroupWasCreated(scopeId.value, name.value, currencyCode.value, idOwner.value));
+    group.apply(
+      new GroupWasCreated(
+        scopeId.value,
+        name.value,
+        currencyCode.value,
+        idOwner.value,
+      ),
+    );
 
     return group;
   }

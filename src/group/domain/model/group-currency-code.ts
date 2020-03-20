@@ -7,8 +7,7 @@ interface Props {
 
 export class GroupCurrencyCode extends ValueObject<Props> {
   static fromString(value: string): GroupCurrencyCode {
-    
-    if(value.length != 3){
+    if (value.length != 3) {
       throw new GroupCurrencyCodeLengthError();
     }
 
