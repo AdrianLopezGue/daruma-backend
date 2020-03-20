@@ -9,7 +9,11 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true
+    "incremental": true,
+    "paths": {
+      "@app/*": ["./src/*"]
+    }
   },
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist"],
+  "include": ["config.ts", "./src/**/*"]
 }
