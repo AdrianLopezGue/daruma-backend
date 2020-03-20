@@ -2,7 +2,11 @@ import { CqrsModule, EventBus, EventPublisher } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
 import { v4 } from 'uuid';
 
-import { UserWasRegistered, UsernameWasChanged, UseremailWasChanged } from '../event';
+import {
+  UserWasRegistered,
+  UsernameWasChanged,
+  UseremailWasChanged,
+} from '../event';
 import { User } from './user';
 import { UserName } from './user-name';
 import { UserEmail } from './user-email';

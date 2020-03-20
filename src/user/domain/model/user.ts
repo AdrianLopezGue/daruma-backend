@@ -16,11 +16,7 @@ export class User extends AggregateRoot {
     super();
   }
 
-  public static add(
-    userId: UserId,
-    name: UserName,
-    email: UserEmail,
-  ): User {
+  public static add(userId: UserId, name: UserName, email: UserEmail): User {
     const user = new User();
 
     user.apply(new UserWasRegistered(userId.value, name.value, email.value));
@@ -32,15 +28,15 @@ export class User extends AggregateRoot {
     return this._userId.value;
   }
 
-  get id(): UserId{
+  get id(): UserId {
     return this._userId;
   }
 
-  get name(): UserName{
+  get name(): UserName {
     return this._username;
   }
 
-  get email(): UserEmail{
+  get email(): UserEmail {
     return this._useremail;
   }
 

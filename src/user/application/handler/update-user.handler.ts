@@ -7,8 +7,7 @@ import { USERS, Users } from '../../domain/repository';
 import { UpdateUserCommand } from '../command/update-user.command';
 
 @CommandHandler(UpdateUserCommand)
-export class UpdateUserHandler
-  implements ICommandHandler<UpdateUserCommand> {
+export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
   constructor(@Inject(USERS) private readonly users: Users) {}
 
   async execute(command: UpdateUserCommand) {
