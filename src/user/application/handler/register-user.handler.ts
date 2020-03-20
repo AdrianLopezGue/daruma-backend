@@ -6,7 +6,7 @@ import {
   EmptyUseremailError,
   EmptyUsernameError,
 } from '../../domain/exception';
-import { User, Useremail, UserId, Username } from '../../domain/model';
+import { User, UserEmail, UserId, UserName } from '../../domain/model';
 
 /*
 import { SCOPES } from '../../domain/repository';
@@ -35,8 +35,8 @@ export class RegisterUserHandler
 
   async execute(command: RegisterUserCommand) {
     const userId = UserId.fromString(command.userId);
-    const username = Username.fromString(command.username);
-    const useremail = Useremail.fromString(command.useremail);
+    const username = UserName.fromString(command.username);
+    const useremail = UserEmail.fromString(command.useremail);
 
     /*
     const instance = await this.eventStore.find(scopeId);
