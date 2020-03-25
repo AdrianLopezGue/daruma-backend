@@ -5,6 +5,10 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "main": "dist/index.js",
+  "engines": {
+    "node": "10"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -25,14 +29,15 @@
     "@nestjs/config": "^0.4.0",
     "@nestjs/core": "^7.0.0",
     "@nestjs/cqrs": "^6.1.0",
-    "@nestjs/platform-express": "^7.0.0",
+    "@nestjs/platform-express": "^7.0.5",
     "@nestjs/swagger": "^4.4.0",
     "@types/mongoose": "^5.7.6",
     "@types/uuid": "^7.0.1",
     "@types/uuid-validate": "0.0.1",
     "class-validator": "^0.11.1",
+    "express": "^4.17.1",
     "firebase-admin": "^8.10.0",
-    "firebase-functions": "^3.3.0",
+    "firebase-functions": "^3.5.0",
     "geteventstore-promise": "^3.2.1",
     "lint": "^0.7.0",
     "mongoose": "^5.9.5",
@@ -82,6 +87,5 @@
     },
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  },
-  "main": "dist/index.js"
+  }
 }
