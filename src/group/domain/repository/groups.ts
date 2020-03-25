@@ -1,8 +1,8 @@
 import { Group, GroupId } from '../model';
 
 export interface Groups {
-  find(scopeId: GroupId): Promise<Group> | null;
-  get(scopeId: GroupId): Promise<Group>;
+  find(groupId: GroupId): Promise<Group> | null;
+  get(groupId: GroupId): Promise<Group>;
   nextIdentity(): GroupId;
-  save(scope: Group): void;
+  save(group: Group): void;
 }

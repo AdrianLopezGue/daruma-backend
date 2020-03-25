@@ -20,7 +20,7 @@ describe('ChangeGroupNameHandler', () => {
   const groups: Partial<Groups> = {};
 
   const groupId = GroupId.fromString(uuid());
-  const name = GroupName.fromString('Scope Name');
+  const name = GroupName.fromString('Group Name');
   const currencyCode = GroupCurrencyCode.fromString('EUR');
   const ownerId = UserId.fromString(uuid());
 

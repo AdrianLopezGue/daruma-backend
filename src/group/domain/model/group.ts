@@ -16,7 +16,7 @@ export class Group extends AggregateRoot {
   }
 
   public static add(
-    scopeId: GroupId,
+    groupId: GroupId,
     name: GroupName,
     currencyCode: GroupCurrencyCode,
     idOwner: UserId,
@@ -25,7 +25,7 @@ export class Group extends AggregateRoot {
 
     group.apply(
       new GroupWasCreated(
-        scopeId.value,
+        groupId.value,
         name.value,
         currencyCode.value,
         idOwner.value,
