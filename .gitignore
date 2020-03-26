@@ -35,3 +35,7 @@ lerna-debug.log*
 
 #Firebase
 /.firebase
+/firebase
+
+# Enviroment dotfiles
+.env
