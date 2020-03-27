@@ -7,6 +7,7 @@ import {
   ChangeGroupNameCommand,
 } from '../../application/command';
 import { GROUP_MODEL, GroupView } from '../read-model/schema/group.schema';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class GroupService {
@@ -16,11 +17,11 @@ export class GroupService {
   ) {}
 
   async createGroup(
-    id: string,
     name: string,
     currencyCode: string,
     idUser: string,
   ) {
+    const id = uuid();
     return this.commandBus.execute(
       new CreateGroupCommand(id, name, currencyCode, idUser),
     );

@@ -41,7 +41,6 @@ export class GroupController {
   async createGroup(@Body() groupDto: GroupDto): Promise<GroupDto> {
     try {
       return await this.groupService.createGroup(
-        groupDto.id,
         groupDto.name,
         groupDto.currencyCode,
         groupDto.idOwner,
