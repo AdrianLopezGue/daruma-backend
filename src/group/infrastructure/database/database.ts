@@ -1,4 +1,5 @@
 import * as admin from 'firebase-admin';
+import { AuthenticationError } from './authentication.error';
 
 const config = {
     apiKey: process.env.API_KEY,
@@ -10,10 +11,20 @@ const config = {
 
 admin.initializeApp(config);
 
-const firebaseDatabase = admin.firestore();
+const firebaseAdmin = admin.firestore();
 // Disable deprecated features
-firebaseDatabase.settings({
+firebaseAdmin.settings({
     timestampsInSnapshots: true
 });
 
-export default firebaseDatabase;
+async function verifyIdToken(idToken: string) {
+  try {
+    const decodedIdToken = await admin.auth().verifyIdToken(idToken, true);
+    return decodedIdToken;
+  } catch (error) {
+    throw AuthenticationError.withString();
+  }
+}
+
+export default firebaseAdmin;
+export { verifyIdToken };

@@ -11,4 +11,7 @@ export class GroupDto {
   @IsString()
   @ApiProperty()
   readonly idOwner!: string;
+  @IsString()
+  @ApiProperty()
+  readonly idToken!: string;
 }

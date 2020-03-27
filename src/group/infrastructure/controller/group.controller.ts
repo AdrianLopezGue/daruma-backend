@@ -21,6 +21,7 @@ import { GroupDto } from '../dto/group.dto';
 import { ChangeNameGroupDto } from '../dto/change-name-group.dto';
 import { GroupView } from '../read-model/schema/group.schema';
 import { GroupService } from '../service/group.service';
+import { TokenIdDto } from '../dto/token-id.dto';
 
 @ApiTags('Groups')
 @Controller('groups')
@@ -38,7 +39,7 @@ export class GroupController {
   @ApiResponse({ status: 204, description: 'Create Group.' })
   @HttpCode(204)
   @Post()
-  async createGroup(@Body() groupDto: GroupDto): Promise<GroupDto> {
+  async createGroup(@Body() groupDto: GroupDto, @Body() tokenIdDto: TokenIdDto): Promise<GroupDto> {
     try {
       return await this.groupService.createGroup(
         groupDto.name,
