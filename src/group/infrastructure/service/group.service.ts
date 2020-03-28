@@ -6,8 +6,8 @@ import {
   CreateGroupCommand,
   ChangeGroupNameCommand,
 } from '../../application/command';
-import { GROUP_MODEL, GroupView } from '../read-model/schema/group.schema';
 import { v4 as uuid } from 'uuid';
+import { GroupDto } from '../dto/group.dto';
 
 @Injectable()
 export class GroupService {
@@ -31,11 +31,11 @@ export class GroupService {
     return this.commandBus.execute(new ChangeGroupNameCommand(id, name));
   }
 
-  async getGroup(id: string): Promise<GroupView> {
+  async getGroup(id: string): Promise<GroupDto> {
     return this.groupModel.findById(id).exec();
   }
 
-  async getGroups(): Promise<GroupView[]> {
+  async getGroups(): Promise<GroupDto[]> {
     return this.groupModel.find().exec();
   }
 }

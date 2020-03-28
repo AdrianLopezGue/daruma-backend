@@ -1,19 +1,22 @@
 import { Injectable } from '@nestjs/common';
 
-import firebaseAdmin from '../../../common/firebase/admin';
-
 import { GroupId } from '../../domain/model/group-id';
 import { UserId } from '../../../user/domain/model/user-id';
 import { Groups } from '../../domain/repository/groups';
 import { Group } from '../../domain/model/group';
 import { GroupName } from '../../domain/model/group-name';
 import { GroupCurrencyCode } from '@app/group/domain/model';
+import { FirestoreDatabase } from '../../../core/database/database';
 
 @Injectable()
 export class GroupDatabase implements Groups {
+  constructor(
+    private readonly firestoreDatabase: FirestoreDatabase,
+  ){}
+
   save(group: Group): Promise<Group> {
-    return firebaseAdmin
-      .collection('groups')
+    return this.firestoreDatabase
+      .getCollection('groups')
       .add(group)
       .then(groupsRef => {
         return {
@@ -27,8 +30,8 @@ export class GroupDatabase implements Groups {
   }
 
   get(groupId: GroupId): Promise<Group> {
-    return firebaseAdmin
-      .collection('groups')
+    return this.firestoreDatabase
+      .getCollection('groups')
       .doc(groupId.value)
       .get()
       .then(doc => this.mapResponse(doc.data(), doc.id))
@@ -38,8 +41,8 @@ export class GroupDatabase implements Groups {
   }
 
   async find(groupId: GroupId): Promise<Group> | null {
-    return firebaseAdmin
-      .collection('groups')
+    return this.firestoreDatabase
+      .getCollection('groups')
       .doc(groupId.value)
       .get()
       .then((doc) =>

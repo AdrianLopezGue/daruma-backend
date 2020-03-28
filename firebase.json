@@ -12,5 +12,10 @@
       "**/.*",
       "**/node_modules/**"
     ]
+  },
+  "emulators": {
+    "functions": {
+      "port": "5002"
+    }
   }
 }
