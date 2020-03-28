@@ -1,12 +1,12 @@
 import { ConfigService } from 'nestjs-config';
 import * as admin from 'firebase-admin';
 
-import { AuthenticationError } from '../../group/infrastructure/service/authentication.error';
-
 import serviceAccount = require('../../../firebase/service-account-file.json');
+import { Injectable } from '@nestjs/common/decorators';
 
+@Injectable()
 export class FirestoreDatabase {
-    private firestoreDatabase: FirebaseFirestore.Firestore;
+    private firestoreApp: FirebaseFirestore.Firestore;
 
     constructor(configService: ConfigService) {
       this.initialApp(configService)
@@ -24,23 +24,14 @@ export class FirestoreDatabase {
 
     admin.initializeApp(config);
 
-    this.firestoreDatabase = admin.firestore();
-    this.firestoreDatabase.settings({
+    this.firestoreApp = admin.firestore();
+    this.firestoreApp.settings({
         timestampsInSnapshots: true
     });
   }
 
-    public async verifyIdToken(idToken: string){
-    try {
-      const decodedIdToken = await admin.auth().verifyIdToken(idToken, true);
-      return decodedIdToken;
-    } catch (error) {
-      throw AuthenticationError.withString();
-    }
-  }
-
     getCollection(collectName: string) {
-    const collection = this.firestoreDatabase.collection(collectName);
+    const collection = this.firestoreApp.collection(collectName);
     return collection;
   }
     getDocument(collectName, docId): Promise<any> {
