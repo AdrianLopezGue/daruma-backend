@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@firebase/database": "^0.5.24",
+    "@firebase/functions": "^0.4.38",
     "@nestjs/common": "^7.0.0",
     "@nestjs/config": "^0.4.0",
     "@nestjs/core": "^7.0.0",

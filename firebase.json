@@ -15,7 +15,7 @@
   },
   "emulators": {
     "functions": {
-      "port": "5002"
+      "port": "5001"
     }
   }
 }
