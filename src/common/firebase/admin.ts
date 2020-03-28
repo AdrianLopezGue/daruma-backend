@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import { AuthenticationError } from './authentication.error';
+import { AuthenticationError } from '../guards/authentication.error';
 
 const config = {
     apiKey: process.env.API_KEY,

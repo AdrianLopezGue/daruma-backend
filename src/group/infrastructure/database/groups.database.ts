@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import firebaseAdmin from './database';
+import firebaseAdmin from '../../../common/firebase/admin';
 
 import { GroupId } from '../../domain/model/group-id';
 import { UserId } from '../../../user/domain/model/user-id';

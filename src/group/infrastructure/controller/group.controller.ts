@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -21,10 +22,11 @@ import { GroupDto } from '../dto/group.dto';
 import { ChangeNameGroupDto } from '../dto/change-name-group.dto';
 import { GroupView } from '../read-model/schema/group.schema';
 import { GroupService } from '../service/group.service';
-import { TokenIdDto } from '../dto/token-id.dto';
+import { AuthGuard } from '@app/common/guards/auth.guard';
 
 @ApiTags('Groups')
 @Controller('groups')
+@UseGuards(new AuthGuard())
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
@@ -39,7 +41,7 @@ export class GroupController {
   @ApiResponse({ status: 204, description: 'Create Group.' })
   @HttpCode(204)
   @Post()
-  async createGroup(@Body() groupDto: GroupDto, @Body() tokenIdDto: TokenIdDto): Promise<GroupDto> {
+  async createGroup(@Body() groupDto: GroupDto): Promise<GroupDto> {
     try {
       return await this.groupService.createGroup(
         groupDto.name,
