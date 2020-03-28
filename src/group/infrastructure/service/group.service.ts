@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { Model } from 'mongoose';
 
 import {
   CreateGroupCommand,
@@ -8,12 +7,16 @@ import {
 } from '../../application/command';
 import { v4 as uuid } from 'uuid';
 import { GroupDto } from '../dto/group.dto';
+import { GROUPS } from '../../domain/repository/index';
+import { GroupDatabase } from '../database';
+import { GroupId } from '@app/group/domain/model/group-id';
+import { GroupView } from '../schema/group.view';
 
 @Injectable()
 export class GroupService {
   constructor(
     private readonly commandBus: CommandBus,
-    @Inject(GROUP_MODEL) private readonly groupModel: Model<GroupView>,
+    @Inject(GROUPS) private readonly firebaseDatabase: GroupDatabase,
   ) {}
 
   async createGroup(
@@ -31,11 +34,11 @@ export class GroupService {
     return this.commandBus.execute(new ChangeGroupNameCommand(id, name));
   }
 
-  async getGroup(id: string): Promise<GroupDto> {
-    return this.groupModel.findById(id).exec();
+  async getGroup(id: string): Promise<GroupView> {
+    return this.firebaseDatabase.get(GroupId.fromString(id));
   }
 
-  async getGroups(): Promise<GroupDto[]> {
-    return this.groupModel.find().exec();
+  async getGroupsById(id: string): Promise<GroupView[]> {
+    return this.firebaseDatabase.getGroupsById(GroupId.fromString(id));
   }
 }

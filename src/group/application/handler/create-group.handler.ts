@@ -37,7 +37,7 @@ export class CreateGroupHandler implements ICommandHandler<CreateGroupCommand> {
       throw GroupIdAlreadyRegisteredError.withString(command.groupId);
     }
 
-    if ((await this.checkUniqueGroupName.with(name)) instanceof GroupId) {
+    if ((await this.checkUniqueGroupName.with(name, userId)) instanceof GroupId) {
       throw GroupNameAlreadyRegisteredError.withString(command.name);
     }
 

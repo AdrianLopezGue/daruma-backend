@@ -1,6 +1,8 @@
 
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import { AuthenticationError } from './authentication.error';
+import admin = require('firebase-admin');
 
 
 @Injectable()
@@ -14,9 +16,18 @@ export class AuthGuard implements CanActivate {
     if (!authorization) {
       return false;
     }
-    
-    request.user = verifyIdToken(authorization);
+
+    request.user = this.verifyIdToken(authorization);
 
     return true;
+  }
+
+  public async verifyIdToken(idToken: string){
+    try {
+      const decodedIdToken = await admin.auth().verifyIdToken(idToken, true);
+      return decodedIdToken;
+    } catch (error) {
+      throw AuthenticationError.withString();
+    }
   }
 }
