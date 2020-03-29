@@ -4,6 +4,7 @@ import { GroupId } from './group-id';
 import { GroupName } from './group-name';
 import { GroupCurrencyCode } from './group-currency-code';
 import { UserId } from '../../../user/domain/model';
+import { GroupView } from '../../infrastructure/schema/group.view';
 
 export class Group extends AggregateRoot {
   private _groupId: GroupId;
@@ -13,6 +14,21 @@ export class Group extends AggregateRoot {
 
   private constructor() {
     super();
+  }
+
+  public getState(): GroupView{
+    const groupView = new GroupView(this.id.value, this.name.value, this.currencyCode.value, this.idOwner.value);
+    return groupView;
+  }
+
+  public static fromState(groupView: GroupView): Group{
+    const group = new Group();
+    group._groupId = GroupId.fromString(groupView.idGroup);
+    group._name = GroupId.fromString(groupView.name);
+    group._currencyCode = GroupId.fromString(groupView.currencyCode);
+    group._idOwner = GroupId.fromString(groupView.idOwner);
+
+    return group;
   }
 
   public static add(
