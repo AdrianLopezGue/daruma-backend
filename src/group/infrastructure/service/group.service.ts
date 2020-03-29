@@ -6,11 +6,10 @@ import {
   ChangeGroupNameCommand,
 } from '../../application/command';
 import { v4 as uuid } from 'uuid';
-import { GroupDto } from '../dto/group.dto';
 import { GROUPS } from '../../domain/repository/index';
 import { GroupDatabase } from '../database';
 import { GroupId } from '@app/group/domain/model/group-id';
-import { GroupView } from '../schema/group.view';
+import { Group } from '../../domain/model/group';
 
 @Injectable()
 export class GroupService {
@@ -34,11 +33,11 @@ export class GroupService {
     return this.commandBus.execute(new ChangeGroupNameCommand(id, name));
   }
 
-  async getGroup(id: string): Promise<GroupView> {
-    return this.firebaseDatabase.get(GroupId.fromString(id));
+  async getGroup(id: string): Promise<Group> {
+    return this.firebaseDatabase.find(GroupId.fromString(id));
   }
 
-  async getGroupsById(id: string): Promise<GroupView[]> {
+  async getGroupsById(id: string): Promise<Group[]> {
     return this.firebaseDatabase.getGroupsById(GroupId.fromString(id));
   }
 }
