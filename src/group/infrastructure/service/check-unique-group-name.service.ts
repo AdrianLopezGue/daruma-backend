@@ -13,12 +13,12 @@ export class CheckUniqueGroupNameFromFirebase implements CheckUniqueGroupName {
   ) {}
 
   async with(groupName: GroupName, userId: UserId): Promise<GroupId> {
-    const groupView = await this.firebaseDatabase.findName(groupName, userId);
+    const groupView = await this.firebaseDatabase.findGroupByName(groupName, userId);
 
     if (groupView === null) {
       return null;
     }
 
-    return GroupId.fromString(groupView.idOwner);
+    return GroupId.fromString(groupView.idOwner.value);
   }
 }

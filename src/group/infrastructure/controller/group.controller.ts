@@ -9,7 +9,7 @@ import {
   Post,
   Put,
   Query,
-  UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -21,19 +21,20 @@ import {
 import { GroupDto } from '../dto/group.dto';
 import { ChangeNameGroupDto } from '../dto/change-name-group.dto';
 import { GroupService } from '../service/group.service';
-import { AuthGuard } from '../service/auth.guard.service';
 import { GroupView } from '../schema/group.view';
+import { Authorization } from '../service/auth.decorator';
+import { UserId } from '../../../user/domain/model/user-id';
+import { Group } from '@app/group/domain/model';
 
 @ApiTags('Groups')
 @Controller('groups')
-@UseGuards(new AuthGuard())
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
   @ApiOperation({ summary: 'Get Groups' })
   @ApiResponse({ status: 200, description: 'Get Groups.' })
   @Get()
-  async getGroupsByIdowner(@Query('id') id: string): Promise<GroupView[]> {
+  async getGroupsByIdowner(@Query('id') id: string): Promise<Group[]> {
     return this.groupService.getGroupsById(id);
   }
 
@@ -41,22 +42,28 @@ export class GroupController {
   @ApiResponse({ status: 204, description: 'Create Group.' })
   @HttpCode(204)
   @Post()
-  async createGroup(@Body() groupDto: GroupDto): Promise<GroupDto> {
-    try {
-      return await this.groupService.createGroup(
-        groupDto.name,
-        groupDto.currencyCode,
-        groupDto.idOwner,
-      );
-    } catch (e) {
-      if (e instanceof GroupIdAlreadyRegisteredError) {
-        throw new ConflictException(e.message);
-      } else if (e instanceof GroupNameAlreadyRegisteredError) {
-        throw new ConflictException(e.message);
-      } else if (e instanceof Error) {
-        throw new BadRequestException(`Unexpected error: ${e.message}`);
-      } else {
-        throw new BadRequestException('Server error');
+  async createGroup(@Body() groupDto: GroupDto, @Authorization() idUser: UserId): Promise<GroupDto> {
+
+    if (idUser.value !== groupDto.idOwner){
+      throw new ForbiddenException('Forbidden acces to data');
+    }
+    else{
+      try {
+        return await this.groupService.createGroup(
+          groupDto.name,
+          groupDto.currencyCode,
+          groupDto.idOwner,
+        );
+      } catch (e) {
+        if (e instanceof GroupIdAlreadyRegisteredError) {
+          throw new ConflictException(e.message);
+        } else if (e instanceof GroupNameAlreadyRegisteredError) {
+          throw new ConflictException(e.message);
+        } else if (e instanceof Error) {
+          throw new BadRequestException(`Unexpected error: ${e.message}`);
+        } else {
+          throw new BadRequestException('Server error');
+        }
       }
     }
   }
@@ -65,7 +72,7 @@ export class GroupController {
   @ApiResponse({ status: 204, description: 'Get Group.' })
   @ApiResponse({ status: 404, description: 'Not found' })
   @Get(':id')
-  async getGroup(@Query('id') id: string): Promise<GroupView> {
+  async getGroup(@Query('id') id: string): Promise<Group> {
     try {
       return await this.groupService.getGroup(id);
     } catch (e) {
