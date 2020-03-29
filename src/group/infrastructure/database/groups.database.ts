@@ -27,32 +27,19 @@ export class GroupDatabase implements Groups {
       .set(data);
   }
 
-  async get(groupId: GroupId): Promise<GroupView> {
+  find(groupId: GroupId): Promise<Group> | null {
     return this.firestoreDatabase
-      .getDocument('groups', groupId.value)
-  }
-
-  async find(groupId: GroupId): Promise<GroupView> | null {
-    return this.firestoreDatabase
-      .getDocument('groups', groupId.value)
-  }
-
-  async findName(groupName: GroupName, idOwner: UserId): Promise<GroupView> | null {
-    return this.firestoreDatabase
-    .getCollection('groups')
-    .where('idOwner', '==', idOwner.value)
-    .where('name', '==', groupName.value)
-    .get()
+    .getDocument('groups', groupId.value)
     .then(snapshot => {
       if (snapshot.empty) {
         console.log('No matching documents.');
         return null;
       }
 
-      let group: GroupView = null;
+      let group: Group = null;
 
       snapshot.forEach(doc => {
-        group = this.mapResponse(doc.data(), doc.id);
+        group = Group.fromState(this.mapResponse(doc.data(), doc.id));
       });
 
       return group;
@@ -64,7 +51,34 @@ export class GroupDatabase implements Groups {
     });
   }
 
-  getGroupsById(userId: UserId): Promise<GroupView[]> {
+  async findGroupByName(groupName: GroupName, idOwner: UserId): Promise<Group> | null {
+    return this.firestoreDatabase
+    .getCollection('groups')
+    .where('idOwner', '==', idOwner.value)
+    .where('name', '==', groupName.value)
+    .get()
+    .then(snapshot => {
+      if (snapshot.empty) {
+        console.log('No matching documents.');
+        return null;
+      }
+
+      let group: Group = null;
+
+      snapshot.forEach(doc => {
+        group = Group.fromState(this.mapResponse(doc.data(), doc.id));
+      });
+
+      return group;
+    })
+    .catch(err => {
+      console.log('Error getting documents', err);
+
+      return null;
+    });
+  }
+
+  getGroupsById(userId: UserId): Promise<Group[]> {
     return this.firestoreDatabase
       .getCollection('groups')
       .where('idOwner', '==', userId.value)
@@ -75,10 +89,10 @@ export class GroupDatabase implements Groups {
           return [];
         }
 
-        const group: GroupView[] = [];
+        const group: Group[] = [];
 
         snapshot.forEach(doc => {
-          group.push(this.mapResponse(doc.data(), doc.id));
+          group.push(Group.fromState(this.mapResponse(doc.data(), doc.id)));
         });
 
         return group;
