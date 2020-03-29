@@ -34,7 +34,7 @@ export class FirestoreDatabase {
     const collection = this.firestoreApp.collection(collectName);
     return collection;
   }
-    getDocument(collectName, docId): Promise<any> {
+    getDocument(collectName: string, docId: string): Promise<any> {
     const collect = this.getCollection(collectName);
     const doc = collect.doc(docId)
     return doc.get();
