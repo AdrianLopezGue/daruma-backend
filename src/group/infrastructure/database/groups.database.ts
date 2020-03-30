@@ -4,7 +4,7 @@ import { GroupId } from '../../domain/model/group-id';
 import { UserId } from '../../../user/domain/model/user-id';
 import { Groups } from '../../domain/repository/groups';
 import { Group } from '../../domain/model/group';
-import { FirestoreDatabase } from '../../../core/database/database';
+import { FirestoreDatabase } from '../../../core/firestore/firestore';
 import { GroupView } from '../schema/group.view';
 import { GroupName } from '../../domain/model/group-name';
 

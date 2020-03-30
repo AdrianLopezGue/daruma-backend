@@ -1,7 +1,7 @@
 import { ConfigService } from 'nestjs-config';
-import { FirestoreDatabase } from './database';
+import { FirestoreDatabase } from './firestore';
 
-export const DatabaseProvider = [
+export const FirestoreProvider = [
   {
     provide: 'DATABASE_CONNECTION',
     useFactory: async (config: ConfigService): Promise<FirestoreDatabase> =>
