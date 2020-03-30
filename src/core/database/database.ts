@@ -1,7 +1,7 @@
 import { ConfigService } from 'nestjs-config';
 import * as admin from 'firebase-admin';
 
-import * as serviceAccount from '../../config/service-account-file.json';
+import serviceAccount = require('../../../firebase/service-account-file.json');
 import { Injectable } from '@nestjs/common/decorators';
 
 @Injectable()
@@ -15,21 +15,19 @@ export class FirestoreDatabase {
     initialApp(configService: ConfigService) {
 
     const config = {
-        credential: admin.credential.cert(serviceAccount as object),
+        credential: admin.credential.cert(serviceAccount.toString()),
         apiKey: configService.get('database').apiKey,
         authDomain: configService.get('database').authDomain,
         databaseURL: configService.get('database').databaseUrl,
         storageBucket: configService.get('database').storageBucket,
     };
 
-    if (admin.apps.length === 0){
-      admin.initializeApp(config);
+    admin.initializeApp(config);
 
-      this.firestoreApp = admin.firestore();
-      this.firestoreApp.settings({
-          timestampsInSnapshots: true
-      });
-    }
+    this.firestoreApp = admin.firestore();
+    this.firestoreApp.settings({
+        timestampsInSnapshots: true
+    });
   }
 
     getCollection(collectName: string) {

@@ -35,7 +35,7 @@ lerna-debug.log*
 
 #Firebase
 /.firebase
-/src/config/service-account-file.json
+/firebase
 
 # Enviroment dotfiles
 .env
