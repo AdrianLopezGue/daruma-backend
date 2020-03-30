@@ -7,12 +7,12 @@
   "license": "UNLICENSED",
   "main": "dist/index.js",
   "engines": {
-    "node": "10"
+    "node": "12"
   },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "serve": "npm build && firebase emulators:start --only functions",
+    "serve": "npm run-script build && firebase emulators:start --only functions,firestore",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
