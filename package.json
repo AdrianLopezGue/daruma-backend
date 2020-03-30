@@ -13,6 +13,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "serve": "npm run-script build && firebase emulators:start --only functions,firestore",
+    "shell": "npm build && firebase functions:shell",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
