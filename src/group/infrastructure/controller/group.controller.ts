@@ -21,7 +21,6 @@ import {
 import { GroupDto } from '../dto/group.dto';
 import { ChangeNameGroupDto } from '../dto/change-name-group.dto';
 import { GroupService } from '../service/group.service';
-import { GroupView } from '../schema/group.view';
 import { Authorization } from '../service/auth.decorator';
 import { UserId } from '../../../user/domain/model/user-id';
 import { Group } from '@app/group/domain/model';
