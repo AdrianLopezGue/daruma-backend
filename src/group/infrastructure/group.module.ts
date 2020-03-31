@@ -12,12 +12,14 @@ import { EventStore } from '../../core/eventstore/eventstore';
 import { groupEventHandlers } from '../domain/event/index';
 import { EventStoreModule } from '../../core/eventstore/eventstore.module';
 import { DatabaseModule } from '../../core/database/database.module';
+import { ProjectionHandlers } from './read-model/projection/index';
 
 @Module({
   controllers: [GroupController],
   imports: [CqrsModule, FirebaseModule, DatabaseModule, EventStoreModule.forRoot()],
   providers: [
     ...CommandHandlers,
+    ...ProjectionHandlers,
     ...GroupProviders,
     GroupService,
     GroupEventStore,

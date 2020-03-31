@@ -89,14 +89,15 @@ export class EventStore implements IEventPublisher, IMessageSource {
   async bridgeEventsTo<T extends IEvent>(subject: Subject<T>) {
     const streamName = `$ce-${this._category}`;
 
-    const onEvent = async event => {
+    const onEvent = async (...event: any) => {
       const eventUrl =
         this._eventStoreHostUrl +
-        `${event.metadata.$o}/${event.data.split('@')[0]}`;
+        `${event[1].metadata.$o}/${event[1].data.split('@')[0]}`;
 
       const requestOptions: http.RequestOptions = {
         headers: {
           Accept: 'application/vnd.eventstore.atom+json',
+          Authorization: 'Basic YWRtaW46Y2hhbmdlaXQ=',
         },
       };
 
