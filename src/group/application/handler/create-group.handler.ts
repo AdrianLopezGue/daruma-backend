@@ -31,17 +31,17 @@ export class CreateGroupHandler implements ICommandHandler<CreateGroupCommand> {
     const groupId = GroupId.fromString(command.groupId);
     const name = GroupName.fromString(command.name);
     const currencyCode = GroupCurrencyCode.fromString(command.currencyCode);
-    const userId = UserId.fromString(command.userId);
+    const ownerId = UserId.fromString(command.ownerId);
 
     if ((await this.groups.find(groupId)) instanceof Group) {
       throw GroupIdAlreadyRegisteredError.withString(command.groupId);
     }
 
-    if ((await this.checkUniqueGroupName.with(name, userId)) instanceof GroupId) {
+    if ((await this.checkUniqueGroupName.with(name)) instanceof GroupId) {
       throw GroupNameAlreadyRegisteredError.withString(command.name);
     }
 
-    const group = Group.add(groupId, name, currencyCode, userId);
+    const group = Group.add(groupId, name, currencyCode, ownerId);
 
     this.groups.save(group);
   }

@@ -5,6 +5,6 @@ export class CreateGroupCommand implements ICommand {
     public readonly groupId: string,
     public readonly name: string,
     public readonly currencyCode: string,
-    public readonly userId: string,
+    public readonly ownerId: string,
   ) {}
 }

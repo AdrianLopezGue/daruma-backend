@@ -15,7 +15,7 @@ describe('Group', () => {
   let eventPublisher$: EventPublisher;
 
   const groupId = GroupId.fromString(v4());
-  const idOwner = UserId.fromString(v4());
+  const ownerId = UserId.fromString(v4());
   const name = GroupName.fromString('Group Name');
   const currencyCode = GroupCurrencyCode.fromString('EUR');
 
@@ -31,7 +31,7 @@ describe('Group', () => {
 
   it('can be created', () => {
     group = eventPublisher$.mergeObjectContext(
-      Group.add(groupId, name, currencyCode, idOwner),
+      Group.add(groupId, name, currencyCode, ownerId),
     );
     group.commit();
 
@@ -41,7 +41,7 @@ describe('Group', () => {
         groupId.value,
         name.value,
         currencyCode.value,
-        idOwner.value,
+        ownerId.value,
       ),
     );
   });
@@ -59,7 +59,7 @@ describe('Group', () => {
   });
 
   it('has an owner', () => {
-    expect(group.idOwner.equals(idOwner)).toBeTruthy();
+    expect(group.ownerId.equals(ownerId)).toBeTruthy();
   });
 
   it('can be renamed', () => {
