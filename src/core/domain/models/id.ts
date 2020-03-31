@@ -1,3 +1,6 @@
+import { version } from 'uuid-validate';
+
+import { InvalidIdError } from '../exceptions';
 import { ValueObject } from './value-object';
 
 interface Props {
@@ -6,6 +9,10 @@ interface Props {
 
 export abstract class Id extends ValueObject<Props> {
   protected constructor(id: string) {
+    if (version(id) !== 4) {
+      throw InvalidIdError.withString(id);
+    }
+
     super({ value: id });
   }
 
