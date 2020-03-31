@@ -10,6 +10,7 @@ import { GROUPS } from '../../domain/repository/index';
 import { GroupDatabase } from '../database';
 import { GroupId } from '@app/group/domain/model/group-id';
 import { Group } from '../../domain/model/group';
+import { GroupView } from '../schema/group.view';
 
 @Injectable()
 export class GroupService {
@@ -24,9 +25,13 @@ export class GroupService {
     idUser: string,
   ) {
     const id = uuid();
-    return this.commandBus.execute(
+    this.commandBus.execute(
       new CreateGroupCommand(id, name, currencyCode, idUser),
     );
+
+    return new GroupView(
+      id, name, currencyCode, idUser
+    )
   }
 
   async changeNameGroup(id: string, name: string) {

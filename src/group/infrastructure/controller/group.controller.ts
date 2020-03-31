@@ -44,7 +44,7 @@ export class GroupController {
   async createGroup(@Body() groupDto: GroupDto, @Authorization() idUser: UserId): Promise<GroupDto> {
 
     if (idUser.value !== groupDto.idOwner){
-      throw new ForbiddenException('Forbidden acces to data');
+      throw new ForbiddenException('Forbidden access to data');
     }
     else{
       try {
