@@ -1,13 +1,12 @@
-import { ConfigService } from 'nestjs-config';
 import { FirebaseDatabase } from './firebase';
 
 export const FirebaseProvider = [
   {
     provide: 'LOGIN',
-    useFactory: async (config: ConfigService): Promise<FirebaseDatabase> =>
+    useFactory: async (): Promise<FirebaseDatabase> =>
       {
-        return new FirebaseDatabase(config);
+        return new FirebaseDatabase();
       },
-    inject: [ConfigService],
+    inject: [],
   },
 ];

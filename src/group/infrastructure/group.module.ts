@@ -10,10 +10,12 @@ import { GroupEventStore } from './eventstore/groups.event-store';
 import { FirebaseDatabase } from '../../core/firebase/firebase';
 import { EventStore } from '../../core/eventstore/eventstore';
 import { groupEventHandlers } from '../domain/event/index';
+import { EventStoreModule } from '../../core/eventstore/eventstore.module';
+import { DatabaseModule } from '../../core/database/database.module';
 
 @Module({
   controllers: [GroupController],
-  imports: [CqrsModule, FirebaseModule],
+  imports: [CqrsModule, FirebaseModule, DatabaseModule, EventStoreModule.forRoot()],
   providers: [
     ...CommandHandlers,
     ...GroupProviders,
