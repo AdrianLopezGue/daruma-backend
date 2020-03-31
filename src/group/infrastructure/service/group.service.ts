@@ -5,44 +5,31 @@ import {
   CreateGroupCommand,
   ChangeGroupNameCommand,
 } from '../../application/command';
-import { v4 as uuid } from 'uuid';
-import { GROUPS } from '../../domain/repository/index';
-import { GroupDatabase } from '../database';
-import { GroupId } from '@app/group/domain/model/group-id';
-import { Group } from '../../domain/model/group';
-import { GroupView } from '../schema/group.view';
+import { GroupView, GROUP_MODEL } from '../read-model/schema/group.schema';
+import { Model } from 'mongoose';
+import uuid = require('uuid');
 
 @Injectable()
 export class GroupService {
   constructor(
     private readonly commandBus: CommandBus,
-    @Inject(GROUPS) private readonly firebaseDatabase: GroupDatabase,
+    @Inject(GROUP_MODEL) private readonly groupModel: Model<GroupView>,
   ) {}
 
-  async createGroup(
-    name: string,
-    currencyCode: string,
-    idUser: string,
-  ) {
-    const id = uuid();
-    this.commandBus.execute(
-      new CreateGroupCommand(id, name, currencyCode, idUser),
-    );
-
-    return new GroupView(
-      id, name, currencyCode, idUser
-    )
+  async createGroup(id: string, name: string, currencyCode: string) {
+    const idOwner = uuid.v4();
+    return this.commandBus.execute(new CreateGroupCommand(id, name, currencyCode, idOwner));
   }
 
   async changeNameGroup(id: string, name: string) {
     return this.commandBus.execute(new ChangeGroupNameCommand(id, name));
   }
 
-  async getGroup(id: string): Promise<Group> {
-    return this.firebaseDatabase.find(GroupId.fromString(id));
+  async getGroup(id: string): Promise<GroupView> {
+    return this.groupModel.findById(id).exec();
   }
 
-  async getGroupsById(id: string): Promise<Group[]> {
-    return this.firebaseDatabase.getGroupsById(GroupId.fromString(id));
+  async getGroups(): Promise<GroupView[]> {
+    return this.groupModel.find().exec();
   }
 }

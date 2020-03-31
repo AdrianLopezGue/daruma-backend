@@ -1,24 +1,24 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { GroupName, GroupId } from '../../domain/model';
+import { GroupId } from '../../domain/model';
 import { CheckUniqueGroupName } from '../../domain/services/check-unique-group-name.service';
-import { GROUPS } from '@app/group/domain/repository';
-import { GroupDatabase } from '../database';
-import { UserId } from '@app/user/domain/model';
+import { GroupView, GROUP_MODEL } from '../read-model/schema/group.schema';
+import { Model } from 'mongoose';
+import { GroupName } from '../../domain/model/group-name';
 
 @Injectable()
-export class CheckUniqueGroupNameFromFirebase implements CheckUniqueGroupName {
+export class CheckUniqueGroupNameFromReadModel implements CheckUniqueGroupName {
   constructor(
-    @Inject(GROUPS) private readonly firebaseDatabase: GroupDatabase,
+    @Inject(GROUP_MODEL) private readonly groupModel: Model<GroupView>,
   ) {}
 
-  async with(groupName: GroupName, userId: UserId): Promise<GroupId> {
-    const groupView = await this.firebaseDatabase.findGroupByName(groupName, userId);
+  async with(name: GroupName): Promise<GroupId> {
+    const groupView = await this.groupModel.findOne({ name: name.value });
 
     if (groupView === null) {
       return null;
     }
 
-    return GroupId.fromString(groupView.idOwner.value);
+    return GroupId.fromString(groupView.id);
   }
 }

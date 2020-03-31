@@ -21,9 +21,10 @@ import {
 import { GroupDto } from '../dto/group.dto';
 import { ChangeNameGroupDto } from '../dto/change-name-group.dto';
 import { GroupService } from '../service/group.service';
-import { Authorization } from '../service/auth.decorator';
+import { Authorization } from '../service/authentication.decorator';
 import { UserId } from '../../../user/domain/model/user-id';
 import { Group } from '@app/group/domain/model';
+import { GroupView } from '../read-model/schema/group.schema';
 
 @ApiTags('Groups')
 @Controller('groups')
@@ -33,8 +34,8 @@ export class GroupController {
   @ApiOperation({ summary: 'Get Groups' })
   @ApiResponse({ status: 200, description: 'Get Groups.' })
   @Get()
-  async getGroupsByIdowner(@Query('id') id: string): Promise<Group[]> {
-    return this.groupService.getGroupsById(id);
+  async getGroups(): Promise<GroupView[]> {
+    return this.groupService.getGroups();
   }
 
   @ApiOperation({ summary: 'Create Group' })
@@ -71,7 +72,7 @@ export class GroupController {
   @ApiResponse({ status: 204, description: 'Get Group.' })
   @ApiResponse({ status: 404, description: 'Not found' })
   @Get(':id')
-  async getGroup(@Query('id') id: string): Promise<Group> {
+  async getGroup(@Query('id') id: string): Promise<GroupView> {
     try {
       return await this.groupService.getGroup(id);
     } catch (e) {

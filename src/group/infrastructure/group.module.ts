@@ -1,28 +1,31 @@
 import { Module, OnModuleInit } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
-import { FirestoreModule } from '../../core/firestore/firestore.module';
+import { FirebaseModule } from '../../core/firebase/firebase.module';
 import { CommandHandlers } from '../application/handler';
 import { GroupController } from './controller/group.controller';
 import { GroupProviders } from './group.provider';
 import { GroupService } from './service/group.service';
-import { GroupDatabase } from './database/groups.database';
-import { FirestoreDatabase } from '../../core/firestore/firestore';
+import { GroupEventStore } from './eventstore/groups.event-store';
+import { FirebaseDatabase } from '../../core/firebase/firebase';
+import { EventStore } from '../../core/eventstore/eventstore';
+import { groupEventHandlers } from '../domain/event/index';
 
 @Module({
   controllers: [GroupController],
-  imports: [CqrsModule, FirestoreModule],
+  imports: [CqrsModule, FirebaseModule],
   providers: [
     ...CommandHandlers,
     ...GroupProviders,
     GroupService,
-    GroupDatabase,
-    FirestoreDatabase,
+    GroupEventStore,
+    FirebaseDatabase,
   ],
 })
 export class GroupModule implements OnModuleInit {
-  constructor() {}
+  constructor(private readonly eventStore: EventStore) {}
 
-  onModuleInit() {;
+  onModuleInit() {
+    this.eventStore.addEventHandlers(groupEventHandlers);
   }
 }

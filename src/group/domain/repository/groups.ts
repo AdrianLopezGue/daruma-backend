@@ -1,11 +1,8 @@
-import { Group } from '../model';
-import { UserId } from '@app/user/domain/model';
-import { GroupName } from '../model/group-name';
-import { GroupId } from '../model/group-id';
+import { Group, GroupId } from '../model';
 
 export interface Groups {
-  findGroupByName(groupName: GroupName, idOwner: UserId): Promise<Group> | null; // fromState
-  find(groupId: GroupId): Promise<Group> | null; // fromState
+  find(groupId: GroupId): Promise<Group> | null;
+  get(groupId: GroupId): Promise<Group>;
+  nextIdentity(): GroupId;
   save(group: Group): void;
-  getGroupsById(userId: UserId): Promise<Group[]>; // getState
 }
