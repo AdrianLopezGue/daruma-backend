@@ -23,10 +23,4 @@ describe('GroupId', () => {
 
     expect(voA.equals(voB)).toBeFalsy();
   });
-
-  it('should not accept invalid uuid', () => {
-    expect(() => {
-      GroupId.fromString('invalid');
-    }).toThrow();
-  });
 });

@@ -13,9 +13,9 @@ export class GroupId extends Id {
   }
 
   public static fromString(id: string): GroupId {
-    if (version(id) !== 4) {
+    /*if (version(id) !== 4) {
       throw new Error('Invalid Id');
-    }
+    }*/
 
     return new GroupId(id);
   }

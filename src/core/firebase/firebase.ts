@@ -8,7 +8,7 @@ export class FirebaseDatabase {
 
     constructor() {
       this.initialApp()
-  }
+    }
 
     initialApp() {
 

@@ -1,7 +1,8 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { AuthenticationError } from './authentication.error';
 import { UserId } from '../../../user/domain/model/user-id';
-import admin = require('firebase-admin');
+import * as admin from 'firebase-admin';
+import * as serviceAccount from '../../../config/service-account-file.json';
 
 export const Authorization = createParamDecorator(async (data: unknown, ctx: ExecutionContext) => {
 
@@ -10,6 +11,18 @@ export const Authorization = createParamDecorator(async (data: unknown, ctx: Exe
 
     if (!authorization) {
       return false;
+    }
+
+    const config = {
+      credential: admin.credential.cert(serviceAccount as object),
+      apiKey: process.env.API_KEY,
+      authDomain: process.env.AUTH_DOMAIN,
+      databaseURL: process.env.DATABASE_URL,
+      storageBucket: process.env.STORAGE_BUCKET
+    };
+
+    if (admin.apps.length === 0){
+      admin.initializeApp(config);
     }
 
     try {

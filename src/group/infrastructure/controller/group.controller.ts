@@ -23,7 +23,6 @@ import { ChangeNameGroupDto } from '../dto/change-name-group.dto';
 import { GroupService } from '../service/group.service';
 import { Authorization } from '../service/authentication.decorator';
 import { UserId } from '../../../user/domain/model/user-id';
-import { Group } from '@app/group/domain/model';
 import { GroupView } from '../read-model/schema/group.schema';
 
 @ApiTags('Groups')

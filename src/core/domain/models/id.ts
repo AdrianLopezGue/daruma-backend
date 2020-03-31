@@ -9,9 +9,9 @@ interface Props {
 
 export abstract class Id extends ValueObject<Props> {
   protected constructor(id: string) {
-    if (version(id) !== 4) {
+    /*if (version(id) !== 4) {
       throw InvalidIdError.withString(id);
-    }
+    }*/
 
     super({ value: id });
   }

@@ -1,6 +1,4 @@
 import uuid = require('uuid');
-
-import { InvalidIdError } from '../exceptions/invalid-id-error';
 import { Id } from './id';
 
 describe('Id', () => {
@@ -9,12 +7,6 @@ describe('Id', () => {
     const myId = MyId.fromString(id);
 
     expect(myId.value).toBe(id);
-  });
-
-  it('returns exception if id is not valid', () => {
-    expect(() => MyId.fromString('invalid')).toThrowError(
-      InvalidIdError.withString('invalid'),
-    );
   });
 });
 
