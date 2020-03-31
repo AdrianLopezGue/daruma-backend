@@ -1,0 +1,21 @@
+version: '3.3'
+
+services:
+  eventstore:
+    image: eventstore/eventstore:latest
+    ports:
+      - 1113:1113
+      - 2113:2113
+    environment:
+      - EVENTSTORE_RUN_PROJECTIONS=All
+      - EVENTSTORE_START_STANDARD_PROJECTIONS=true
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8081:8081
