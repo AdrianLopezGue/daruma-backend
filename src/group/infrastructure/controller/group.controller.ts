@@ -46,23 +46,22 @@ export class GroupController {
     if (idUser.value !== groupDto.idOwner){
       throw new ForbiddenException('Forbidden access to data');
     }
-    else{
-      try {
-        return await this.groupService.createGroup(
-          groupDto.name,
-          groupDto.currencyCode,
-          groupDto.idOwner,
-        );
-      } catch (e) {
-        if (e instanceof GroupIdAlreadyRegisteredError) {
-          throw new ConflictException(e.message);
-        } else if (e instanceof GroupNameAlreadyRegisteredError) {
-          throw new ConflictException(e.message);
-        } else if (e instanceof Error) {
-          throw new BadRequestException(`Unexpected error: ${e.message}`);
-        } else {
-          throw new BadRequestException('Server error');
-        }
+
+    try {
+      return await this.groupService.createGroup(
+        groupDto.name,
+        groupDto.currencyCode,
+        groupDto.idOwner,
+      );
+    } catch (e) {
+      if (e instanceof GroupIdAlreadyRegisteredError) {
+        throw new ConflictException(e.message);
+      } else if (e instanceof GroupNameAlreadyRegisteredError) {
+        throw new ConflictException(e.message);
+      } else if (e instanceof Error) {
+        throw new BadRequestException(`Unexpected error: ${e.message}`);
+      } else {
+        throw new BadRequestException('Server error');
       }
     }
   }
