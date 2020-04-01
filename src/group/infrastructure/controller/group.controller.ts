@@ -33,8 +33,8 @@ export class GroupController {
   @ApiOperation({ summary: 'Get Groups' })
   @ApiResponse({ status: 200, description: 'Get Groups.' })
   @Get()
-  async getGroups(): Promise<GroupView[]> {
-    return this.groupService.getGroups();
+  async getGroups(@Authorization() ownerId: UserId): Promise<GroupView[]> {
+    return this.groupService.getGroups(ownerId.value);
   }
 
   @ApiOperation({ summary: 'Create Group' })

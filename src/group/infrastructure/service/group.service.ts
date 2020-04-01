@@ -29,7 +29,7 @@ export class GroupService {
     return this.groupModel.findById(id).exec();
   }
 
-  async getGroups(): Promise<GroupView[]> {
-    return this.groupModel.find().exec();
+  async getGroups(ownerId: string): Promise<GroupView[]> {
+    return this.groupModel.find({ ownerId: ownerId }).exec();
   }
 }
