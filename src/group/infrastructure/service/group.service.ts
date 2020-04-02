@@ -16,9 +16,8 @@ export class GroupService {
     @Inject(GROUP_MODEL) private readonly groupModel: Model<GroupView>,
   ) {}
 
-  async createGroup(name: string, currencyCode: string, ownerId: string) {
-    const groupId = uuid.v4();
-    return this.commandBus.execute(new CreateGroupCommand(groupId, currencyCode, name, ownerId));
+  async createGroup(groupId: string, name: string, currencyCode: string, ownerId: string) {
+    return this.commandBus.execute(new CreateGroupCommand(groupId, name, currencyCode, ownerId));
   }
 
   async changeNameGroup(id: string, name: string) {

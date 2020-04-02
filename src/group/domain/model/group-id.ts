@@ -1,5 +1,4 @@
 import { Id } from '../../../core/domain';
-import { version } from 'uuid-validate';
 import { v4 as uuid } from 'uuid';
 
 interface Props {
@@ -13,9 +12,6 @@ export class GroupId extends Id {
   }
 
   public static fromString(id: string): GroupId {
-    /*if (version(id) !== 4) {
-      throw new Error('Invalid Id');
-    }*/
 
     return new GroupId(id);
   }

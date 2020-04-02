@@ -4,6 +4,9 @@ import { IsString } from 'class-validator';
 export class GroupDto {
   @IsString()
   @ApiProperty()
+  readonly groupId!: string;
+  @IsString()
+  @ApiProperty()
   readonly name!: string;
   @IsString()
   @ApiProperty()

@@ -49,6 +49,7 @@ export class GroupController {
 
     try {
       return await this.groupService.createGroup(
+        groupDto.groupId,
         groupDto.name,
         groupDto.currencyCode,
         groupDto.idOwner,
