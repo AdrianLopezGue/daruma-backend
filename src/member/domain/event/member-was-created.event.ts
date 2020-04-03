@@ -1,6 +1,6 @@
 import { DomainEvent } from '../../../core/domain';
 
-export class MemberWasRegistered implements DomainEvent {
+export class MemberWasCreated implements DomainEvent {
   public constructor(
     public readonly id: string,
     public readonly idGroup: string,
