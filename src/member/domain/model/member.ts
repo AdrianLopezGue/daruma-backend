@@ -1,5 +1,5 @@
 import { AggregateRoot } from '../../../core/domain/models/aggregate-root';
-import { MemberWasRegistered } from '../event/member-was-created.event';
+import { MemberWasCreated } from '../event/member-was-created.event';
 import { MemberId } from './member-id';
 import { MemberEmail } from './member-email';
 import { MemberName } from './member-name';
@@ -26,7 +26,7 @@ export class Member extends AggregateRoot {
     const member = new Member();
 
     member.apply(
-      new MemberWasRegistered(
+      new MemberWasCreated(
         memberId.value,
         groupId.value,
         name.value,
@@ -62,7 +62,7 @@ export class Member extends AggregateRoot {
     return this._userId;
   }
 
-  private onMemberWasRegistered(event: MemberWasRegistered) {
+  private onMemberWasCreated(event: MemberWasCreated) {
     this._memberId = MemberId.fromString(event.id);
     this._groupId = GroupId.fromString(event.idGroup);
     this._membername = MemberName.fromString(event.membername);
