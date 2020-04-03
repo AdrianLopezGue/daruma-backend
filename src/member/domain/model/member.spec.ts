@@ -6,7 +6,7 @@ import { MemberId } from './member-id';
 import { MemberName } from './member-name';
 import { MemberEmail } from './member-email';
 import { GroupId } from '../../../group/domain/model/group-id';
-import { MemberWasRegistered } from '../event/member-was-registered.event';
+import { MemberWasCreated } from '../event/member-was-created.event';
 import { UserId } from '../../../user/domain/model/user-id';
 
 
@@ -37,7 +37,7 @@ describe('Member', () => {
 
     expect(eventBus$.publish).toHaveBeenCalledTimes(1);
     expect(eventBus$.publish).toHaveBeenCalledWith(
-      new MemberWasRegistered(memberId.value, groupId.value, name.value, email.value, userId.value),
+      new MemberWasCreated(memberId.value, groupId.value, name.value, email.value, userId.value),
     );
   });
 

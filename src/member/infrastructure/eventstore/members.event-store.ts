@@ -1,0 +1,20 @@
+import { Injectable } from '@nestjs/common';
+import { EventPublisher } from '@nestjs/cqrs';
+
+import { EventStore } from '../../../core/eventstore/eventstore';
+import { Members } from '../../domain/repository/members';
+import { Member } from '../../domain/model/member';
+
+
+@Injectable()
+export class MemberEventStore implements Members {
+  constructor(
+    private readonly eventStore: EventStore,
+    private readonly publisher: EventPublisher,
+  ) {}
+
+  save(member: Member): void {
+    member = this.publisher.mergeObjectContext(member);
+    member.commit();
+  }
+}
