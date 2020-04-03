@@ -1,5 +1,5 @@
 import { AggregateRoot } from '../../../core/domain/models/aggregate-root';
-import { MemberWasRegistered } from '../event/member-was-registered.event';
+import { MemberWasRegistered } from '../event/member-was-created.event';
 import { MemberId } from './member-id';
 import { MemberEmail } from './member-email';
 import { MemberName } from './member-name';
