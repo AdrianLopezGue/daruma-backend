@@ -5,6 +5,7 @@ import {
   Controller,
   HttpCode,
   Post,
+  ForbiddenException,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -14,6 +15,8 @@ import {
 } from '../../domain/exception';
 import { UserDto } from '../dto/user.dto';
 import { UserService } from '../service/user.service';
+import { UserId } from '../../domain/model/user-id';
+import { Authorization } from '../service/authentication.decorator';
 
 @ApiTags('Users')
 @Controller('users')
@@ -24,7 +27,12 @@ export class UserController {
   @ApiResponse({ status: 204, description: 'Create User.' })
   @HttpCode(204)
   @Post()
-  async createUser(@Body() userDto: UserDto): Promise<UserDto> {
+  async createUser(@Body() userDto: UserDto, @Authorization() idUser: UserId): Promise<UserDto> {
+
+    if (idUser.value !== userDto.id){
+      throw new ForbiddenException('Forbidden access to data');
+    }
+
     try {
       return await this.userService.createUser(
         userDto.id,
