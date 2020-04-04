@@ -10,6 +10,8 @@ import {
   Put,
   Query,
   ForbiddenException,
+  ValidationPipe,
+  UsePipes,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -24,11 +26,12 @@ import { GroupService } from '../service/group.service';
 import { Authorization } from '../service/authentication.decorator';
 import { UserId } from '../../../user/domain/model/user-id';
 import { GroupView } from '../read-model/schema/group.schema';
+import { MemberService } from '../../../member/infrastructure/service/member.service';
 
 @ApiTags('Groups')
 @Controller('groups')
 export class GroupController {
-  constructor(private readonly groupService: GroupService) {}
+  constructor(private readonly groupService: GroupService, private readonly memberService: MemberService) {}
 
   @ApiOperation({ summary: 'Get Groups' })
   @ApiResponse({ status: 200, description: 'Get Groups.' })
@@ -39,16 +42,17 @@ export class GroupController {
 
   @ApiOperation({ summary: 'Create Group' })
   @ApiResponse({ status: 204, description: 'Create Group.' })
+  @UsePipes(new ValidationPipe({ transform: true }))
   @HttpCode(204)
   @Post()
-  async createGroup(@Body() groupDto: GroupDto, @Authorization() idUser: UserId): Promise<GroupDto> {
+  async createGroup(@Body() groupDto: GroupDto, @Authorization() idUser: UserId): Promise<void> {
 
     if (idUser.value !== groupDto.idOwner){
       throw new ForbiddenException('Forbidden access to data');
     }
 
     try {
-      return await this.groupService.createGroup(
+      await this.groupService.createGroup(
         groupDto.groupId,
         groupDto.name,
         groupDto.currencyCode,
@@ -65,6 +69,8 @@ export class GroupController {
         throw new BadRequestException('Server error');
       }
     }
+
+    groupDto.members.forEach(async member => this.memberService.createMember(member.id, groupDto.groupId, member.name, member.email));
   }
 
   @ApiOperation({ summary: 'Get Group' })

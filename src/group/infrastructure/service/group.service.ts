@@ -7,7 +7,6 @@ import {
 } from '../../application/command';
 import { GroupView, GROUP_MODEL } from '../read-model/schema/group.schema';
 import { Model } from 'mongoose';
-import uuid = require('uuid');
 
 @Injectable()
 export class GroupService {
