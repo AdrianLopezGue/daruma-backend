@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { UserId } from '../../../user/domain/model/user-id';
-import { CreateUserHandler } from './create-user.handler.command';
+import { CreateUserHandler } from './create-user.handler';
 import { UserName } from '../../domain/model/user-name';
 import { UserEmail } from '../../domain/model/user-email';
 import { USERS, Users } from '../../domain/repository/users';

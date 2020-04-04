@@ -1,7 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { UserId } from '../../../user/domain/model';
+import { UserId } from '../../domain/model';
 import { UserName } from '../../domain/model/user-name';
 import { UserEmail } from '../../domain/model/user-email';
 import { CreateUserCommand } from '../command/create-user.command';
