@@ -3,9 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { v4 } from 'uuid';
 
 import {
-  UserWasRegistered,
-  UsernameWasChanged,
-  UseremailWasChanged,
+  UserWasCreated
 } from '../event';
 import { User } from './user';
 import { UserName } from './user-name';
@@ -37,7 +35,7 @@ describe('User', () => {
 
     expect(eventBus$.publish).toHaveBeenCalledTimes(1);
     expect(eventBus$.publish).toHaveBeenCalledWith(
-      new UserWasRegistered(userId.value, name.value, email.value),
+      new UserWasCreated(userId.value, name.value, email.value),
     );
   });
 
@@ -51,33 +49,5 @@ describe('User', () => {
 
   it('has an email', () => {
     expect(user.email.equals(email)).toBeTruthy();
-  });
-
-  it('can change name', () => {
-    const newName = UserName.fromString('New name');
-    user = eventPublisher$.mergeObjectContext(user);
-    user.changeUsername(newName);
-    user.commit();
-
-    expect(eventBus$.publish).toHaveBeenCalledTimes(1);
-    expect(eventBus$.publish).toHaveBeenCalledWith(
-      new UsernameWasChanged(userId.value, newName.value),
-    );
-
-    expect(user.name.equals(newName)).toBeTruthy();
-  });
-
-  it('can change email', () => {
-    const newEmail = UserEmail.fromString('New email');
-    user = eventPublisher$.mergeObjectContext(user);
-    user.changeUseremail(newEmail);
-    user.commit();
-
-    expect(eventBus$.publish).toHaveBeenCalledTimes(1);
-    expect(eventBus$.publish).toHaveBeenCalledWith(
-      new UseremailWasChanged(userId.value, newEmail.value),
-    );
-
-    expect(user.email.equals(newEmail)).toBeTruthy();
   });
 });
