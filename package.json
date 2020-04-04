@@ -39,6 +39,7 @@
     "@types/mongoose": "^5.7.8",
     "@types/uuid": "^7.0.2",
     "@types/uuid-validate": "0.0.1",
+    "class-transformer": "^0.2.3",
     "class-validator": "^0.11.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
