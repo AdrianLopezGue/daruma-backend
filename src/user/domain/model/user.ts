@@ -3,9 +3,7 @@ import { UserId } from './user-id';
 import { UserName } from './user-name';
 import { UserEmail } from './user-email';
 
-import { UserWasRegistered } from '../event/user-was-registered.event';
-import { UsernameWasChanged } from '../event/username-was-changed.event';
-import { UseremailWasChanged } from '../event/useremail-was-changed.event';
+import { UserWasCreated } from '../event/user-was-created.event';
 
 export class User extends AggregateRoot {
   private _userId: UserId;
@@ -19,7 +17,7 @@ export class User extends AggregateRoot {
   public static add(userId: UserId, name: UserName, email: UserEmail): User {
     const user = new User();
 
-    user.apply(new UserWasRegistered(userId.value, name.value, email.value));
+    user.apply(new UserWasCreated(userId.value, name.value, email.value));
 
     return user;
   }
@@ -40,33 +38,9 @@ export class User extends AggregateRoot {
     return this._useremail;
   }
 
-  changeUsername(username: UserName) {
-    if (username.equals(this._username)) {
-      return;
-    }
-
-    this.apply(new UsernameWasChanged(this.id.value, username.value));
-  }
-
-  changeUseremail(useremail: UserEmail) {
-    if (useremail.equals(this._useremail)) {
-      return;
-    }
-
-    this.apply(new UseremailWasChanged(this.id.value, useremail.value));
-  }
-
-  private onUserWasRegistered(event: UserWasRegistered) {
+  private onUserWasCreated(event: UserWasCreated) {
     this._userId = UserId.fromString(event.id);
     this._username = UserName.fromString(event.username);
-    this._useremail = UserEmail.fromString(event.useremail);
-  }
-
-  private onUsernameWasChanged(event: UsernameWasChanged) {
-    this._username = UserName.fromString(event.username);
-  }
-
-  private onUseremailWasChanged(event: UseremailWasChanged) {
     this._useremail = UserEmail.fromString(event.useremail);
   }
 }
