@@ -5,6 +5,7 @@ import { MemberEmail } from './member-email';
 import { MemberName } from './member-name';
 import { GroupId } from '../../../group/domain/model/group-id';
 import { UserId } from '../../../user/domain/model/user-id';
+import { MemberWasRegisteredAsUser } from '../event/member-was-registered-as-user.event';
 
 export class Member extends AggregateRoot {
   private _memberId: MemberId;
@@ -62,11 +63,23 @@ export class Member extends AggregateRoot {
     return this._userId;
   }
 
+  setUserId(userId: UserId) {
+    if (userId.equals(this._userId)) {
+      return;
+    }
+
+    this.apply(new MemberWasRegisteredAsUser(this._memberId.value, userId.value));
+  }
+
   private onMemberWasCreated(event: MemberWasCreated) {
     this._memberId = MemberId.fromString(event.id);
     this._groupId = GroupId.fromString(event.idGroup);
     this._membername = MemberName.fromString(event.membername);
     this._memberemail = MemberEmail.fromString(event.memberemail);
+    this._userId = UserId.fromString(event.idUser);
+  }
+
+  private onMemberWasRegisteredAsUser(event: MemberWasRegisteredAsUser) {
     this._userId = UserId.fromString(event.idUser);
   }
 }
