@@ -14,7 +14,7 @@ export class MemberService {
     @Inject(MEMBER_MODEL) private readonly memberModel: Model<MemberView>,
   ) {}
 
-  async createMember(memberId: string, groupId: string, name: string, email: string, userId: string) {
+  async createMember(memberId: string, groupId: string, name: string, email: string, userId?: string) {
     return this.commandBus.execute(new CreateMemberCommand(memberId, groupId, name, email, userId));
   }
 
