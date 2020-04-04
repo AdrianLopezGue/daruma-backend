@@ -4,7 +4,6 @@ import { GroupId } from './group-id';
 import { GroupName } from './group-name';
 import { GroupCurrencyCode } from './group-currency-code';
 import { UserId } from '../../../user/domain/model';
-import { Member } from '../../../member/domain/model/member';
 
 export class Group extends AggregateRoot {
   private _groupId: GroupId;
@@ -54,10 +53,6 @@ export class Group extends AggregateRoot {
 
   get ownerId(): UserId {
     return this._ownerId;
-  }
-
-  get members(): Member[] {
-    return this._members;
   }
 
   rename(name: GroupName) {
