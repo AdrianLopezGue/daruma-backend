@@ -8,7 +8,6 @@ import { Members } from '../../domain/repository/members';
 import { MemberId } from '../../domain/model/member-id';
 import { GroupId } from '../../../group/domain/model/group-id';
 import { MemberName } from '../../domain/model/member-name';
-import { MemberEmail } from '../../domain/model/member-email';
 import { Member } from '../../domain/model/member';
 
 @CommandHandler(CreateMemberCommand)
@@ -21,10 +20,9 @@ export class CreateMemberHandler implements ICommandHandler<CreateMemberCommand>
     const memberId = MemberId.fromString(command.memberId);
     const groupId = GroupId.fromString(command.groupId);
     const name = MemberName.fromString(command.name);
-    const email = MemberEmail.fromString(command.email);
     const userId = UserId.fromString(command.userId);
 
-    const member = Member.add(memberId, groupId, name, email, userId);
+    const member = Member.add(memberId, groupId, name, userId);
 
     this.members.save(member);
   }

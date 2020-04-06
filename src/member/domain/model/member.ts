@@ -1,7 +1,6 @@
 import { AggregateRoot } from '../../../core/domain/models/aggregate-root';
 import { MemberWasCreated } from '../event/member-was-created.event';
 import { MemberId } from './member-id';
-import { MemberEmail } from './member-email';
 import { MemberName } from './member-name';
 import { GroupId } from '../../../group/domain/model/group-id';
 import { UserId } from '../../../user/domain/model/user-id';
@@ -11,7 +10,6 @@ export class Member extends AggregateRoot {
   private _memberId: MemberId;
   private _groupId: GroupId;
   private _membername: MemberName;
-  private _memberemail: MemberEmail;
   private _userId: UserId;
 
   private constructor() {
@@ -22,7 +20,6 @@ export class Member extends AggregateRoot {
     memberId: MemberId,
     groupId: GroupId,
     name: MemberName,
-    email: MemberEmail,
     userId = UserId.fromString('')): Member {
     const member = new Member();
 
@@ -31,7 +28,6 @@ export class Member extends AggregateRoot {
         memberId.value,
         groupId.value,
         name.value,
-        email.value,
         userId.value,
       ),
     );
@@ -55,10 +51,6 @@ export class Member extends AggregateRoot {
     return this._membername;
   }
 
-  get email(): MemberEmail {
-    return this._memberemail;
-  }
-
   get userId(): UserId {
     return this._userId;
   }
@@ -75,7 +67,6 @@ export class Member extends AggregateRoot {
     this._memberId = MemberId.fromString(event.id);
     this._groupId = GroupId.fromString(event.idGroup);
     this._membername = MemberName.fromString(event.membername);
-    this._memberemail = MemberEmail.fromString(event.memberemail);
     this._userId = UserId.fromString(event.idUser);
   }
 

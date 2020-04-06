@@ -7,9 +7,8 @@ export const memberEventHandlers = {
     id: string,
     idGroup: string,
     name: string,
-    email: string,
     idUser: string,
-  ) => new MemberWasCreated(id, idGroup, name, email, idUser),
+  ) => new MemberWasCreated(id, idGroup, name, idUser),
   MemberWasRegisteredAsUser: (id: string, idUser: string) =>
     new MemberWasRegisteredAsUser(id, idUser),
 };

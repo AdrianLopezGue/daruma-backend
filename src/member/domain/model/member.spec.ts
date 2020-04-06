@@ -4,7 +4,6 @@ import { v4 } from 'uuid';
 import { Member } from './member';
 import { MemberId } from './member-id';
 import { MemberName } from './member-name';
-import { MemberEmail } from './member-email';
 import { GroupId } from '../../../group/domain/model/group-id';
 import { MemberWasCreated } from '../event/member-was-created.event';
 import { UserId } from '../../../user/domain/model/user-id';
@@ -18,7 +17,6 @@ describe('Member', () => {
   const memberId = MemberId.fromString(v4());
   const groupId = GroupId.fromString(v4());
   const name = MemberName.fromString('Member Name');
-  const email = MemberEmail.fromString('Member Email');
   const userId = UserId.fromString('1111');
 
   beforeEach(async () => {
@@ -32,12 +30,12 @@ describe('Member', () => {
   });
 
   it('can be created with id', () => {
-    member = eventPublisher$.mergeObjectContext(Member.add(memberId, groupId, name, email, userId));
+    member = eventPublisher$.mergeObjectContext(Member.add(memberId, groupId, name, userId));
     member.commit();
 
     expect(eventBus$.publish).toHaveBeenCalledTimes(1);
     expect(eventBus$.publish).toHaveBeenCalledWith(
-      new MemberWasCreated(memberId.value, groupId.value, name.value, email.value, userId.value),
+      new MemberWasCreated(memberId.value, groupId.value, name.value, userId.value),
     );
   });
 
@@ -51,10 +49,6 @@ describe('Member', () => {
 
   it('has a name', () => {
     expect(member.name.equals(name)).toBeTruthy();
-  });
-
-  it('has an email', () => {
-    expect(member.email.equals(email)).toBeTruthy();
   });
 
   it('has an userId', () => {
