@@ -13,6 +13,7 @@ import { groupEventHandlers } from '../domain/event/index';
 import { EventStoreModule } from '../../core/eventstore/eventstore.module';
 import { DatabaseModule } from '../../core/database/database.module';
 import { ProjectionHandlers } from './read-model/projection/index';
+import { MemberService } from '../../member/infrastructure/service/member.service';
 
 @Module({
   controllers: [GroupController],
@@ -24,6 +25,7 @@ import { ProjectionHandlers } from './read-model/projection/index';
     GroupService,
     GroupEventStore,
     FirebaseDatabase,
+    MemberService
   ],
 })
 export class GroupModule implements OnModuleInit {
