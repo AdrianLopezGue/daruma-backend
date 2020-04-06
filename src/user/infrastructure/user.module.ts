@@ -11,9 +11,10 @@ import { UserService } from './service/user.service';
 import { UserEventStore } from './eventstore/user.event-store';
 import { userEventHandlers } from '../domain/event/index';
 import { UserProviders } from './user.provider';
+import { UserController } from './controller/user.controller';
 
 @Module({
-  controllers: [],
+  controllers: [UserController],
   imports: [CqrsModule, DatabaseModule, EventStoreModule.forRoot()],
   providers: [
     ...CommandHandlers,
