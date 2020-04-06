@@ -32,5 +32,4 @@ export class GroupDto {
 export class MemberDto {
   readonly id: string;
   readonly name: string;
-  readonly email: string;
 }
