@@ -7,7 +7,6 @@ import { Members } from '../../domain/repository/members';
 import { MEMBERS } from '../../domain/repository/index';
 import { MemberId } from '../../domain/model/member-id';
 import { MemberName } from '../../domain/model/member-name';
-import { MemberEmail } from '../../domain/model/member-email';
 import { CreateMemberCommand } from '../command/create-member.command';
 import { GroupId } from '../../../group/domain/model/group-id';
 import { Member } from '../../domain/model/member';
@@ -20,7 +19,6 @@ describe('CreateMemberHandler', () => {
   const memberId = MemberId.fromString(v4());
   const groupId = GroupId.fromString(v4());
   const name = MemberName.fromString('Member Name');
-  const email = MemberEmail.fromString('Member Email');
   const userId = UserId.fromString('1111');
 
   beforeEach(async () => {
@@ -44,13 +42,12 @@ describe('CreateMemberHandler', () => {
         memberId.value,
         groupId.value,
         name.value,
-        email.value,
         userId.value,
       ),
     );
 
     expect(members.save).toHaveBeenCalledWith(
-      Member.add(memberId, groupId, name, email, userId),
+      Member.add(memberId, groupId, name, userId),
     );
   });
 });
