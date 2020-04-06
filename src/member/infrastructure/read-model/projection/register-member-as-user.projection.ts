@@ -9,7 +9,7 @@ import { MemberView } from '../schema/member.schema';
 export class RegisterMemberAsUserProjection
   implements IEventHandler<MemberWasRegisteredAsUser> {
   constructor(
-    @Inject('GROUP_MODEL') private readonly memberModel: Model<MemberView>,
+    @Inject('MEMBER_MODEL') private readonly memberModel: Model<MemberView>,
   ) {}
 
   async handle(event: MemberWasRegisteredAsUser) {

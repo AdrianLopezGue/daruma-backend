@@ -17,7 +17,6 @@ export class MemberWasCreatedProjection
       _id: event.id,
       groupId: event.idGroup,
       name: event.membername,
-      email: event.memberemail,
       userId: event.idUser,
     });
 
