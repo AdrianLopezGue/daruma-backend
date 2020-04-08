@@ -70,7 +70,7 @@ export class GroupController {
       }
     }
 
-    groupDto.members.forEach(async member => this.memberService.createMember(member.id, groupDto.groupId, member.name, member.email));
+    groupDto.members.forEach(async member => this.memberService.createMember(member.id, groupDto.groupId, member.name));
   }
 
   @ApiOperation({ summary: 'Get Group' })
