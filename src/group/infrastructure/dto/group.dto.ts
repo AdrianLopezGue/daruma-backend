@@ -1,6 +1,6 @@
 const transformMembers = members => {
   if (Array.isArray(members)) {
-    return members.map(member => ({id: member.id, name: member.name, email: member.email}))
+    return members.map(member => ({id: member.id, name: member.name}))
   } else {
     return members;
   }
