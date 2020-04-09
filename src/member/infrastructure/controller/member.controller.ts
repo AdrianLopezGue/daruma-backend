@@ -12,16 +12,16 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { GroupIdNotFoundError } from '../../../group/domain/exception/group-id-not-found.error';
-import { MemberService } from '../service/member.service';
 import { MemberView } from '../read-model/schema/member.schema';
 import { RegisterMemberAsUserDto } from '../dto/register-member-as-user.dto';
 import { MemberIdNotFoundError } from '../../domain/exception/member-id-not-found.error';
 import { Authorization } from '../service/authentication.decorator';
 import { UserId } from '../../../user/domain/model/user-id';
+import { MemberService } from '../service/member.service';
 
 @ApiTags('Members')
 @Controller('members')
-export class ScopeController {
+export class MemberController {
   constructor(private readonly memberService: MemberService) {}
 
   @ApiOperation({ summary: 'Get Members of Group' })
