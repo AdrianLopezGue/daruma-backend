@@ -1,3 +1,7 @@
+const transformOwner = owner => {
+    return ({id: owner.id, name: owner.name})
+}
+
 const transformMembers = members => {
   if (Array.isArray(members)) {
     return members.map(member => ({id: member.id, name: member.name}))
@@ -9,6 +13,7 @@ const transformMembers = members => {
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { OwnerDto } from './owner.dto';
 
 export class GroupDto {
   @IsString()
@@ -20,9 +25,9 @@ export class GroupDto {
   @IsString()
   @ApiProperty()
   readonly currencyCode!: string;
-  @IsString()
+  @Transform(transformOwner, {toClassOnly: true})
   @ApiProperty()
-  readonly idOwner!: string;
+  readonly owner!: OwnerDto;
   @Transform(transformMembers, {toClassOnly: true})
   @ApiProperty()
   readonly members!: MemberDto[];
@@ -33,3 +38,4 @@ export class MemberDto {
   readonly id: string;
   readonly name: string;
 }
+

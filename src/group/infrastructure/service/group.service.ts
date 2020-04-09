@@ -7,12 +7,14 @@ import {
 } from '../../application/command';
 import { GroupView, GROUP_MODEL } from '../read-model/schema/group.schema';
 import { Model } from 'mongoose';
+import { MemberService } from '../../../member/infrastructure/service/member.service';
 
 @Injectable()
 export class GroupService {
   constructor(
     private readonly commandBus: CommandBus,
     @Inject(GROUP_MODEL) private readonly groupModel: Model<GroupView>,
+    private readonly memberService: MemberService
   ) {}
 
   async createGroup(groupId: string, name: string, currencyCode: string, ownerId: string) {
@@ -28,6 +30,7 @@ export class GroupService {
   }
 
   async getGroups(ownerId: string): Promise<GroupView[]> {
-    return this.groupModel.find({ ownerId: ownerId }).exec();
+    const idGroups = await this.memberService.getGroups(ownerId);
+    return this.groupModel.find({ _id: { $in : [ idGroups.toString() ] }}).exec();
   }
 }
