@@ -10,9 +10,10 @@ import { MemberProviders } from './member.provider';
 import { MemberService } from './service/member.service';
 import { MemberEventStore } from './eventstore/members.event-store';
 import { memberEventHandlers } from '../domain/event/index';
+import { MemberController } from './controller/member.controller';
 
 @Module({
-  controllers: [],
+  controllers: [MemberController],
   imports: [CqrsModule, DatabaseModule, EventStoreModule.forRoot()],
   providers: [
     ...CommandHandlers,
