@@ -27,6 +27,7 @@ import { Authorization } from '../service/authentication.decorator';
 import { UserId } from '../../../user/domain/model/user-id';
 import { GroupView } from '../read-model/schema/group.schema';
 import { MemberService } from '../../../member/infrastructure/service/member.service';
+import uuid = require('uuid');
 
 @ApiTags('Groups')
 @Controller('groups')
@@ -47,7 +48,7 @@ export class GroupController {
   @Post()
   async createGroup(@Body() groupDto: GroupDto, @Authorization() idUser: UserId): Promise<void> {
 
-    if (idUser.value !== groupDto.idOwner){
+    if (idUser.value !== groupDto.owner.id){
       throw new ForbiddenException('Forbidden access to data');
     }
 
@@ -56,7 +57,7 @@ export class GroupController {
         groupDto.groupId,
         groupDto.name,
         groupDto.currencyCode,
-        groupDto.idOwner,
+        groupDto.owner.id,
       );
     } catch (e) {
       if (e instanceof GroupIdAlreadyRegisteredError) {
@@ -70,6 +71,7 @@ export class GroupController {
       }
     }
 
+    this.memberService.createMember(uuid.v4(), groupDto.groupId, groupDto.owner.name, groupDto.owner.id)
     groupDto.members.forEach(async member => this.memberService.createMember(member.id, groupDto.groupId, member.name));
   }
 
