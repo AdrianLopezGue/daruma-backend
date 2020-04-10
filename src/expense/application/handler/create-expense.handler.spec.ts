@@ -15,6 +15,7 @@ import { Expenses } from '../../domain/repository/expenses';
 import { CreateExpenseCommand } from '../command/create-expense.command';
 import { EXPENSES } from '../../domain/repository/index';
 import { Expense } from '../../domain/model/expense';
+import { GroupId } from '../../../group/domain/model/group-id';
 
 describe('CreateExpenseHandler', () => {
   let command$: CreateExpenseHandler;
@@ -22,6 +23,7 @@ describe('CreateExpenseHandler', () => {
   const expenses: Partial<Expenses> = {};
 
   const expenseId = ExpenseId.fromString(v4());
+  const groupId = GroupId.fromString(v4());
   const name = ExpenseName.fromString('Expense name');
   const amount = ExpenseAmount.withMoneyAndCurrencyCode(
     ExpenseCurrencyUnit.fromBigInt(BigInt(100)),
@@ -52,6 +54,7 @@ describe('CreateExpenseHandler', () => {
     await command$.execute(
       new CreateExpenseCommand(
         expenseId.value,
+        groupId.value,
         name.value,
         amount.money.value,
         amount.currencyCode.value,
@@ -64,7 +67,7 @@ describe('CreateExpenseHandler', () => {
     );
 
     expect(expenses.save).toHaveBeenCalledWith(
-        Expense.add(expenseId, name, amount, payers, debtors, date, periodicity, endPeriodicity),
+        Expense.add(expenseId, groupId, name, amount, payers, debtors, date, periodicity, endPeriodicity),
     );
   });
 });
