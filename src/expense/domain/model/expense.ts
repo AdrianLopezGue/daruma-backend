@@ -1,0 +1,107 @@
+import { AggregateRoot } from '../../../core/domain/models/aggregate-root';
+
+import { UserId } from '../../../user/domain/model';
+import { ExpenseId } from './expense-id';
+import { ExpenseName } from './expense-name';
+import { ExpenseAmount } from './expense-amount';
+import { GroupCurrencyCode } from '../../../group/domain/model/group-currency-code';
+import { ExpenseDate } from './expense-date';
+import { ExpensePeriodicity } from './expense-periodicity';
+import { ExpenseEndPeriodicity } from './expense-end-periodicity';
+import { ExpenseWasCreated } from '../event/expense-was-created';
+import { ExpenseCurrencyUnit } from './expense-currency-unit';
+
+export class Expense extends AggregateRoot {
+  private _expenseId: ExpenseId;
+  private _name: ExpenseName;
+  private _amount: ExpenseAmount;
+  private _date: ExpenseDate;
+  private _periodicity: ExpensePeriodicity;
+  private _endPeriodicity: ExpenseEndPeriodicity;
+  private _payers: UserId[];
+  private _debtors: UserId[];
+
+  private constructor() {
+    super();
+  }
+
+  public static add(
+    expenseId: ExpenseId,
+    name: ExpenseName,
+    amount: ExpenseAmount,
+    payers: UserId[],
+    debtors: UserId[],
+    date: ExpenseDate,
+    periodicty: ExpensePeriodicity,
+    endPeriodicity: ExpenseEndPeriodicity,
+  ): Expense {
+    const expense = new Expense();
+
+    expense.apply(
+      new ExpenseWasCreated(
+        expenseId.value,
+        name.value,
+        amount.money.value,
+        amount.currencyCode.value,
+        payers.map((payer) => payer.value),
+        debtors.map((debtor) => debtor.value),
+        date.value,
+        periodicty.value,
+        endPeriodicity != null ? endPeriodicity.value : null,
+      ),
+    );
+
+    return expense;
+  }
+
+  public aggregateId(): string {
+    return this._expenseId.value;
+  }
+
+  get id(): ExpenseId {
+    return this._expenseId;
+  }
+
+  get name(): ExpenseName {
+    return this._name;
+  }
+
+  get amount(): ExpenseAmount {
+    return this._amount;
+  }
+
+  get date(): ExpenseDate {
+    return this._date;
+  }
+
+  get periodicity(): ExpensePeriodicity {
+    return this._periodicity;
+  }
+
+  get endPeriodicity(): ExpenseEndPeriodicity {
+    return this._endPeriodicity;
+  }
+
+  get payers(): UserId[] {
+    return this._payers;
+  }
+
+  get debtors(): UserId[] {
+    return this._debtors;
+  }
+
+
+  private onExpenseWasCreated(event: ExpenseWasCreated) {
+    this._expenseId = ExpenseId.fromString(event.id);
+    this._name = ExpenseName.fromString(event.name);
+    this._amount = ExpenseAmount.withMoneyAndCurrencyCode(
+      ExpenseCurrencyUnit.fromBigInt(BigInt(event.money)),
+      GroupCurrencyCode.fromString(event.currencyCode),
+    );
+    this._date = ExpenseDate.fromDate(event.date);
+    this._periodicity = ExpensePeriodicity.fromString(event.periodicity);
+    this._endPeriodicity = ExpenseEndPeriodicity.fromDate(event.endPeriodicity);
+    this._payers = event.payers.map((payer) => UserId.fromString(payer));
+    this._debtors = event.debtors.map((debtor) => UserId.fromString(debtor));
+  }
+}
