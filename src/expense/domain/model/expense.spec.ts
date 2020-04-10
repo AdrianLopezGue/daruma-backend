@@ -12,6 +12,7 @@ import { ExpenseDate } from './expense-date';
 import { UserId } from '../../../user/domain/model/user-id';
 import { ExpensePeriodicity } from './expense-periodicity';
 import { ExpenseEndPeriodicity } from './expense-end-periodicity';
+import { GroupId } from '../../../group/domain/model/group-id';
 
 describe('Expense', () => {
   let expense: Expense;
@@ -19,6 +20,7 @@ describe('Expense', () => {
   let eventPublisher$: EventPublisher;
 
   const expenseId = ExpenseId.fromString(v4());
+  const groupId = GroupId.fromString(v4());
   const name = ExpenseName.fromString('Expense Name');
   const amount = ExpenseAmount.withMoneyAndCurrencyCode(
     ExpenseCurrencyUnit.fromBigInt(BigInt(100)),
@@ -41,13 +43,14 @@ describe('Expense', () => {
   });
 
   it('can be created', () => {
-    expense = eventPublisher$.mergeObjectContext(Expense.add(expenseId, name, amount, payers, debtors, date, periodicity, endPeriodicity));
+    expense = eventPublisher$.mergeObjectContext(Expense.add(expenseId, groupId, name, amount, payers, debtors, date, periodicity, endPeriodicity));
     expense.commit();
 
     expect(eventBus$.publish).toHaveBeenCalledTimes(1);
     expect(eventBus$.publish).toHaveBeenCalledWith(
       new ExpenseWasCreated(
           expenseId.value,
+          groupId.value,
           name.value,
           amount.money.value,
           amount.currencyCode.value,
@@ -62,6 +65,10 @@ describe('Expense', () => {
 
   it('has an id', () => {
     expect(expense.id.equals(expenseId)).toBeTruthy();
+  });
+
+  it('has an groupId', () => {
+    expect(expense.groupId.equals(groupId)).toBeTruthy();
   });
 
   it('has a name', () => {

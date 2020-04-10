@@ -1,6 +1,5 @@
 import { AggregateRoot } from '../../../core/domain/models/aggregate-root';
 
-import { UserId } from '../../../user/domain/model';
 import { ExpenseId } from './expense-id';
 import { ExpenseName } from './expense-name';
 import { ExpenseAmount } from './expense-amount';
@@ -10,16 +9,19 @@ import { ExpensePeriodicity } from './expense-periodicity';
 import { ExpenseEndPeriodicity } from './expense-end-periodicity';
 import { ExpenseWasCreated } from '../event/expense-was-created';
 import { ExpenseCurrencyUnit } from './expense-currency-unit';
+import { MemberId } from '../../../member/domain/model/member-id';
+import { GroupId } from '../../../group/domain/model/group-id';
 
 export class Expense extends AggregateRoot {
   private _expenseId: ExpenseId;
+  private _groupId: GroupId;
   private _name: ExpenseName;
   private _amount: ExpenseAmount;
   private _date: ExpenseDate;
   private _periodicity: ExpensePeriodicity;
   private _endPeriodicity: ExpenseEndPeriodicity;
-  private _payers: UserId[];
-  private _debtors: UserId[];
+  private _payers: MemberId[];
+  private _debtors: MemberId[];
 
   private constructor() {
     super();
@@ -27,10 +29,11 @@ export class Expense extends AggregateRoot {
 
   public static add(
     expenseId: ExpenseId,
+    groupId: GroupId,
     name: ExpenseName,
     amount: ExpenseAmount,
-    payers: UserId[],
-    debtors: UserId[],
+    payers: MemberId[],
+    debtors: MemberId[],
     date: ExpenseDate,
     periodicty: ExpensePeriodicity,
     endPeriodicity: ExpenseEndPeriodicity,
@@ -40,6 +43,7 @@ export class Expense extends AggregateRoot {
     expense.apply(
       new ExpenseWasCreated(
         expenseId.value,
+        groupId.value,
         name.value,
         amount.money.value,
         amount.currencyCode.value,
@@ -62,6 +66,10 @@ export class Expense extends AggregateRoot {
     return this._expenseId;
   }
 
+  get groupId(): GroupId {
+    return this._groupId;
+  }
+
   get name(): ExpenseName {
     return this._name;
   }
@@ -82,17 +90,18 @@ export class Expense extends AggregateRoot {
     return this._endPeriodicity;
   }
 
-  get payers(): UserId[] {
+  get payers(): MemberId[] {
     return this._payers;
   }
 
-  get debtors(): UserId[] {
+  get debtors(): MemberId[] {
     return this._debtors;
   }
 
 
   private onExpenseWasCreated(event: ExpenseWasCreated) {
     this._expenseId = ExpenseId.fromString(event.id);
+    this._groupId = GroupId.fromString(event.groupId);
     this._name = ExpenseName.fromString(event.name);
     this._amount = ExpenseAmount.withMoneyAndCurrencyCode(
       ExpenseCurrencyUnit.fromBigInt(BigInt(event.money)),
@@ -101,7 +110,7 @@ export class Expense extends AggregateRoot {
     this._date = ExpenseDate.fromDate(event.date);
     this._periodicity = ExpensePeriodicity.fromString(event.periodicity);
     this._endPeriodicity = ExpenseEndPeriodicity.fromDate(event.endPeriodicity);
-    this._payers = event.payers.map((payer) => UserId.fromString(payer));
-    this._debtors = event.debtors.map((debtor) => UserId.fromString(debtor));
+    this._payers = event.payers.map((payer) => MemberId.fromString(payer));
+    this._debtors = event.debtors.map((debtor) => MemberId.fromString(debtor));
   }
 }

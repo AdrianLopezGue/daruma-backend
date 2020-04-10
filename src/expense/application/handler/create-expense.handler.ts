@@ -24,6 +24,7 @@ export class CreateExpenseHandler implements ICommandHandler<CreateExpenseComman
   async execute(command: CreateExpenseCommand) {
 
     const expenseId = ExpenseId.fromString(command.expenseId);
+    const groupId = ExpenseId.fromString(command.groupId);
     const name = ExpenseName.fromString(command.name);
     const amount = ExpenseAmount.withMoneyAndCurrencyCode(
       ExpenseCurrencyUnit.fromBigInt(BigInt(command.money)),
@@ -35,7 +36,7 @@ export class CreateExpenseHandler implements ICommandHandler<CreateExpenseComman
     const periodicity = ExpensePeriodicity.fromString(command.periodicity);
     const endPeriodicity = ExpenseEndPeriodicity.fromDate(command.endPeriodicity);
 
-    const expense = Expense.add(expenseId, name, amount, payers, debtors, date, periodicity, endPeriodicity);
+    const expense = Expense.add(expenseId, groupId, name, amount, payers, debtors, date, periodicity, endPeriodicity);
 
     this.expenses.save(expense);
   }
