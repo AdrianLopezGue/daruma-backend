@@ -3,6 +3,7 @@ import { ICommand } from '@nestjs/cqrs';
 export class CreateExpenseCommand implements ICommand {
   constructor(
     public readonly expenseId: string,
+    public readonly groupId: string,
     public readonly name: string,
     public readonly money: bigint,
     public readonly currencyCode: string,

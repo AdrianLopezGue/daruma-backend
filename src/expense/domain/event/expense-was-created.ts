@@ -4,6 +4,7 @@ import { DomainEvent } from '../../../core/domain';
 export class ExpenseWasCreated implements DomainEvent {
   constructor(
     public readonly id: string,
+    public readonly groupId: string,
     public readonly name: string,
     public readonly money: bigint,
     public readonly currencyCode: string,
