@@ -19,8 +19,6 @@ export class ExpenseWasCreatedProjection
       name: event.name,
       money: event.money,
       currencyCode: event.currencyCode,
-      payers: event.payers,
-      debtors: event.debtors,
       date: event.date,
       periodicity: event.periodicity,
       endPeriodicity: event.endPeriodicity,

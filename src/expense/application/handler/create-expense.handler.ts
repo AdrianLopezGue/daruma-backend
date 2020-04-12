@@ -11,7 +11,6 @@ import { GroupCurrencyCode } from '../../../group/domain/model/group-currency-co
 import { ExpenseDate } from '../../domain/model/expense-date';
 import { ExpensePeriodicity } from '../../domain/model/expense-periodicity';
 import { ExpenseEndPeriodicity } from '../../domain/model/expense-end-periodicity';
-import { UserId } from '../../../user/domain/model/user-id';
 import { Expenses } from '../../domain/repository/expenses';
 
 @CommandHandler(CreateExpenseCommand)
@@ -27,8 +26,6 @@ export class CreateExpenseHandler
       ExpenseCurrencyUnit.fromBigInt(BigInt(command.money)),
       GroupCurrencyCode.fromString(command.currencyCode),
     );
-    const payers = command.payers.map(payer => UserId.fromString(payer));
-    const debtors = command.debtors.map(debtor => UserId.fromString(debtor));
     const date = ExpenseDate.fromDate(command.date);
     const periodicity = ExpensePeriodicity.fromString(command.periodicity);
     const endPeriodicity = ExpenseEndPeriodicity.fromDate(
@@ -40,8 +37,6 @@ export class CreateExpenseHandler
       groupId,
       name,
       amount,
-      payers,
-      debtors,
       date,
       periodicity,
       endPeriodicity,
