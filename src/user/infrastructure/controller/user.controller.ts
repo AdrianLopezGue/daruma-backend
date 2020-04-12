@@ -27,9 +27,11 @@ export class UserController {
   @ApiResponse({ status: 204, description: 'Create User.' })
   @HttpCode(204)
   @Post()
-  async createUser(@Body() userDto: UserDto, @Authorization() idUser: UserId): Promise<UserDto> {
-
-    if (idUser.value !== userDto.id){
+  async createUser(
+    @Body() userDto: UserDto,
+    @Authorization() idUser: UserId,
+  ): Promise<UserDto> {
+    if (idUser.value !== userDto.id) {
       throw new ForbiddenException('Forbidden access to data');
     }
 

@@ -32,7 +32,10 @@ import uuid = require('uuid');
 @ApiTags('Groups')
 @Controller('groups')
 export class GroupController {
-  constructor(private readonly groupService: GroupService, private readonly memberService: MemberService) {}
+  constructor(
+    private readonly groupService: GroupService,
+    private readonly memberService: MemberService,
+  ) {}
 
   @ApiOperation({ summary: 'Get Groups' })
   @ApiResponse({ status: 200, description: 'Get Groups.' })
@@ -46,9 +49,11 @@ export class GroupController {
   @UsePipes(new ValidationPipe({ transform: true }))
   @HttpCode(204)
   @Post()
-  async createGroup(@Body() groupDto: GroupDto, @Authorization() idUser: UserId): Promise<void> {
-
-    if (idUser.value !== groupDto.owner.id){
+  async createGroup(
+    @Body() groupDto: GroupDto,
+    @Authorization() idUser: UserId,
+  ): Promise<void> {
+    if (idUser.value !== groupDto.owner.id) {
       throw new ForbiddenException('Forbidden access to data');
     }
 
@@ -71,8 +76,15 @@ export class GroupController {
       }
     }
 
-    this.memberService.createMember(uuid.v4(), groupDto.groupId, groupDto.owner.name, groupDto.owner.id)
-    groupDto.members.forEach(async member => this.memberService.createMember(member.id, groupDto.groupId, member.name));
+    this.memberService.createMember(
+      uuid.v4(),
+      groupDto.groupId,
+      groupDto.owner.name,
+      groupDto.owner.id,
+    );
+    groupDto.members.forEach(async member =>
+      this.memberService.createMember(member.id, groupDto.groupId, member.name),
+    );
   }
 
   @ApiOperation({ summary: 'Get Group' })

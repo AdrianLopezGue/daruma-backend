@@ -8,7 +8,7 @@ interface Props {
 export class ExpenseCurrencyUnit extends ValueObject<Props> {
   public static fromBigInt(currencyUnit: bigint): ExpenseCurrencyUnit {
     if (currencyUnit < 0) {
-      throw  NegativeCurrencyUnitError.withString();
+      throw NegativeCurrencyUnitError.withString();
     }
 
     return new ExpenseCurrencyUnit({ value: currencyUnit });

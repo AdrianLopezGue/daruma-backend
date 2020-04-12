@@ -8,7 +8,6 @@ import { GroupId } from '../../../group/domain/model/group-id';
 import { MemberWasCreated } from '../event/member-was-created.event';
 import { UserId } from '../../../user/domain/model/user-id';
 
-
 describe('Member', () => {
   let member: Member;
   let eventBus$: EventBus;
@@ -30,12 +29,19 @@ describe('Member', () => {
   });
 
   it('can be created with id', () => {
-    member = eventPublisher$.mergeObjectContext(Member.add(memberId, groupId, name, userId));
+    member = eventPublisher$.mergeObjectContext(
+      Member.add(memberId, groupId, name, userId),
+    );
     member.commit();
 
     expect(eventBus$.publish).toHaveBeenCalledTimes(1);
     expect(eventBus$.publish).toHaveBeenCalledWith(
-      new MemberWasCreated(memberId.value, groupId.value, name.value, userId.value),
+      new MemberWasCreated(
+        memberId.value,
+        groupId.value,
+        name.value,
+        userId.value,
+      ),
     );
   });
 

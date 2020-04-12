@@ -13,5 +13,5 @@ export const PayerProviders = [
   {
     provide: PAYERS,
     useClass: PayerEventStore,
-  }
+  },
 ];

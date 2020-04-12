@@ -3,5 +3,5 @@ import { RegisterMemberAsUserProjection } from './register-member-as-user.projec
 
 export const ProjectionHandlers = [
   MemberWasCreatedProjection,
-  RegisterMemberAsUserProjection
+  RegisterMemberAsUserProjection,
 ];

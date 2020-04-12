@@ -1,3 +1,3 @@
 export default {
-    url: 'mongodb://localhost/database',
-  };
+  url: 'mongodb://localhost/database',
+};

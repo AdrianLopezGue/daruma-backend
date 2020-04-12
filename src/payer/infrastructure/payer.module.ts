@@ -15,14 +15,19 @@ import { ProjectionHandlers } from './read-model/projection/index';
 
 @Module({
   controllers: [],
-  imports: [CqrsModule, FirebaseModule, DatabaseModule, EventStoreModule.forRoot()],
+  imports: [
+    CqrsModule,
+    FirebaseModule,
+    DatabaseModule,
+    EventStoreModule.forRoot(),
+  ],
   providers: [
     ...CommandHandlers,
     ...ProjectionHandlers,
     ...PayerProviders,
     PayerService,
     PayerEventStore,
-    FirebaseDatabase
+    FirebaseDatabase,
   ],
 })
 export class PayerModule implements OnModuleInit {

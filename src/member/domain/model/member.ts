@@ -20,7 +20,8 @@ export class Member extends AggregateRoot {
     memberId: MemberId,
     groupId: GroupId,
     name: MemberName,
-    userId = UserId.fromString('')): Member {
+    userId = UserId.fromString(''),
+  ): Member {
     const member = new Member();
 
     member.apply(
@@ -60,7 +61,9 @@ export class Member extends AggregateRoot {
       return;
     }
 
-    this.apply(new MemberWasRegisteredAsUser(this._memberId.value, userId.value));
+    this.apply(
+      new MemberWasRegisteredAsUser(this._memberId.value, userId.value),
+    );
   }
 
   private onMemberWasCreated(event: MemberWasCreated) {

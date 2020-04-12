@@ -33,7 +33,9 @@ describe('RegisterMemberAsUserHandler', () => {
       ],
     }).compile();
 
-    command$ = module.get<RegisterMemberAsUserHandler>(RegisterMemberAsUserHandler);
+    command$ = module.get<RegisterMemberAsUserHandler>(
+      RegisterMemberAsUserHandler,
+    );
     members.find = jest.fn().mockResolvedValue(null);
     members.save = jest.fn();
   });

@@ -52,7 +52,7 @@ describe('CreatePayerHandler', () => {
     );
 
     expect(payers.save).toHaveBeenCalledWith(
-        Payer.add(payerId, expenseId, memberId, amount),
+      Payer.add(payerId, expenseId, memberId, amount),
     );
   });
 });

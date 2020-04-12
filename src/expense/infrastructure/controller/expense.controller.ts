@@ -50,9 +50,11 @@ export class ExpenseController {
   @UsePipes(new ValidationPipe({ transform: true }))
   @HttpCode(204)
   @Post()
-  async createExpense(@Body() expenseDto: ExpenseDto, @Authorization() idUser: UserId): Promise<void> {
-
-    if (idUser.value !== expenseDto.creatorId){
+  async createExpense(
+    @Body() expenseDto: ExpenseDto,
+    @Authorization() idUser: UserId,
+  ): Promise<void> {
+    if (idUser.value !== expenseDto.creatorId) {
       throw new ForbiddenException('Forbidden access to data');
     }
 
@@ -67,7 +69,7 @@ export class ExpenseController {
         expenseDto.debtors,
         expenseDto.date,
         expenseDto.periodicity,
-        expenseDto.endPeriodicity
+        expenseDto.endPeriodicity,
       );
     } catch (e) {
       if (e instanceof ExpenseIdAlreadyRegisteredError) {

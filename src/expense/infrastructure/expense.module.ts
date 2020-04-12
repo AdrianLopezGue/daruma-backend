@@ -16,14 +16,19 @@ import { expenseEventHandlers } from '../domain/event/index';
 
 @Module({
   controllers: [ExpenseController],
-  imports: [CqrsModule, FirebaseModule, DatabaseModule, EventStoreModule.forRoot()],
+  imports: [
+    CqrsModule,
+    FirebaseModule,
+    DatabaseModule,
+    EventStoreModule.forRoot(),
+  ],
   providers: [
     ...CommandHandlers,
     ...ProjectionHandlers,
     ...ExpenseProviders,
     ExpenseService,
     ExpenseEventStore,
-    FirebaseDatabase
+    FirebaseDatabase,
   ],
 })
 export class ExpenseModule implements OnModuleInit {

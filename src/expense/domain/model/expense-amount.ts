@@ -8,7 +8,10 @@ interface Props {
 }
 
 export class ExpenseAmount extends ValueObject<Props> {
-  static withMoneyAndCurrencyCode(money: ExpenseCurrencyUnit, currencyCode: GroupCurrencyCode): ExpenseAmount {
+  static withMoneyAndCurrencyCode(
+    money: ExpenseCurrencyUnit,
+    currencyCode: GroupCurrencyCode,
+  ): ExpenseAmount {
     return new ExpenseAmount({ money, currencyCode });
   }
 

@@ -1,4 +1,3 @@
-
 import { DomainEvent } from '../../../core/domain';
 
 export class PayerWasCreated implements DomainEvent {

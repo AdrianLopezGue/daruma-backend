@@ -2,9 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { Model } from 'mongoose';
 
-import {
-  CreateUserCommand
-} from '../../application/command';
+import { CreateUserCommand } from '../../application/command';
 import { USER_MODEL, UserView } from '../read-model/schema/user.schema';
 
 @Injectable()

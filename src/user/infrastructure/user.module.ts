@@ -1,7 +1,6 @@
 import { Module, OnModuleInit } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
-
 import { EventStore } from '../../core/eventstore/eventstore';
 import { EventStoreModule } from '../../core/eventstore/eventstore.module';
 import { DatabaseModule } from '../../core/database/database.module';

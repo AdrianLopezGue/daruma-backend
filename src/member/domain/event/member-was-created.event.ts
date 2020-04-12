@@ -5,6 +5,6 @@ export class MemberWasCreated implements DomainEvent {
     public readonly id: string,
     public readonly idGroup: string,
     public readonly membername: string,
-    public readonly idUser: string
+    public readonly idUser: string,
   ) {}
 }
