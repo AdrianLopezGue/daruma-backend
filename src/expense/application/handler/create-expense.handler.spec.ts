@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { v4 } from 'uuid';
 
-import { UserId } from '../../../user/domain/model/user-id';
 import { CreateExpenseHandler } from './create-expense.handler';
 import { ExpenseId } from '../../domain/model/expense-id';
 import { ExpenseName } from '../../domain/model/expense-name';
@@ -29,8 +28,6 @@ describe('CreateExpenseHandler', () => {
     ExpenseCurrencyUnit.fromBigInt(BigInt(100)),
     GroupCurrencyCode.fromString('EUR'),
   );
-  const payers = [UserId.fromString('111111'), UserId.fromString('222222')];
-  const debtors = [UserId.fromString('333333'), UserId.fromString('444444')];
   const date = ExpenseDate.fromDate(new Date('2019-11-15T17:43:50'));
   const periodicity = ExpensePeriodicity.fromString('Daily');
   const endPeriodicity = ExpenseEndPeriodicity.fromDate(
@@ -60,8 +57,6 @@ describe('CreateExpenseHandler', () => {
         name.value,
         amount.money.value,
         amount.currencyCode.value,
-        payers.map(payer => payer.value),
-        debtors.map(debtor => debtor.value),
         date.value,
         periodicity.value,
         endPeriodicity.value,
@@ -74,8 +69,6 @@ describe('CreateExpenseHandler', () => {
         groupId,
         name,
         amount,
-        payers,
-        debtors,
         date,
         periodicity,
         endPeriodicity,

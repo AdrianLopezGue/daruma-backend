@@ -9,7 +9,6 @@ import { ExpensePeriodicity } from './expense-periodicity';
 import { ExpenseEndPeriodicity } from './expense-end-periodicity';
 import { ExpenseWasCreated } from '../event/expense-was-created';
 import { ExpenseCurrencyUnit } from './expense-currency-unit';
-import { MemberId } from '../../../member/domain/model/member-id';
 import { GroupId } from '../../../group/domain/model/group-id';
 
 export class Expense extends AggregateRoot {
@@ -20,8 +19,6 @@ export class Expense extends AggregateRoot {
   private _date: ExpenseDate;
   private _periodicity: ExpensePeriodicity;
   private _endPeriodicity: ExpenseEndPeriodicity;
-  private _payers: MemberId[];
-  private _debtors: MemberId[];
 
   private constructor() {
     super();
@@ -32,8 +29,6 @@ export class Expense extends AggregateRoot {
     groupId: GroupId,
     name: ExpenseName,
     amount: ExpenseAmount,
-    payers: MemberId[],
-    debtors: MemberId[],
     date: ExpenseDate,
     periodicty: ExpensePeriodicity,
     endPeriodicity: ExpenseEndPeriodicity,
@@ -47,8 +42,6 @@ export class Expense extends AggregateRoot {
         name.value,
         amount.money.value,
         amount.currencyCode.value,
-        payers.map(payer => payer.value),
-        debtors.map(debtor => debtor.value),
         date.value,
         periodicty.value,
         endPeriodicity != null ? endPeriodicity.value : null,
@@ -90,14 +83,6 @@ export class Expense extends AggregateRoot {
     return this._endPeriodicity;
   }
 
-  get payers(): MemberId[] {
-    return this._payers;
-  }
-
-  get debtors(): MemberId[] {
-    return this._debtors;
-  }
-
   private onExpenseWasCreated(event: ExpenseWasCreated) {
     this._expenseId = ExpenseId.fromString(event.id);
     this._groupId = GroupId.fromString(event.groupId);
@@ -109,7 +94,5 @@ export class Expense extends AggregateRoot {
     this._date = ExpenseDate.fromDate(event.date);
     this._periodicity = ExpensePeriodicity.fromString(event.periodicity);
     this._endPeriodicity = ExpenseEndPeriodicity.fromDate(event.endPeriodicity);
-    this._payers = event.payers.map(payer => MemberId.fromString(payer));
-    this._debtors = event.debtors.map(debtor => MemberId.fromString(debtor));
   }
 }

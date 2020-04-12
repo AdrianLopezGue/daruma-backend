@@ -6,8 +6,6 @@ export const ExpenseSchema = new Schema({
   name: String,
   money: Number,
   currencyCode: String,
-  payers: [String],
-  debtors: [String],
   date: Date,
   periodicity: String,
   endPeriodicity: Date,
@@ -20,8 +18,6 @@ export interface ExpenseView extends Document {
   readonly name: string;
   readonly money: bigint;
   readonly currencyCode: string;
-  readonly payers: string[];
-  readonly debtors: string[];
   readonly date: Date;
   readonly periodicity: string;
   readonly endPeriodicity: Date;
