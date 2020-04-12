@@ -11,10 +11,9 @@ import { MemberName } from '../../domain/model/member-name';
 import { Member } from '../../domain/model/member';
 
 @CommandHandler(CreateMemberCommand)
-export class CreateMemberHandler implements ICommandHandler<CreateMemberCommand> {
-  constructor(
-    @Inject(MEMBERS) private readonly members: Members,
-  ) {}
+export class CreateMemberHandler
+  implements ICommandHandler<CreateMemberCommand> {
+  constructor(@Inject(MEMBERS) private readonly members: Members) {}
 
   async execute(command: CreateMemberCommand) {
     const memberId = MemberId.fromString(command.memberId);

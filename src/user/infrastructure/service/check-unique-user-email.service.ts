@@ -6,7 +6,6 @@ import { CheckUniqueUserEmail } from '../../domain/services/check-unique-user-em
 import { UserEmail } from '../../domain/model/user-email';
 import { UserId } from '../../domain/model/user-id';
 
-
 @Injectable()
 export class CheckUniqueUserEmailFromReadModel implements CheckUniqueUserEmail {
   constructor(

@@ -1,4 +1,3 @@
-
 import { Connection } from 'mongoose';
 import { MEMBER_MODEL, MemberSchema } from './read-model/schema/member.schema';
 import { MEMBERS } from '../domain/repository/index';
@@ -14,5 +13,5 @@ export const MemberProviders = [
   {
     provide: MEMBERS,
     useClass: MemberEventStore,
-  }
+  },
 ];

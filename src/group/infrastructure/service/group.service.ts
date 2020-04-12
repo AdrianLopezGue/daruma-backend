@@ -14,11 +14,18 @@ export class GroupService {
   constructor(
     private readonly commandBus: CommandBus,
     @Inject(GROUP_MODEL) private readonly groupModel: Model<GroupView>,
-    private readonly memberService: MemberService
+    private readonly memberService: MemberService,
   ) {}
 
-  async createGroup(groupId: string, name: string, currencyCode: string, ownerId: string) {
-    return this.commandBus.execute(new CreateGroupCommand(groupId, name, currencyCode, ownerId));
+  async createGroup(
+    groupId: string,
+    name: string,
+    currencyCode: string,
+    ownerId: string,
+  ) {
+    return this.commandBus.execute(
+      new CreateGroupCommand(groupId, name, currencyCode, ownerId),
+    );
   }
 
   async changeNameGroup(id: string, name: string) {
@@ -31,6 +38,6 @@ export class GroupService {
 
   async getGroups(ownerId: string): Promise<GroupView[]> {
     const idGroups = await this.memberService.getGroups(ownerId);
-    return this.groupModel.find({ _id: { $in : [ idGroups.toString() ] }}).exec();
+    return this.groupModel.find({ _id: { $in: [idGroups.toString()] } }).exec();
   }
 }

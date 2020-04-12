@@ -20,7 +20,6 @@ export class MemberWasCreatedProjection
       userId: event.idUser,
     });
 
-
     return memberView.save();
   }
 }

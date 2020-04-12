@@ -1,6 +1,9 @@
 import { EXPENSES } from '../domain/repository/index';
 import { Connection } from 'mongoose';
-import { EXPENSE_MODEL, ExpenseSchema } from './read-model/schema/expense.schema';
+import {
+  EXPENSE_MODEL,
+  ExpenseSchema,
+} from './read-model/schema/expense.schema';
 import { ExpenseEventStore } from './eventstore/expense.event-store';
 
 export const ExpenseProviders = [
@@ -13,5 +16,5 @@ export const ExpenseProviders = [
   {
     provide: EXPENSES,
     useClass: ExpenseEventStore,
-  }
+  },
 ];

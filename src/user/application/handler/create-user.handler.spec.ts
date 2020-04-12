@@ -10,7 +10,6 @@ import { User } from '../../domain/model/user';
 import { CheckUniqueUserEmail } from '../../../../dist/user/domain/services/check-unique-user-email.service';
 import { CHECK_UNIQUE_USER_EMAIL } from '../../domain/services/check-unique-user-email.service';
 
-
 describe('CreateUserHandler', () => {
   let command$: CreateUserHandler;
 
@@ -44,11 +43,7 @@ describe('CreateUserHandler', () => {
 
   it('should creates a new user', async () => {
     await command$.execute(
-      new CreateUserCommand(
-        userId.value,
-        username.value,
-        useremail.value
-      ),
+      new CreateUserCommand(userId.value, username.value, useremail.value),
     );
 
     expect(users.save).toHaveBeenCalledWith(

@@ -24,13 +24,15 @@ describe('Expense', () => {
   const name = ExpenseName.fromString('Expense Name');
   const amount = ExpenseAmount.withMoneyAndCurrencyCode(
     ExpenseCurrencyUnit.fromBigInt(BigInt(100)),
-    GroupCurrencyCode.fromString('EUR')
+    GroupCurrencyCode.fromString('EUR'),
   );
   const payers = [UserId.fromString('111111'), UserId.fromString('222222')];
   const debtors = [UserId.fromString('333333'), UserId.fromString('444444')];
   const date = ExpenseDate.fromDate(new Date('2019-11-15T17:43:50'));
   const periodicity = ExpensePeriodicity.fromString('Daily');
-  const endPeriodicity = ExpenseEndPeriodicity.fromDate(new Date('2019-11-15T17:43:50'));
+  const endPeriodicity = ExpenseEndPeriodicity.fromDate(
+    new Date('2019-11-15T17:43:50'),
+  );
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -43,23 +45,35 @@ describe('Expense', () => {
   });
 
   it('can be created', () => {
-    expense = eventPublisher$.mergeObjectContext(Expense.add(expenseId, groupId, name, amount, payers, debtors, date, periodicity, endPeriodicity));
+    expense = eventPublisher$.mergeObjectContext(
+      Expense.add(
+        expenseId,
+        groupId,
+        name,
+        amount,
+        payers,
+        debtors,
+        date,
+        periodicity,
+        endPeriodicity,
+      ),
+    );
     expense.commit();
 
     expect(eventBus$.publish).toHaveBeenCalledTimes(1);
     expect(eventBus$.publish).toHaveBeenCalledWith(
       new ExpenseWasCreated(
-          expenseId.value,
-          groupId.value,
-          name.value,
-          amount.money.value,
-          amount.currencyCode.value,
-          payers.map((payer) => payer.value),
-          debtors.map((debtor) => debtor.value),
-          date.value,
-          periodicity.value,
-          endPeriodicity.value
-          ),
+        expenseId.value,
+        groupId.value,
+        name.value,
+        amount.money.value,
+        amount.currencyCode.value,
+        payers.map(payer => payer.value),
+        debtors.map(debtor => debtor.value),
+        date.value,
+        periodicity.value,
+        endPeriodicity.value,
+      ),
     );
   });
 
@@ -77,7 +91,9 @@ describe('Expense', () => {
 
   it('has an amount', () => {
     expect(expense.amount.money.equals(amount.money)).toBeTruthy();
-    expect(expense.amount.currencyCode.equals(amount.currencyCode)).toBeTruthy();
+    expect(
+      expense.amount.currencyCode.equals(amount.currencyCode),
+    ).toBeTruthy();
   });
 
   it('has an date', () => {

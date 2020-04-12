@@ -17,9 +17,9 @@ export class ExpenseDto {
   @IsString()
   @ApiProperty()
   readonly currencyCode!: string;
-  @ApiProperty({type: [String]})
+  @ApiProperty({ type: [String] })
   readonly payers!: string[];
-  @ApiProperty({type: [String]})
+  @ApiProperty({ type: [String] })
   readonly debtors!: string[];
   @IsDate()
   @ApiProperty()

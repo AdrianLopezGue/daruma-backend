@@ -13,6 +13,8 @@ export class RegisterMemberAsUserProjection
   ) {}
 
   async handle(event: MemberWasRegisteredAsUser) {
-    this.memberModel.updateOne({ _id: event.id }, { userId: event.idUser }).exec();
+    this.memberModel
+      .updateOne({ _id: event.id }, { userId: event.idUser })
+      .exec();
   }
 }

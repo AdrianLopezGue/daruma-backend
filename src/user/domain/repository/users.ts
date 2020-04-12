@@ -1,4 +1,3 @@
-
 import { User } from '../model';
 import { UserId } from '../model/user-id';
 

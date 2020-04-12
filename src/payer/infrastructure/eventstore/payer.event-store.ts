@@ -6,7 +6,6 @@ import { Payers } from '../../domain/repository/payers';
 import { PayerId } from '../../domain/model/payer-id';
 import { Payer } from '../../domain/model/payer';
 
-
 @Injectable()
 export class PayerEventStore implements Payers {
   constructor(

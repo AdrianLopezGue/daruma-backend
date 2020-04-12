@@ -14,15 +14,12 @@ import { ExpenseEndPeriodicity } from '../../domain/model/expense-end-periodicit
 import { UserId } from '../../../user/domain/model/user-id';
 import { Expenses } from '../../domain/repository/expenses';
 
-
 @CommandHandler(CreateExpenseCommand)
-export class CreateExpenseHandler implements ICommandHandler<CreateExpenseCommand> {
-  constructor(
-    @Inject(EXPENSES) private readonly expenses: Expenses,
-  ) {}
+export class CreateExpenseHandler
+  implements ICommandHandler<CreateExpenseCommand> {
+  constructor(@Inject(EXPENSES) private readonly expenses: Expenses) {}
 
   async execute(command: CreateExpenseCommand) {
-
     const expenseId = ExpenseId.fromString(command.expenseId);
     const groupId = ExpenseId.fromString(command.groupId);
     const name = ExpenseName.fromString(command.name);
@@ -30,13 +27,25 @@ export class CreateExpenseHandler implements ICommandHandler<CreateExpenseComman
       ExpenseCurrencyUnit.fromBigInt(BigInt(command.money)),
       GroupCurrencyCode.fromString(command.currencyCode),
     );
-    const payers = command.payers.map((payer) => UserId.fromString(payer));
-    const debtors = command.debtors.map((debtor) => UserId.fromString(debtor));
+    const payers = command.payers.map(payer => UserId.fromString(payer));
+    const debtors = command.debtors.map(debtor => UserId.fromString(debtor));
     const date = ExpenseDate.fromDate(command.date);
     const periodicity = ExpensePeriodicity.fromString(command.periodicity);
-    const endPeriodicity = ExpenseEndPeriodicity.fromDate(command.endPeriodicity);
+    const endPeriodicity = ExpenseEndPeriodicity.fromDate(
+      command.endPeriodicity,
+    );
 
-    const expense = Expense.add(expenseId, groupId, name, amount, payers, debtors, date, periodicity, endPeriodicity);
+    const expense = Expense.add(
+      expenseId,
+      groupId,
+      name,
+      amount,
+      payers,
+      debtors,
+      date,
+      periodicity,
+      endPeriodicity,
+    );
 
     this.expenses.save(expense);
   }
