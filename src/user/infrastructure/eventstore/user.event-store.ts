@@ -6,7 +6,6 @@ import { Users } from '../../domain/repository/users';
 import { User } from '../../domain/model/user';
 import { UserId } from '../../domain/model/user-id';
 
-
 @Injectable()
 export class UserEventStore implements Users {
   constructor(

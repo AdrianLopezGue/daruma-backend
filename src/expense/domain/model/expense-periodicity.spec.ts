@@ -11,7 +11,7 @@ describe('Expense Periodicity', () => {
 
   it('should throw an exception if the value is invalid', () => {
     expect(() => ExpensePeriodicity.fromString('Aaa123')).toThrow(
-       InvalidPeriodicityStateError,
+      InvalidPeriodicityStateError,
     );
   });
 

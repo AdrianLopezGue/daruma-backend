@@ -5,8 +5,7 @@ import { UserWasCreated } from '../../../domain/event/user-was-created.event';
 import { UserView } from '../schema/user.schema';
 
 @EventsHandler(UserWasCreated)
-export class UserWasCreatedProjection
-  implements IEventHandler<UserWasCreated> {
+export class UserWasCreatedProjection implements IEventHandler<UserWasCreated> {
   constructor(
     @Inject('USER_MODEL') private readonly userModel: Model<UserView>,
   ) {}

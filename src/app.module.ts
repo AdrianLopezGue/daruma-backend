@@ -8,6 +8,12 @@ import { ExpenseModule } from './expense/infrastructure/expense.module';
 
 @Global()
 @Module({
-  imports: [BootstrapModule, GroupModule, UserModule, MemberModule, ExpenseModule],
+  imports: [
+    BootstrapModule,
+    GroupModule,
+    UserModule,
+    MemberModule,
+    ExpenseModule,
+  ],
 })
 export class AppModule {}

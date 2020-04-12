@@ -12,7 +12,7 @@ import { CreateExpenseCommand } from '../../application/command/create-expense.c
 export class ExpenseService {
   constructor(
     private readonly commandBus: CommandBus,
-    @Inject(EXPENSE_MODEL) private readonly expenseModel: Model<ExpenseView>
+    @Inject(EXPENSE_MODEL) private readonly expenseModel: Model<ExpenseView>,
   ) {}
 
   // tslint:disable-next-line: max-line-length

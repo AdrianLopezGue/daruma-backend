@@ -4,7 +4,10 @@ import { GROUPS } from '../domain/repository/index';
 import { GroupEventStore } from './eventstore/groups.event-store';
 import { GROUP_MODEL, GroupSchema } from './read-model/schema/group.schema';
 import { Connection } from 'mongoose';
-import { MEMBER_MODEL, MemberSchema } from '../../member/infrastructure/read-model/schema/member.schema';
+import {
+  MEMBER_MODEL,
+  MemberSchema,
+} from '../../member/infrastructure/read-model/schema/member.schema';
 
 export const GroupProviders = [
   {

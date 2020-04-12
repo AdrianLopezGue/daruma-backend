@@ -28,7 +28,7 @@ describe('CreateMemberHandler', () => {
         {
           provide: MEMBERS,
           useValue: members,
-        }
+        },
       ],
     }).compile();
 

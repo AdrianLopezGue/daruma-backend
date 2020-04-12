@@ -1,6 +1,5 @@
 import { ExpenseDate } from './expense-date';
 
-
 describe('Expense Date', () => {
   const newDate: Date = new Date('2019-11-8T16:52:50');
 

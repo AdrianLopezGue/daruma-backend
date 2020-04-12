@@ -48,14 +48,20 @@ export class MemberController {
   @ApiResponse({ status: 404, description: 'Not found' })
   @HttpCode(204)
   @Patch(':id')
-  async registerMemberAsUser(@Query('id') id: string, @Body() memberDto: RegisterMemberAsUserDto, @Authorization() idUser: UserId) {
-
-    if (idUser.value !== memberDto.idUser){
-        throw new ForbiddenException('Forbidden access to data');
+  async registerMemberAsUser(
+    @Query('id') id: string,
+    @Body() memberDto: RegisterMemberAsUserDto,
+    @Authorization() idUser: UserId,
+  ) {
+    if (idUser.value !== memberDto.idUser) {
+      throw new ForbiddenException('Forbidden access to data');
     }
 
     try {
-      return await this.memberService.registerMemberAsUser(id, memberDto.idUser);
+      return await this.memberService.registerMemberAsUser(
+        id,
+        memberDto.idUser,
+      );
     } catch (e) {
       if (e instanceof MemberIdNotFoundError) {
         throw new NotFoundException('Member not found');

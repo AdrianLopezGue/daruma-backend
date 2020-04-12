@@ -6,13 +6,11 @@ interface Props {
 }
 
 export class ExpenseId extends Id {
-
   static generate(): ExpenseId {
     return new ExpenseId(uuid());
   }
 
   public static fromString(id: string): ExpenseId {
-
     return new ExpenseId(id);
   }
 

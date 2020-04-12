@@ -33,7 +33,9 @@ describe('CreateExpenseHandler', () => {
   const debtors = [UserId.fromString('333333'), UserId.fromString('444444')];
   const date = ExpenseDate.fromDate(new Date('2019-11-15T17:43:50'));
   const periodicity = ExpensePeriodicity.fromString('Daily');
-  const endPeriodicity = ExpenseEndPeriodicity.fromDate(new Date('2019-11-15T17:43:50'));
+  const endPeriodicity = ExpenseEndPeriodicity.fromDate(
+    new Date('2019-11-15T17:43:50'),
+  );
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -58,16 +60,26 @@ describe('CreateExpenseHandler', () => {
         name.value,
         amount.money.value,
         amount.currencyCode.value,
-        payers.map((payer) => payer.value),
-        debtors.map((debtor) => debtor.value),
+        payers.map(payer => payer.value),
+        debtors.map(debtor => debtor.value),
         date.value,
         periodicity.value,
-        endPeriodicity.value
+        endPeriodicity.value,
       ),
     );
 
     expect(expenses.save).toHaveBeenCalledWith(
-        Expense.add(expenseId, groupId, name, amount, payers, debtors, date, periodicity, endPeriodicity),
+      Expense.add(
+        expenseId,
+        groupId,
+        name,
+        amount,
+        payers,
+        debtors,
+        date,
+        periodicity,
+        endPeriodicity,
+      ),
     );
   });
 });

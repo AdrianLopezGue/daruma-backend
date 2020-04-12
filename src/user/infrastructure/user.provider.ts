@@ -1,4 +1,3 @@
-
 import { Connection } from 'mongoose';
 import { USER_MODEL, UserSchema } from './read-model/schema/user.schema';
 import { UserEventStore } from './eventstore/user.event-store';

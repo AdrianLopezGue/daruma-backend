@@ -6,13 +6,11 @@ interface Props {
 }
 
 export class GroupId extends Id {
-
   static generate(): GroupId {
     return new GroupId(uuid());
   }
 
   public static fromString(id: string): GroupId {
-
     return new GroupId(id);
   }
 

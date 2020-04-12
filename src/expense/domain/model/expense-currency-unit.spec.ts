@@ -8,7 +8,7 @@ describe('ExpenseCurrencyUnit', () => {
 
   it('should not be negative', () => {
     expect(() => {
-        ExpenseCurrencyUnit.fromBigInt(BigInt(-10));
+      ExpenseCurrencyUnit.fromBigInt(BigInt(-10));
     }).toThrow(NegativeCurrencyUnitError);
   });
 });

@@ -9,8 +9,10 @@ import { USERS, Users } from '../../domain/repository/users';
 import { User } from '../../domain/model/user';
 import { UserIdAlreadyRegisteredError } from '../../domain/exception/user-id-already-registered.error';
 import { UserEmailAlreadyRegisteredError } from '../../domain/exception/user-email-already-registered.error';
-import { CHECK_UNIQUE_USER_EMAIL, CheckUniqueUserEmail } from '../../domain/services/check-unique-user-email.service';
-
+import {
+  CHECK_UNIQUE_USER_EMAIL,
+  CheckUniqueUserEmail,
+} from '../../domain/services/check-unique-user-email.service';
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
@@ -29,7 +31,9 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
       throw UserIdAlreadyRegisteredError.withString(command.userId);
     }
 
-    if ((await this.checkUniqueUserEmail.with(useremail)) instanceof UserEmail) {
+    if (
+      (await this.checkUniqueUserEmail.with(useremail)) instanceof UserEmail
+    ) {
       throw UserEmailAlreadyRegisteredError.withString(command.useremail);
     }
 

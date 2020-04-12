@@ -47,8 +47,8 @@ export class Expense extends AggregateRoot {
         name.value,
         amount.money.value,
         amount.currencyCode.value,
-        payers.map((payer) => payer.value),
-        debtors.map((debtor) => debtor.value),
+        payers.map(payer => payer.value),
+        debtors.map(debtor => debtor.value),
         date.value,
         periodicty.value,
         endPeriodicity != null ? endPeriodicity.value : null,
@@ -98,7 +98,6 @@ export class Expense extends AggregateRoot {
     return this._debtors;
   }
 
-
   private onExpenseWasCreated(event: ExpenseWasCreated) {
     this._expenseId = ExpenseId.fromString(event.id);
     this._groupId = GroupId.fromString(event.groupId);
@@ -110,7 +109,7 @@ export class Expense extends AggregateRoot {
     this._date = ExpenseDate.fromDate(event.date);
     this._periodicity = ExpensePeriodicity.fromString(event.periodicity);
     this._endPeriodicity = ExpenseEndPeriodicity.fromDate(event.endPeriodicity);
-    this._payers = event.payers.map((payer) => MemberId.fromString(payer));
-    this._debtors = event.debtors.map((debtor) => MemberId.fromString(debtor));
+    this._payers = event.payers.map(payer => MemberId.fromString(payer));
+    this._debtors = event.debtors.map(debtor => MemberId.fromString(debtor));
   }
 }

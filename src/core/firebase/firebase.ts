@@ -5,18 +5,16 @@ import { Injectable } from '@nestjs/common/decorators';
 
 @Injectable()
 export class FirebaseDatabase {
+  constructor() {
+    this.initialApp();
+  }
 
-    constructor() {
-      this.initialApp()
-    }
-
-    initialApp() {
-
+  initialApp() {
     const config = {
-        credential: admin.credential.cert(serviceAccount as object),
+      credential: admin.credential.cert(serviceAccount as object),
     };
 
-    if (admin.apps.length === 0){
+    if (admin.apps.length === 0) {
       admin.initializeApp(config);
     }
   }

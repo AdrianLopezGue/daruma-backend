@@ -17,7 +17,12 @@ import { MemberService } from '../../member/infrastructure/service/member.servic
 
 @Module({
   controllers: [GroupController],
-  imports: [CqrsModule, FirebaseModule, DatabaseModule, EventStoreModule.forRoot()],
+  imports: [
+    CqrsModule,
+    FirebaseModule,
+    DatabaseModule,
+    EventStoreModule.forRoot(),
+  ],
   providers: [
     ...CommandHandlers,
     ...ProjectionHandlers,
@@ -25,7 +30,7 @@ import { MemberService } from '../../member/infrastructure/service/member.servic
     GroupService,
     GroupEventStore,
     FirebaseDatabase,
-    MemberService
+    MemberService,
   ],
 })
 export class GroupModule implements OnModuleInit {

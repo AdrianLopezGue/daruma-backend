@@ -6,7 +6,6 @@ import { Members } from '../../domain/repository/members';
 import { Member } from '../../domain/model/member';
 import { MemberId } from '../../domain/model/member-id';
 
-
 @Injectable()
 export class MemberEventStore implements Members {
   constructor(

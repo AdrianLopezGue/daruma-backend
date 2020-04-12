@@ -6,7 +6,6 @@ import { Expenses } from '../../domain/repository/expenses';
 import { ExpenseId } from '../../domain/model/expense-id';
 import { Expense } from '../../domain/model/expense';
 
-
 @Injectable()
 export class ExpenseEventStore implements Expenses {
   constructor(

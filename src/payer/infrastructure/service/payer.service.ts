@@ -12,7 +12,15 @@ export class PayerService {
     @Inject(PAYER_MODEL) private readonly payerModel: Model<PayerView>,
   ) {}
 
-  async createPayer(id: string, expenseId: string, memberId: string, money: bigint, currencyCode: string) {
-    return this.commandBus.execute(new CreatePayerCommand(id, expenseId, memberId, money, currencyCode));
+  async createPayer(
+    id: string,
+    expenseId: string,
+    memberId: string,
+    money: bigint,
+    currencyCode: string,
+  ) {
+    return this.commandBus.execute(
+      new CreatePayerCommand(id, expenseId, memberId, money, currencyCode),
+    );
   }
 }

@@ -18,10 +18,23 @@ export class Payer extends AggregateRoot {
     super();
   }
 
-  public static add(payerId: PayerId, expenseId: ExpenseId, memberId: MemberId, amount: ExpenseAmount): Payer {
+  public static add(
+    payerId: PayerId,
+    expenseId: ExpenseId,
+    memberId: MemberId,
+    amount: ExpenseAmount,
+  ): Payer {
     const payer = new Payer();
 
-    payer.apply(new PayerWasCreated(payerId.value, expenseId.value, memberId.value, amount.money.value, amount.currencyCode.value));
+    payer.apply(
+      new PayerWasCreated(
+        payerId.value,
+        expenseId.value,
+        memberId.value,
+        amount.money.value,
+        amount.currencyCode.value,
+      ),
+    );
 
     return payer;
   }
@@ -51,8 +64,8 @@ export class Payer extends AggregateRoot {
     this._expenseId = ExpenseId.fromString(event.expenseId);
     this._memberId = MemberId.fromString(event.memberId);
     this._amount = ExpenseAmount.withMoneyAndCurrencyCode(
-        ExpenseCurrencyUnit.fromBigInt(BigInt(event.money)),
-        GroupCurrencyCode.fromString(event.currencyCode),
-      );
+      ExpenseCurrencyUnit.fromBigInt(BigInt(event.money)),
+      GroupCurrencyCode.fromString(event.currencyCode),
+    );
   }
 }
