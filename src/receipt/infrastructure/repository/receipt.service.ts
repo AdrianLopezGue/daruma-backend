@@ -5,6 +5,8 @@ import { Model } from 'mongoose';
 
 import { ReceiptView, RECEIPT_MODEL } from '../read-model/schema/receipt.schema';
 import { CreateReceiptCommand } from '../../application/command/create-receipt.command';
+import { Payer } from '../../../payer/domain/model/payer';
+import { Debtor } from '../../../debtor/domain/model/debtor';
 
 @Injectable()
 export class ReceiptService {
@@ -17,8 +19,8 @@ export class ReceiptService {
     receiptId: string,
     expenseId: string,
     date: Date,
-    payers: string[],
-    debtors: string[],
+    payers: Payer[],
+    debtors: Debtor[],
     money: bigint,
     currencyCode: string,
   ) {

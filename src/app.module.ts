@@ -19,7 +19,8 @@ import { PayerModule } from './payer/infrastructure/payer.module';
     ExpenseModule,
     ReceiptModule,
     PayerModule,
-    DebtorModule
+    DebtorModule,
+    ReceiptModule
   ],
 })
 export class AppModule {}

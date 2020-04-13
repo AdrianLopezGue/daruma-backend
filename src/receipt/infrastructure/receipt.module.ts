@@ -8,7 +8,7 @@ import { EventStore } from '../../core/eventstore/eventstore';
 import { EventStoreModule } from '../../core/eventstore/eventstore.module';
 import { DatabaseModule } from '../../core/database/database.module';
 import { ProjectionHandlers } from './read-model/projection/index';
-import { ReceiptService } from './service/receipt.service';
+import { ReceiptService } from './repository/receipt.service';
 import { ReceiptEventStore } from './eventstore/receipt.event-store';
 import { receiptEventHandlers } from '../domain/event/index';
 import { ReceiptProviders } from './receipt.provider';

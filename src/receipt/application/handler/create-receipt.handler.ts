@@ -5,8 +5,6 @@ import { GroupCurrencyCode } from '../../../group/domain/model/group-currency-co
 import { CreateReceiptCommand } from '../command/create-receipt.command';
 import { Receipts } from '../../domain/repository/receipts';
 import { ReceiptId } from '../../domain/model/receipt-id';
-import { PayerId } from '../../../payer/domain/model/payer-id';
-import { DebtorId } from '../../../debtor/domain/model/debtor-id';
 import { Receipt } from '../../domain/model/receipt';
 import { ExpenseDate } from '../../../expense/domain/model/expense-date';
 import { ExpenseId } from '../../../expense/domain/model/expense-id';
@@ -22,8 +20,8 @@ export class CreateReceiptHandler
     const receiptId = ReceiptId.fromString(command.receiptId);
     const expenseId = ExpenseId.fromString(command.expenseId);
     const date = ExpenseDate.fromDate(command.date);
-    const payers = command.payers.map(payer => PayerId.fromString(payer));
-    const debtors = command.debtors.map(debtor => DebtorId.fromString(debtor));
+    const payers = command.payers;
+    const debtors = command.debtors;
     const amount = ExpenseAmount.withMoneyAndCurrencyCode(
       ExpenseCurrencyUnit.fromBigInt(BigInt(command.money)),
       GroupCurrencyCode.fromString(command.currencyCode),

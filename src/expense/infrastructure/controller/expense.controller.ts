@@ -21,17 +21,11 @@ import { UserId } from '../../../user/domain/model/user-id';
 import { ExpenseDto } from '../dto/expense.dto';
 import { Authorization } from '../service/authentication.decorator';
 import { ExpenseIdAlreadyRegisteredError } from '../../domain/exception/expense-id-already-registered.error';
-import { PayerService } from '@app/payer/infrastructure/service/payer.service';
-import { DebtorService } from '../../../debtor/infrastructure/service/debtor.service';
-import { PayerId } from '@app/payer/domain/model/payer-id';
-import uuid = require('uuid');
 @ApiTags('Expenses')
 @Controller('expenses')
 export class ExpenseController {
   constructor(
     private readonly expenseService: ExpenseService,
-    private readonly payerService: PayerService,
-    private readonly debtorService: DebtorService,
   ) {}
 
   @ApiOperation({ summary: 'Get Expensess of Group' })
@@ -72,6 +66,8 @@ export class ExpenseController {
         expenseDto.name,
         expenseDto.money,
         expenseDto.currencyCode,
+        expenseDto.payers,
+        expenseDto.debtors,
         expenseDto.date,
         expenseDto.periodicity,
         expenseDto.endPeriodicity,
@@ -85,13 +81,5 @@ export class ExpenseController {
         throw new BadRequestException('Server error');
       }
     }
-
-    expenseDto.payers.forEach(async payer =>
-      this.payerService.createPayer(uuid.v4(), expenseDto.expenseId, payer.id, payer.money, expenseDto.currencyCode),
-    );
-
-    expenseDto.debtors.forEach(async debtor =>
-      this.debtorService.createDebtor(uuid.v4(), expenseDto.expenseId, debtor.id, debtor.money, expenseDto.currencyCode),
-    );
   }
 }
