@@ -13,6 +13,8 @@ import { ExpenseService } from './service/expense.service';
 import { ExpenseEventStore } from './eventstore/expense.event-store';
 import { ExpenseController } from './controller/expense.controller';
 import { expenseEventHandlers } from '../domain/event/index';
+import { PayerService } from '../../payer/infrastructure/service/payer.service';
+import { DebtorService } from '../../debtor/infrastructure/service/debtor.service';
 
 @Module({
   controllers: [ExpenseController],
@@ -29,6 +31,8 @@ import { expenseEventHandlers } from '../domain/event/index';
     ExpenseService,
     ExpenseEventStore,
     FirebaseDatabase,
+    PayerService,
+    DebtorService
   ],
 })
 export class ExpenseModule implements OnModuleInit {

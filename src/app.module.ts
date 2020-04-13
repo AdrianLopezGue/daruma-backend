@@ -5,6 +5,9 @@ import { GroupModule } from './group/infrastructure/group.module';
 import { MemberModule } from './member/infrastructure/member.module';
 import { UserModule } from './user/infrastructure/user.module';
 import { ExpenseModule } from './expense/infrastructure/expense.module';
+import { ReceiptModule } from './receipt/infrastructure/receipt.module';
+import { DebtorModule } from './debtor/infrastructure/debtor.module';
+import { PayerModule } from './payer/infrastructure/payer.module';
 
 @Global()
 @Module({
@@ -14,6 +17,9 @@ import { ExpenseModule } from './expense/infrastructure/expense.module';
     UserModule,
     MemberModule,
     ExpenseModule,
+    ReceiptModule,
+    PayerModule,
+    DebtorModule
   ],
 })
 export class AppModule {}
