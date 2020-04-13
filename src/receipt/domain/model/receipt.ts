@@ -4,18 +4,18 @@ import { ReceiptId } from './receipt-id';
 import { ExpenseId } from '../../../expense/domain/model/expense-id';
 import { ExpenseDate } from '../../../expense/domain/model/expense-date';
 import { ExpenseAmount } from '../../../expense/domain/model/expense-amount';
-import { PayerId } from '../../../payer/domain/model/payer-id';
-import { DebtorId } from '../../../debtor/domain/model/debtor-id';
 import { ReceiptWasCreated } from '../event/receipt-was-created';
 import { ExpenseCurrencyUnit } from '../../../expense/domain/model/expense-currency-unit';
 import { GroupCurrencyCode } from '../../../group/domain/model/group-currency-code';
+import { Payer } from '../../../payer/domain/model/payer';
+import { Debtor } from '../../../debtor/domain/model/debtor';
 
 export class Receipt extends AggregateRoot {
   private _receiptId: ReceiptId;
   private _expenseId: ExpenseId;
   private _date: ExpenseDate;
-  private _payers: PayerId[];
-  private _debtors: DebtorId[];
+  private _payers: Payer[];
+  private _debtors: Debtor[];
   private _amount: ExpenseAmount;
 
   private constructor() {
@@ -26,8 +26,8 @@ export class Receipt extends AggregateRoot {
     receiptId: ReceiptId,
     expenseId: ExpenseId,
     date: ExpenseDate,
-    payers: PayerId[],
-    debtors: DebtorId[],
+    payers: Payer[],
+    debtors: Debtor[],
     amount: ExpenseAmount,
   ): Receipt {
     const receipt = new Receipt();
@@ -37,8 +37,8 @@ export class Receipt extends AggregateRoot {
         receiptId.value,
         expenseId.value,
         date.value,
-        payers.map((payer) => payer.value),
-        debtors.map((debtor) => debtor.value),
+        payers,
+        debtors,
         amount.money.value,
         amount.currencyCode.value,
       ),
@@ -67,11 +67,11 @@ export class Receipt extends AggregateRoot {
     return this._amount;
   }
 
-  get payers(): PayerId[] {
+  get payers(): Payer[] {
     return this._payers;
   }
 
-  get debtors(): DebtorId[] {
+  get debtors(): Debtor[] {
     return this._debtors;
   }
 
@@ -79,8 +79,8 @@ export class Receipt extends AggregateRoot {
     this._receiptId = ReceiptId.fromString(event.id);
     this._expenseId = ExpenseId.fromString(event.id);
     this._date = ExpenseDate.fromDate(event.date);
-    this._payers = event.payers.map(payer => PayerId.fromString(payer));
-    this._debtors = event.debtors.map(debtor => DebtorId.fromString(debtor));
+    this._payers = event.payers;
+    this._debtors = event.debtors;
     this._amount = ExpenseAmount.withMoneyAndCurrencyCode(
       ExpenseCurrencyUnit.fromBigInt(BigInt(event.money)),
       GroupCurrencyCode.fromString(event.currencyCode),

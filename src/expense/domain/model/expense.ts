@@ -10,6 +10,13 @@ import { ExpenseEndPeriodicity } from './expense-end-periodicity';
 import { ExpenseWasCreated } from '../event/expense-was-created';
 import { ExpenseCurrencyUnit } from './expense-currency-unit';
 import { GroupId } from '../../../group/domain/model/group-id';
+import { PayerId } from '../../../payer/domain/model/payer-id';
+import { MemberId } from '../../../member/domain/model/member-id';
+import { Payer } from '../../../payer/domain/model/payer';
+import { DebtorId } from '../../../debtor/domain/model/debtor-id';
+import { Debtor } from '../../../debtor/domain/model/debtor';
+import { ReceiptId } from '@app/receipt/domain/model/receipt-id';
+import { Receipt } from '@app/receipt/domain/model/receipt';
 
 export class Expense extends AggregateRoot {
   private _expenseId: ExpenseId;
@@ -49,6 +56,48 @@ export class Expense extends AggregateRoot {
     );
 
     return expense;
+  }
+
+  public addPayer(
+    payerId: PayerId,
+    memberId: MemberId,
+    amount: ExpenseAmount,
+  ): Payer {
+    return Payer.add(
+      payerId,
+      this.id,
+      memberId,
+      amount
+    );
+  }
+
+  public addDebtor(
+    debtorId: DebtorId,
+    memberId: MemberId,
+    amount: ExpenseAmount,
+  ): Debtor {
+    return Debtor.add(
+        debtorId,
+        this.id,
+        memberId,
+        amount
+    );
+  }
+
+  public createReceipt(
+    receiptId: ReceiptId,
+    date: ExpenseDate,
+    payers: Payer[],
+    debtors: Debtor[]
+  ): Receipt{
+    return Receipt.add(
+      receiptId,
+      this.id,
+      date,
+      payers,
+      debtors,
+      this.amount
+    )
   }
 
   public aggregateId(): string {

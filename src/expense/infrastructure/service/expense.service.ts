@@ -7,6 +7,7 @@ import {
   ExpenseView,
 } from '../read-model/schema/expense.schema';
 import { CreateExpenseCommand } from '../../application/command/create-expense.command';
+import { ParticipantDto } from '../dto/expense.dto';
 
 @Injectable()
 export class ExpenseService {
@@ -22,6 +23,8 @@ export class ExpenseService {
     name: string,
     money: bigint,
     currencyCode: string,
+    payers: ParticipantDto[],
+    debtors: ParticipantDto[],
     date: Date,
     periodicity: string,
     endPeriodicity?: Date,
@@ -34,6 +37,8 @@ export class ExpenseService {
         name,
         money,
         currencyCode,
+        payers,
+        debtors,
         date,
         periodicity,
         endPeriodicity,
