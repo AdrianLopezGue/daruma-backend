@@ -12,11 +12,26 @@ import { ExpenseDate } from '../../domain/model/expense-date';
 import { ExpensePeriodicity } from '../../domain/model/expense-periodicity';
 import { ExpenseEndPeriodicity } from '../../domain/model/expense-end-periodicity';
 import { Expenses } from '../../domain/repository/expenses';
+import { PayerId } from '../../../payer/domain/model/payer-id';
+import { MemberId } from '../../../member/domain/model/member-id';
+import { DebtorId } from '../../../debtor/domain/model/debtor-id';
+import { Payer } from '../../../payer/domain/model/payer';
+import { PAYERS, Payers } from '../../../payer/domain/repository/index';
+import { Debtor } from '../../../debtor/domain/model/debtor';
+import { DEBTORS, Debtors } from '../../../debtor/domain/repository/index';
+import uuid = require('uuid');
+import { ReceiptId } from '@app/receipt/domain/model/receipt-id';
+import { RECEIPTS, Receipts } from '../../../receipt/domain/repository/index';
 
 @CommandHandler(CreateExpenseCommand)
 export class CreateExpenseHandler
   implements ICommandHandler<CreateExpenseCommand> {
-  constructor(@Inject(EXPENSES) private readonly expenses: Expenses) {}
+  constructor(
+    @Inject(EXPENSES) private readonly expenses: Expenses,
+    @Inject(PAYERS) private readonly payers: Payers,
+    @Inject(DEBTORS) private readonly debtors: Debtors,
+    @Inject(RECEIPTS) private readonly receipts: Receipts
+  ) {}
 
   async execute(command: CreateExpenseCommand) {
     const expenseId = ExpenseId.fromString(command.expenseId);
@@ -26,6 +41,8 @@ export class CreateExpenseHandler
       ExpenseCurrencyUnit.fromBigInt(BigInt(command.money)),
       GroupCurrencyCode.fromString(command.currencyCode),
     );
+    const expensePayers = command.payers;
+    const expenseDebtors = command.debtors;
     const date = ExpenseDate.fromDate(command.date);
     const periodicity = ExpensePeriodicity.fromString(command.periodicity);
     const endPeriodicity = ExpenseEndPeriodicity.fromDate(
@@ -43,5 +60,43 @@ export class CreateExpenseHandler
     );
 
     this.expenses.save(expense);
+
+    const payersAdded: Payer[] =  [];
+    const debtorsAdded: Debtor[] =  [];
+
+    expensePayers.forEach(payer => {
+      payersAdded.push(expense.addPayer(
+        PayerId.fromString(uuid.v4()),
+        MemberId.fromString(payer.id),
+        ExpenseAmount.withMoneyAndCurrencyCode(
+          ExpenseCurrencyUnit.fromBigInt(BigInt(payer.money)),
+          GroupCurrencyCode.fromString(command.currencyCode),
+        )
+      ))
+    });
+
+    payersAdded.map((payer) => this.payers.save(payer));
+
+    expenseDebtors.forEach(debtor => {
+      debtorsAdded.push(expense.addDebtor(
+        DebtorId.fromString(uuid.v4()),
+        MemberId.fromString(debtor.id),
+        ExpenseAmount.withMoneyAndCurrencyCode(
+          ExpenseCurrencyUnit.fromBigInt(BigInt(debtor.money)),
+          GroupCurrencyCode.fromString(command.currencyCode),
+        )
+      ))
+    });
+
+    debtorsAdded.map((debtor) => this.debtors.save(debtor));
+
+    const expenseCreated = expense.createReceipt(
+      ReceiptId.fromString(uuid.v4()),
+      date,
+      payersAdded,
+      debtorsAdded,
+    )
+
+    this.receipts.save(expenseCreated);
   }
 }
