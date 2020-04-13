@@ -51,8 +51,6 @@ describe('Expense', () => {
         groupId,
         name,
         amount,
-        payers,
-        debtors,
         date,
         periodicity,
         endPeriodicity,
@@ -68,8 +66,6 @@ describe('Expense', () => {
         name.value,
         amount.money.value,
         amount.currencyCode.value,
-        payers.map(payer => payer.value),
-        debtors.map(debtor => debtor.value),
         date.value,
         periodicity.value,
         endPeriodicity.value,
@@ -106,19 +102,5 @@ describe('Expense', () => {
 
   it('has an endPeriodicity', () => {
     expect(expense.endPeriodicity.equals(endPeriodicity)).toBeTruthy();
-  });
-
-  it('has payers', () => {
-    const payersA: string = payers.toString();
-    const payersB: string = expense.payers.toString();
-
-    expect(payersA === payersB).toBeTruthy();
-  });
-
-  it('has debtors', () => {
-    const debtorsA: string = debtors.toString();
-    const debtorsB: string = expense.debtors.toString();
-
-    expect(debtorsA === debtorsB).toBeTruthy();
   });
 });
