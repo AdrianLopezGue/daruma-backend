@@ -5,6 +5,7 @@ import { CheckUniqueGroupName } from '../../domain/services/check-unique-group-n
 import { GroupView, GROUP_MODEL } from '../read-model/schema/group.schema';
 import { Model } from 'mongoose';
 import { GroupName } from '../../domain/model/group-name';
+import { UserId } from '../../../user/domain/model/user-id';
 
 @Injectable()
 export class CheckUniqueGroupNameFromReadModel implements CheckUniqueGroupName {
@@ -12,9 +13,9 @@ export class CheckUniqueGroupNameFromReadModel implements CheckUniqueGroupName {
     @Inject(GROUP_MODEL) private readonly groupModel: Model<GroupView>,
   ) {}
 
-  async with(name: GroupName): Promise<GroupId> {
-    const groupView = await this.groupModel.findOne({ name: name.value });
+  async with(name: GroupName, idOwner: UserId): Promise<GroupId> {
 
+    const groupView = await this.groupModel.findOne({ $and: [{ 'ownerId': idOwner.value }, { 'name': name.value }]}).exec();
     if (groupView === null) {
       return null;
     }

@@ -7,7 +7,7 @@ import * as serviceAccount from '../../../config/service-account-file.json';
 export const Authorization = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest<Request>();
-    const authorization = request.headers['authorization'];
+    const authorization = request.headers['authorization'].split(' ')[1];
 
     if (!authorization) {
       return false;
