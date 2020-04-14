@@ -15,8 +15,6 @@ import { MemberId } from '../../../member/domain/model/member-id';
 import { Payer } from '../../../payer/domain/model/payer';
 import { DebtorId } from '../../../debtor/domain/model/debtor-id';
 import { Debtor } from '../../../debtor/domain/model/debtor';
-import { ReceiptId } from '@app/receipt/domain/model/receipt-id';
-import { Receipt } from '@app/receipt/domain/model/receipt';
 
 export class Expense extends AggregateRoot {
   private _expenseId: ExpenseId;
@@ -82,22 +80,6 @@ export class Expense extends AggregateRoot {
         memberId,
         amount
     );
-  }
-
-  public createReceipt(
-    receiptId: ReceiptId,
-    date: ExpenseDate,
-    payers: Payer[],
-    debtors: Debtor[]
-  ): Receipt{
-    return Receipt.add(
-      receiptId,
-      this.id,
-      date,
-      payers,
-      debtors,
-      this.amount
-    )
   }
 
   public aggregateId(): string {

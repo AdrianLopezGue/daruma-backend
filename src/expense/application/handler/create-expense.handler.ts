@@ -20,8 +20,6 @@ import { PAYERS, Payers } from '../../../payer/domain/repository/index';
 import { Debtor } from '../../../debtor/domain/model/debtor';
 import { DEBTORS, Debtors } from '../../../debtor/domain/repository/index';
 import uuid = require('uuid');
-import { ReceiptId } from '@app/receipt/domain/model/receipt-id';
-import { RECEIPTS, Receipts } from '../../../receipt/domain/repository/index';
 
 @CommandHandler(CreateExpenseCommand)
 export class CreateExpenseHandler
@@ -30,7 +28,6 @@ export class CreateExpenseHandler
     @Inject(EXPENSES) private readonly expenses: Expenses,
     @Inject(PAYERS) private readonly payers: Payers,
     @Inject(DEBTORS) private readonly debtors: Debtors,
-    @Inject(RECEIPTS) private readonly receipts: Receipts
   ) {}
 
   async execute(command: CreateExpenseCommand) {
@@ -89,14 +86,5 @@ export class CreateExpenseHandler
     });
 
     debtorsAdded.map((debtor) => this.debtors.save(debtor));
-
-    const expenseCreated = expense.createReceipt(
-      ReceiptId.fromString(uuid.v4()),
-      date,
-      payersAdded,
-      debtorsAdded,
-    )
-
-    this.receipts.save(expenseCreated);
   }
 }
