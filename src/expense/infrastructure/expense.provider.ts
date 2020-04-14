@@ -8,6 +8,10 @@ import { ExpenseEventStore } from './eventstore/expense.event-store';
 import { PAYER_MODEL, PayerSchema } from '../../payer/infrastructure/read-model/schema/payer.schema';
 import { DEBTOR_MODEL, DebtorSchema } from '../../debtor/infrastructure/read-model/schema/debtor.schema';
 import { RECEIPT_MODEL, ReceiptSchema } from '../../receipt/infrastructure/read-model/schema/receipt.schema';
+import { PAYERS } from '../../payer/domain/repository/index';
+import { PayerEventStore } from '../../payer/infrastructure/eventstore/payer.event-store';
+import { DEBTORS } from '../../debtor/domain/repository/index';
+import { DebtorEventStore } from '../../debtor/infrastructure/eventstore/debtor.event-store';
 
 export const ExpenseProviders = [
   {
@@ -37,5 +41,13 @@ export const ExpenseProviders = [
   {
     provide: EXPENSES,
     useClass: ExpenseEventStore,
+  },
+  {
+    provide: PAYERS,
+    useClass: PayerEventStore,
+  },
+  {
+    provide: DEBTORS,
+    useClass: DebtorEventStore,
   },
 ];
