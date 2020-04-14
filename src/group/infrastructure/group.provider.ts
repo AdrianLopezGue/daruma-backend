@@ -4,6 +4,8 @@ import { GROUPS } from '../domain/repository/index';
 import { GroupEventStore } from './eventstore/groups.event-store';
 import { GROUP_MODEL, GroupSchema } from './read-model/schema/group.schema';
 import { Connection } from 'mongoose';
+import { MemberEventStore } from '../../member/infrastructure/eventstore/members.event-store';
+import { MEMBERS } from '../../member/domain/repository/index';
 import {
   MEMBER_MODEL,
   MemberSchema,
@@ -25,6 +27,10 @@ export const GroupProviders = [
   {
     provide: GROUPS,
     useClass: GroupEventStore,
+  },
+  {
+    provide: MEMBERS,
+    useClass: MemberEventStore,
   },
   {
     provide: CHECK_UNIQUE_GROUP_NAME,

@@ -26,15 +26,12 @@ import { GroupService } from '../service/group.service';
 import { Authorization } from '../service/authentication.decorator';
 import { UserId } from '../../../user/domain/model/user-id';
 import { GroupView } from '../read-model/schema/group.schema';
-import { MemberService } from '../../../member/infrastructure/service/member.service';
-import uuid = require('uuid');
 
 @ApiTags('Groups')
 @Controller('groups')
 export class GroupController {
   constructor(
     private readonly groupService: GroupService,
-    private readonly memberService: MemberService,
   ) {}
 
   @ApiOperation({ summary: 'Get Groups' })
@@ -62,7 +59,8 @@ export class GroupController {
         groupDto.groupId,
         groupDto.name,
         groupDto.currencyCode,
-        groupDto.owner.id,
+        groupDto.owner,
+        groupDto.members
       );
     } catch (e) {
       if (e instanceof GroupIdAlreadyRegisteredError) {
@@ -75,16 +73,6 @@ export class GroupController {
         throw new BadRequestException('Server error');
       }
     }
-
-    this.memberService.createMember(
-      uuid.v4(),
-      groupDto.groupId,
-      groupDto.owner.name,
-      groupDto.owner.id,
-    );
-    groupDto.members.forEach(async member =>
-      this.memberService.createMember(member.id, groupDto.groupId, member.name),
-    );
   }
 
   @ApiOperation({ summary: 'Get Group' })
