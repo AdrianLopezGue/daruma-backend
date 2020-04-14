@@ -38,12 +38,13 @@ export class CreateGroupHandler implements ICommandHandler<CreateGroupCommand> {
     const name = GroupName.fromString(command.name);
     const currencyCode = GroupCurrencyCode.fromString(command.currencyCode);
     const groupMembers = command.members;
+    const ownerId = UserId.fromString(command.owner.id);
 
     if ((await this.groups.find(groupId)) instanceof Group) {
       throw GroupIdAlreadyRegisteredError.withString(command.groupId);
     }
 
-    if ((await this.checkUniqueGroupName.with(name)) instanceof GroupId) {
+    if ((await this.checkUniqueGroupName.with(name, ownerId)) instanceof GroupId) {
       throw GroupNameAlreadyRegisteredError.withString(command.name);
     }
 
