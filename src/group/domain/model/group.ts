@@ -4,6 +4,9 @@ import { GroupId } from './group-id';
 import { GroupName } from './group-name';
 import { GroupCurrencyCode } from './group-currency-code';
 import { UserId } from '../../../user/domain/model';
+import { MemberId } from '../../../member/domain/model/member-id';
+import { MemberName } from '../../../member/domain/model/member-name';
+import { Member } from '../../../member/domain/model/member';
 
 export class Group extends AggregateRoot {
   private _groupId: GroupId;
@@ -33,6 +36,19 @@ export class Group extends AggregateRoot {
     );
 
     return group;
+  }
+
+  public addMember(
+    memberId: MemberId,
+    name: MemberName,
+    userId = UserId.fromString(''),
+  ): Member {
+    return Member.add(
+      memberId,
+      this.id,
+      name,
+      userId
+    );
   }
 
   public aggregateId(): string {

@@ -8,6 +8,8 @@ import {
 import { GroupView, GROUP_MODEL } from '../read-model/schema/group.schema';
 import { Model } from 'mongoose';
 import { MemberService } from '../../../member/infrastructure/service/member.service';
+import { MemberDto } from '../dto/group.dto';
+import { OwnerDto } from '../dto/owner.dto';
 
 @Injectable()
 export class GroupService {
@@ -21,10 +23,11 @@ export class GroupService {
     groupId: string,
     name: string,
     currencyCode: string,
-    ownerId: string,
+    owner: OwnerDto,
+    members: MemberDto[],
   ) {
     return this.commandBus.execute(
-      new CreateGroupCommand(groupId, name, currencyCode, ownerId),
+      new CreateGroupCommand(groupId, name, currencyCode, owner, members),
     );
   }
 
@@ -38,6 +41,7 @@ export class GroupService {
 
   async getGroups(ownerId: string): Promise<GroupView[]> {
     const idGroups = await this.memberService.getGroups(ownerId);
-    return this.groupModel.find({ _id: { $in: [idGroups.toString()] } }).exec();
+    const arr = Object.keys(idGroups).map(function (id) { return idGroups[id]; });
+    return this.groupModel.find({ _id: { $in: arr } }).exec();
   }
 }
