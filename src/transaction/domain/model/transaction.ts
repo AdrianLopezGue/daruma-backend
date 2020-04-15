@@ -1,16 +1,16 @@
 import { AggregateRoot } from '../../../core/domain/models/aggregate-root';
 
-import { ExpenseAmount } from '../../../expense/domain/model/expense-amount';
-import { ExpenseCurrencyUnit } from '../../../expense/domain/model/expense-currency-unit';
 import { GroupCurrencyCode } from '../../../group/domain/model/group-currency-code';
 import { TransactionId } from './transaction-id';
 import { MemberId } from '../../../member/domain/model/member-id';
 import { TransactionWasCreated } from '../event/transaction-was-created';
+import { BillAmount } from '../../../bill/domain/model/bill-amount';
+import { BillCurrencyUnit } from '../../../bill/domain/model/bill-currency-unit';
 
 export class Transaction extends AggregateRoot {
   private _transactionId: TransactionId;
   private _memberId: MemberId;
-  private _amount: ExpenseAmount;
+  private _amount: BillAmount;
 
   private constructor() {
     super();
@@ -19,7 +19,7 @@ export class Transaction extends AggregateRoot {
   public static add(
     transactionId: TransactionId,
     memberId: MemberId,
-    amount: ExpenseAmount,
+    amount: BillAmount,
   ): Transaction {
     const transaction = new Transaction();
 
@@ -47,15 +47,15 @@ export class Transaction extends AggregateRoot {
     return this._memberId;
   }
 
-  get amount(): ExpenseAmount {
+  get amount(): BillAmount {
     return this._amount;
   }
 
   private onTransactionWasCreated(event: TransactionWasCreated) {
     this._transactionId = TransactionId.fromString(event.id);
     this._memberId = MemberId.fromString(event.id);
-    this._amount = ExpenseAmount.withMoneyAndCurrencyCode(
-      ExpenseCurrencyUnit.fromBigInt(BigInt(event.money)),
+    this._amount = BillAmount.withMoneyAndCurrencyCode(
+      BillCurrencyUnit.fromBigInt(BigInt(event.money)),
       GroupCurrencyCode.fromString(event.currencyCode),
     );
   }
