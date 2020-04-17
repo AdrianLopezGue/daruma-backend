@@ -12,6 +12,8 @@ import {
   ForbiddenException,
   ValidationPipe,
   UsePipes,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -23,9 +25,9 @@ import {
 import { GroupDto } from '../dto/group.dto';
 import { ChangeNameGroupDto } from '../dto/change-name-group.dto';
 import { GroupService } from '../service/group.service';
-import { Authorization } from '../service/authentication.decorator';
 import { UserId } from '../../../user/domain/model/user-id';
 import { GroupView } from '../read-model/schema/group.schema';
+import { FirebaseAuthGuard } from '../../../core/firebase/firebase.auth.guard';
 
 @ApiTags('Groups')
 @Controller('groups')
@@ -36,20 +38,26 @@ export class GroupController {
 
   @ApiOperation({ summary: 'Get Groups' })
   @ApiResponse({ status: 200, description: 'Get Groups.' })
+  @UseGuards(FirebaseAuthGuard)
   @Get()
-  async getGroups(@Authorization() ownerId: UserId): Promise<GroupView[]> {
+  async getGroups(@Request() req): Promise<GroupView[]> {
+    const ownerId : UserId = req.user;
+    
     return this.groupService.getGroups(ownerId.value);
   }
 
   @ApiOperation({ summary: 'Create Group' })
   @ApiResponse({ status: 204, description: 'Create Group.' })
+  @UseGuards(FirebaseAuthGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
   @HttpCode(204)
   @Post()
   async createGroup(
     @Body() groupDto: GroupDto,
-    @Authorization() idUser: UserId,
+    @Request() req 
   ): Promise<void> {
+    const idUser: UserId = req.user;
+
     if (idUser.value !== groupDto.owner.id) {
       throw new ForbiddenException('Forbidden access to data');
     }
