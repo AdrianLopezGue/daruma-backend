@@ -29,7 +29,7 @@ export class MemberService {
   }
 
   async getMembers(groupId: string): Promise<MemberView[]> {
-    return this.memberModel.find({ groupId: groupId }).exec();
+    return this.memberModel.find({ 'groupId': "" + groupId + "" }).exec();
   }
 
   async getGroups(userId: string): Promise<string[]> {

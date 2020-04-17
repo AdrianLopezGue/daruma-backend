@@ -21,7 +21,8 @@ export class BillWasCreatedProjection
       currencyCode: event.currencyCode,
       date: event.date,
       payers: event.payers,
-      debtors: event.debtors
+      debtors: event.debtors,
+      creatorId: event.creatorId
     });
 
     return billView.save();
