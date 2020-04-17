@@ -10,6 +10,7 @@ import { BillDebtor } from './bill-debtor';
 import { BillAmount } from './bill-amount';
 import { BillWasCreated } from '../event/bill-was-created';
 import { BillCurrencyUnit } from './bill-currency-unit';
+import { MemberId } from '../../../member/domain/model/member-id';
 
 export class Bill extends AggregateRoot {
   private _billId: BillId;
@@ -19,6 +20,7 @@ export class Bill extends AggregateRoot {
   private _date: BillDate;
   private _payers: BillPayer[];
   private _debtors: BillDebtor[];
+  private _creatorId: MemberId;
 
   private constructor() {
     super();
@@ -31,7 +33,8 @@ export class Bill extends AggregateRoot {
     amount: BillAmount,
     date: BillDate,
     payers: BillPayer[],
-    debtors: BillDebtor[]
+    debtors: BillDebtor[],
+    creatorId: MemberId,
   ): Bill {
     const bill = new Bill();
 
@@ -44,7 +47,8 @@ export class Bill extends AggregateRoot {
         amount.currencyCode.value,
         date.value,
         payers,
-        debtors
+        debtors,
+        creatorId.value
       ),
     );
 
@@ -83,6 +87,10 @@ export class Bill extends AggregateRoot {
     return this._debtors;
   }
 
+  get creator(): MemberId {
+    return this._creatorId;
+  }
+
   private onBillWasCreated(event: BillWasCreated) {
     this._billId = BillId.fromString(event.id);
     this._groupId = GroupId.fromString(event.groupId);
@@ -94,5 +102,6 @@ export class Bill extends AggregateRoot {
     this._date = BillDate.fromDate(event.date);
     this._payers = event.payers;
     this._debtors = event.debtors;
+    this._creatorId = MemberId.fromString(event.creatorId);
   }
 }
