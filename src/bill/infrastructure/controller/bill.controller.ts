@@ -11,6 +11,8 @@ import {
   Body,
   ForbiddenException,
   ConflictException,
+  Request,
+  UseGuards
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -18,9 +20,9 @@ import { GroupIdNotFoundError } from '../../../group/domain/exception/group-id-n
 import { BillService } from '../service/bill.service';
 import { UserId } from '../../../user/domain/model/user-id';
 import { BillDto } from '../dto/bill.dto';
-import { Authorization } from '../service/authentication.decorator';
 import { BillIdAlreadyRegisteredError } from '../../domain/exception/bill-id-already-registered.error';
 import { BillView } from '../read-model/schema/bill.schema';
+import { FirebaseAuthGuard } from '../../../core/firebase/firebase.auth.guard';
 
 @ApiTags('Bills')
 @Controller('bills')
@@ -32,8 +34,9 @@ export class BillController {
   @ApiOperation({ summary: 'Get Bills of Group' })
   @ApiResponse({ status: 204, description: 'Get Bills of Group.' })
   @ApiResponse({ status: 404, description: 'Not found' })
+  @UseGuards(FirebaseAuthGuard)
   @Get(':id')
-  async getBills(@Query('id') idGroup: string): Promise<BillView[]> {
+  async getBills(@Request() req, @Query('id') idGroup: string): Promise<BillView[]> {
     try {
       return await this.billService.getBills(idGroup);
     } catch (e) {
@@ -49,13 +52,16 @@ export class BillController {
 
   @ApiOperation({ summary: 'Create Bill' })
   @ApiResponse({ status: 204, description: 'Create Bill.' })
+  @UseGuards(FirebaseAuthGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
   @HttpCode(204)
   @Post()
   async createBill(
     @Body() billDto: BillDto,
-    @Authorization() idUser: UserId,
+    @Request() req
   ): Promise<void> {
+    const idUser: UserId = req.user;
+
     if (idUser.value !== billDto.creatorId) {
       throw new ForbiddenException('Forbidden access to data');
     }

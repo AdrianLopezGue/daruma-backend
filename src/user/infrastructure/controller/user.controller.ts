@@ -6,6 +6,8 @@ import {
   HttpCode,
   Post,
   ForbiddenException,
+  UseGuards,
+  Request
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -16,7 +18,7 @@ import {
 import { UserDto } from '../dto/user.dto';
 import { UserService } from '../service/user.service';
 import { UserId } from '../../domain/model/user-id';
-import { Authorization } from '../service/authentication.decorator';
+import { FirebaseAuthGuard } from '../../../core/firebase/firebase.auth.guard';
 
 @ApiTags('Users')
 @Controller('users')
@@ -25,12 +27,15 @@ export class UserController {
 
   @ApiOperation({ summary: 'Create User' })
   @ApiResponse({ status: 204, description: 'Create User.' })
+  @UseGuards(FirebaseAuthGuard)
   @HttpCode(204)
   @Post()
   async createUser(
     @Body() userDto: UserDto,
-    @Authorization() idUser: UserId,
+    @Request() req
   ): Promise<UserDto> {
+    const idUser: UserId = req.user;
+
     if (idUser.value !== userDto.id) {
       throw new ForbiddenException('Forbidden access to data');
     }
