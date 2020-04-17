@@ -11,6 +11,7 @@ export const BillSchema = new Schema({
   date: Date,
   payers: [ {id: String, amount: Number}],
   debtors: [ {id: String, amount: Number}],
+  creatorId: String,
   __v: { type: Number, select: false },
 });
 
@@ -21,8 +22,9 @@ export interface BillView extends Document {
   readonly money: bigint;
   readonly currencyCode: string;
   readonly date: Date;
-  readonly payers: BillPayer[],
-  readonly debtors: BillDebtor[],
+  readonly payers: BillPayer[];
+  readonly debtors: BillDebtor[];
+  readonly creatorId: string;
 }
 
 export const BILL_MODEL = 'BILL_MODEL';
