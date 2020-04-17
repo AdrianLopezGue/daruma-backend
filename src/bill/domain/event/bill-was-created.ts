@@ -12,5 +12,6 @@ export class BillWasCreated implements DomainEvent {
     public readonly date: Date,
     public readonly payers: BillPayer[],
     public readonly debtors: BillDebtor[],
+    public readonly creatorId: string,
   ) {}
 }

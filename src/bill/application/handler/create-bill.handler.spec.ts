@@ -34,14 +34,14 @@ describe('CreateBillHandler', () => {
   const payers = [
     new ParticipantDto('1111111', amount.money.value),
     new ParticipantDto('2222222', amount.money.value),
-
   ];
 
   const debtors = [
     new ParticipantDto('3333333', amount.money.value),
     new ParticipantDto('4444444', amount.money.value),
+  ];
 
-];
+  const creatorId = MemberId.fromString(v4());
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -68,7 +68,8 @@ describe('CreateBillHandler', () => {
         amount.money.value,
         amount.currencyCode.value,
         payers,
-        debtors
+        debtors,
+        creatorId.value,
       ),
     );
 
@@ -87,15 +88,7 @@ describe('CreateBillHandler', () => {
     );
 
     expect(bills.save).toHaveBeenCalledWith(
-      Bill.add(
-        billId,
-        groupId,
-        name,
-        amount,
-        date,
-        billPayers,
-        billDebtors
-      ),
+      Bill.add(billId, groupId, name, amount, date, billPayers, billDebtors, creatorId),
     );
   });
 });

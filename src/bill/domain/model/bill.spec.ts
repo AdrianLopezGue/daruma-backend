@@ -48,6 +48,8 @@ describe('Bill', () => {
   ];
 
   const date = BillDate.fromDate(new Date('2019-11-15T17:43:50'));
+  const creatorId = MemberId.fromString(v4());
+
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -61,7 +63,7 @@ describe('Bill', () => {
 
   it('can be created', () => {
     bill = eventPublisher$.mergeObjectContext(
-      Bill.add(billId, groupId, name, amount, date, payers, debtors),
+      Bill.add(billId, groupId, name, amount, date, payers, debtors, creatorId),
     );
     bill.commit();
 
@@ -75,7 +77,8 @@ describe('Bill', () => {
         amount.currencyCode.value,
         date.value,
         payers,
-        debtors
+        debtors,
+        creatorId.value
       ),
     );
   });
