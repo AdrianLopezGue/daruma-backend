@@ -22,6 +22,7 @@ export class BillService {
     payers: ParticipantDto[],
     debtors: ParticipantDto[],
     date: Date,
+    creatorId: string
   ) {
     return this.commandBus.execute(
       new CreateBillCommand(
@@ -33,11 +34,12 @@ export class BillService {
         currencyCode,
         payers,
         debtors,
+        creatorId
       ),
     );
   }
 
   async getBills(groupId: string): Promise<BillView[]> {
-    return this.billModel.find({ groupId: groupId }).exec();
+    return this.billModel.find({ 'groupId': "" + groupId + "" }).exec();
   }
 }

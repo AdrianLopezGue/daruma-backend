@@ -70,6 +70,7 @@ export class BillController {
         billDto.payers,
         billDto.debtors,
         billDto.date,
+        billDto.creatorId
       );
     } catch (e) {
       if (e instanceof BillIdAlreadyRegisteredError) {

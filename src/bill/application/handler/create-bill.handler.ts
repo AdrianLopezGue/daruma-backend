@@ -42,6 +42,8 @@ export class CreateBillHandler implements ICommandHandler<CreateBillCommand> {
       ),
     );
 
+    const creatorId = MemberId.fromString(command.creatorId);
+
     const date = BillDate.fromDate(command.date);
 
     const bill = Bill.add(
@@ -52,6 +54,7 @@ export class CreateBillHandler implements ICommandHandler<CreateBillCommand> {
       date,
       payers,
       debtors,
+      creatorId
     );
 
     this.bills.save(bill);
