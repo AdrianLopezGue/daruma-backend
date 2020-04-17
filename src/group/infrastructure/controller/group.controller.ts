@@ -42,7 +42,6 @@ export class GroupController {
   @Get()
   async getGroups(@Request() req): Promise<GroupView[]> {
     const ownerId : UserId = req.user;
-    
     return this.groupService.getGroups(ownerId.value);
   }
 
@@ -54,7 +53,7 @@ export class GroupController {
   @Post()
   async createGroup(
     @Body() groupDto: GroupDto,
-    @Request() req 
+    @Request() req
   ): Promise<void> {
     const idUser: UserId = req.user;
 
@@ -86,6 +85,7 @@ export class GroupController {
   @ApiOperation({ summary: 'Get Group' })
   @ApiResponse({ status: 204, description: 'Get Group.' })
   @ApiResponse({ status: 404, description: 'Not found' })
+  @UseGuards(FirebaseAuthGuard)
   @Get(':id')
   async getGroup(@Query('id') id: string): Promise<GroupView> {
     try {
@@ -104,6 +104,7 @@ export class GroupController {
   @ApiOperation({ summary: 'Change Name Group' })
   @ApiResponse({ status: 204, description: 'changeNameGroup' })
   @ApiResponse({ status: 404, description: 'Not found' })
+  @UseGuards(FirebaseAuthGuard)
   @HttpCode(204)
   @Put(':id')
   async changeNameGroup(

@@ -8,6 +8,8 @@ import {
   Query,
   Patch,
   ForbiddenException,
+  Request,
+  UseGuards
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -15,9 +17,9 @@ import { GroupIdNotFoundError } from '../../../group/domain/exception/group-id-n
 import { MemberView } from '../read-model/schema/member.schema';
 import { RegisterMemberAsUserDto } from '../dto/register-member-as-user.dto';
 import { MemberIdNotFoundError } from '../../domain/exception/member-id-not-found.error';
-import { Authorization } from '../service/authentication.decorator';
 import { UserId } from '../../../user/domain/model/user-id';
 import { MemberService } from '../service/member.service';
+import { FirebaseAuthGuard } from '../../../core/firebase/firebase.auth.guard';
 
 @ApiTags('Members')
 @Controller('members')
@@ -27,9 +29,9 @@ export class MemberController {
   @ApiOperation({ summary: 'Get Members of Group' })
   @ApiResponse({ status: 204, description: 'Get Members of Group.' })
   @ApiResponse({ status: 404, description: 'Not found' })
+  @UseGuards(FirebaseAuthGuard)
   @Get(':id')
-  // TODO: Add authorization when calling this method
-  async getMembers(@Query('id') idGroup: string): Promise<MemberView[]> {
+  async getMembers(@Request() req, @Query('id') idGroup: string): Promise<MemberView[]> {
     try {
       return await this.memberService.getMembers(idGroup);
     } catch (e) {
@@ -46,13 +48,16 @@ export class MemberController {
   @ApiOperation({ summary: 'Set UserId to Member' })
   @ApiResponse({ status: 204, description: 'Set UserId to Member' })
   @ApiResponse({ status: 404, description: 'Not found' })
+  @UseGuards(FirebaseAuthGuard)
   @HttpCode(204)
   @Patch(':id')
   async registerMemberAsUser(
     @Query('id') id: string,
     @Body() memberDto: RegisterMemberAsUserDto,
-    @Authorization() idUser: UserId,
+    @Request() req
   ) {
+    const idUser: UserId = req.user;
+
     if (idUser.value !== memberDto.idUser) {
       throw new ForbiddenException('Forbidden access to data');
     }
