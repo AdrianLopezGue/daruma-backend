@@ -13,7 +13,8 @@
     "resolveJsonModule": true,
     "paths": {
       "@app/*": ["./src/*"]
-    }
+    },
+    "skipLibCheck": true
   },
   "exclude": ["node_modules", "dist"],
   "include": ["config.ts", "./src/**/*"]
