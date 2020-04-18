@@ -39,4 +39,11 @@ lerna-debug.log*
 /src/config/service-account-file.json
 
 # Enviroment dotfiles
-.env
+/.env.local
+/.env.*.local
+/.env
+/.env.test
+
+# Cypress
+/cypress/screenshots
+/cypress/videos

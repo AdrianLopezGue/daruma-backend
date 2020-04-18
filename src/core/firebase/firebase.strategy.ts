@@ -1,13 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-http-bearer';
 
 import { UserId } from '../../user/domain/model';
-import { FirebaseAuthService } from './firebase.auth.service';
+import {
+  FIREBASE_AUTH,
+  FirebaseAuthInterface,
+} from './firebase.auth.interface';
 
 @Injectable()
 export class FirebaseStrategy extends PassportStrategy(Strategy) {
-  constructor(private authService: FirebaseAuthService) {
+  constructor(
+    @Inject(FIREBASE_AUTH) private authService: FirebaseAuthInterface,
+  ) {
     super();
   }
 
