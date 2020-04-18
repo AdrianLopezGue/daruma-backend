@@ -1,0 +1,593 @@
+diff --git a/.env b/.env
+new file mode 100644
+index 0000000000000000000000000000000000000000..d1b7dad871f051770557a6c484d83ce05795111b
+--- /dev/null
++++ b/.env
+@@ -0,0 +1,4 @@
++EVENT_STORE_CATEGORY=daruma
++MONGO_URL=mongodb://localhost/daruma
++NODE_ENV=development
++PORT=3000
+diff --git a/.env.test b/.env.test
+new file mode 100644
+index 0000000000000000000000000000000000000000..875de42b8608832a51cafa8ec526924a37f8396c
+--- /dev/null
++++ b/.env.test
+@@ -0,0 +1,4 @@
++EVENT_STORE_CATEGORY=test
++MONGO_URL=mongodb://localhost/daruma-test
++NODE_ENV=test
++PORT=5000
+diff --git a/.gitignore b/.gitignore
+index 18d764935b7d3e20f6d8dc64d68c0d5e3cabb0b0..cb09bb68dc4c3695c14f39cd421829f35a2079dd 100755
+--- a/.gitignore
++++ b/.gitignore
+@@ -39,4 +39,9 @@ lerna-debug.log*
+ /src/config/service-account-file.json
+ 
+ # Enviroment dotfiles
+-.env
+\ No newline at end of file
++/.env.local
++/.env.*.local
++
++# Cypress
++/cypress/screenshots
++/cypress/videos
+diff --git a/cypress.json b/cypress.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..380b26344f0d42f8f537cffae28de8b46c84448d
+--- /dev/null
++++ b/cypress.json
+@@ -0,0 +1,9 @@
++{
++  "baseUrl": "http://localhost:5000",
++  "video": false,
++  "env": {
++    "MONGO_URL": "mongodb://localhost/daruma-test",
++    "EVENT_STORE_URL": "http://admin:changeit@localhost:2113",
++    "EVENT_STORE_CATEGORY": "test"
++  }
++}
+diff --git a/cypress/fixtures/groups.json b/cypress/fixtures/groups.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..90801ce6173511e2271c1964fa625ae90aff5c30
+--- /dev/null
++++ b/cypress/fixtures/groups.json
+@@ -0,0 +1,7 @@
++{
++  "example": {
++    "id": "73a8f4f2-13f7-4bcb-8d40-0a8daa0bd3ea",
++    "name": "Example Group",
++    "currencyCode": "EUR"
++  }
++}
+diff --git a/cypress/fixtures/users.json b/cypress/fixtures/users.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..bda961e1ab85fa0fd5d8609df3b7b13bf025db54
+--- /dev/null
++++ b/cypress/fixtures/users.json
+@@ -0,0 +1,6 @@
++{
++  "johndoe": {
++    "id": "7150c2b3-239e-41c3-9264-37396057c756",
++    "name": "John Doe"
++  }
++}
+diff --git a/cypress/integration/groups/01_get_groups.spec.js b/cypress/integration/groups/01_get_groups.spec.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..10712d97e3b0203db1cb070cf261a3718934c5ce
+--- /dev/null
++++ b/cypress/integration/groups/01_get_groups.spec.js
+@@ -0,0 +1,33 @@
++import * as uuid from 'uuid';
++
++describe('GET /groups', () => {
++  let userid = uuid.v4();
++
++  before(() => {
++    cy.task('db:clean');
++    cy.task('es:clean');
++  });
++
++  beforeEach(() => {
++    cy.fixture('users.json').as('users');
++  });
++
++  const get = auth =>
++    cy.request({
++      method: 'GET',
++      url: 'groups',
++      auth: { bearer: auth },
++    });
++
++  it('Validate the status code', function() {
++    get(this.users.johndoe.id)
++      .its('status')
++      .should('equal', 200);
++  });
++
++  it('Validate empty content', function() {
++    get(this.users.johndoe.id)
++      .its('body')
++      .should('have.length', 0);
++  });
++});
+diff --git a/cypress/integration/groups/02_create_group.spec.js b/cypress/integration/groups/02_create_group.spec.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..b338e76418399c1e79acad482b209d1e62c293bc
+--- /dev/null
++++ b/cypress/integration/groups/02_create_group.spec.js
+@@ -0,0 +1,63 @@
++import * as uuid from 'uuid';
++
++describe('POST /groups', () => {
++  let userid = uuid.v4();
++  let groupid = uuid.v4();
++
++  before(() => {
++    cy.task('db:clean');
++    cy.task('es:clean');
++  });
++
++  beforeEach(() => {
++    cy.fixture('users.json').as('users');
++    cy.fixture('groups.json').as('groups');
++  });
++
++  const post = (auth, group, owner) =>
++    cy.request({
++      method: 'POST',
++      url: 'groups',
++      auth: { bearer: auth },
++      body: {
++        groupId: group.id,
++        name: group.name,
++        currencyCode: group.currencyCode,
++        owner: { id: owner.id, name: owner.name },
++        members: [],
++      },
++      failOnStatusCode: false,
++    });
++
++  it('Validate the status code', function() {
++    post(this.users.johndoe.id, this.groups.example, this.users.johndoe)
++      .its('status')
++      .should('equal', 204);
++  });
++
++  it('Validate the user belongs to group', function() {
++    const otherUser = uuid.v4();
++    post(otherUser, this.groups.example, this.users.johndoe)
++      .its('status')
++      .should('equal', 403);
++  });
++
++  it('Validate group was created', function() {
++    const result = [
++      {
++        _id: this.groups.example.id,
++        name: this.groups.example.name,
++        currencyCode: this.groups.example.currencyCode,
++        ownerId: this.users.johndoe.id,
++      },
++    ];
++
++    cy.request({
++      method: 'GET',
++      url: 'groups',
++      auth: { bearer: this.users.johndoe.id },
++    })
++      .its('body')
++      .should('deep.equal', result);
++  });
++});
+diff --git a/cypress/plugins/index.js b/cypress/plugins/index.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..8c87417a938a34fc4049792a455ac541231197b0
+--- /dev/null
++++ b/cypress/plugins/index.js
+@@ -0,0 +1,46 @@
++/// <reference types="cypress" />
++
++// This function is called when a project is opened or re-opened (e.g. due to
++// the project's config changing)
++
++/**
++ * @type {Cypress.PluginConfig}
++ */
++module.exports = (on, config) => {
++  on('task', {
++    'db:clean': async () => {
++      const mongoose = require('mongoose');
++
++      await mongoose.connect(config.env.MONGO_URL, {
++        useNewUrlParser: true,
++        useUnifiedTopology: true,
++      });
++      await mongoose.connection.db.dropDatabase();
++      await mongoose.disconnect();
++
++      return null;
++    },
++    'es:clean': async () => {
++      const axios = require('axios');
++
++      const response = await axios({
++        url: `${config.env.EVENT_STORE_URL}/streams/$ce-${config.env.EVENT_STORE_CATEGORY}`,
++        method: 'GET',
++      });
++
++      const streams = response.data.entries
++        .map(entry => entry.title.split('@')[1])
++        .filter(value => !value.startsWith('$$'))
++        .filter((value, index, self) => self.indexOf(value) === index);
++
++      streams.forEach(async stream => {
++        await axios({
++          url: `${config.env.EVENT_STORE_URL}/streams/${stream}`,
++          method: 'DELETE',
++        });
++      });
++
++      return null;
++    },
++  });
++};
+diff --git a/cypress/support/commands.js b/cypress/support/commands.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..ca4d256f3eb15dfabad1f5760c9b2d0ceb4c24b9
+--- /dev/null
++++ b/cypress/support/commands.js
+@@ -0,0 +1,25 @@
++// ***********************************************
++// This example commands.js shows you how to
++// create various custom commands and overwrite
++// existing commands.
++//
++// For more comprehensive examples of custom
++// commands please read more here:
++// https://on.cypress.io/custom-commands
++// ***********************************************
++//
++//
++// -- This is a parent command --
++// Cypress.Commands.add("login", (email, password) => { ... })
++//
++//
++// -- This is a child command --
++// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
++//
++//
++// -- This is a dual command --
++// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
++//
++//
++// -- This will overwrite an existing command --
++// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+diff --git a/cypress/support/index.js b/cypress/support/index.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..d68db96df2697e0835f5c490db0c2cc81673f407
+--- /dev/null
++++ b/cypress/support/index.js
+@@ -0,0 +1,20 @@
++// ***********************************************************
++// This example support/index.js is processed and
++// loaded automatically before your test files.
++//
++// This is a great place to put global configuration and
++// behavior that modifies Cypress.
++//
++// You can change the location of this file or turn off
++// automatically serving support files with the
++// 'supportFile' configuration option.
++//
++// You can read more here:
++// https://on.cypress.io/configuration
++// ***********************************************************
++
++// Import commands.js using ES2015 syntax:
++import './commands'
++
++// Alternatively you can use CommonJS syntax:
++// require('./commands')
+diff --git a/package.json b/package.json
+index 280b7857be930fd482ba252880bdc0c5252f18a3..fcd1033318e7675d1ce09b229f073aaab3a5edaa 100755
+--- a/package.json
++++ b/package.json
+@@ -18,6 +18,7 @@
+     "start": "nest start",
+     "deploy": "firebase deploy --only functions,firestore",
+     "start:dev": "nest start --watch",
++    "start:test": "env NODE_ENV=test nest start --watch",
+     "start:debug": "nest start --debug --watch",
+     "start:prod": "node dist/main",
+     "lint": "tslint -p tsconfig.json -c tslint.json",
+@@ -25,7 +26,11 @@
+     "test:watch": "jest --watch",
+     "test:cov": "jest --coverage",
+     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+-    "test:e2e": "jest --config ./test/jest-e2e.json"
++    "test:e2e": "jest --config ./test/jest-e2e.json",
++    "precypress:test": "pm2 start npm -- run start:test",
++    "cypress:test": "cypress run",
++    "postcypress:test": "pm2 delete npm",
++    "cypress:open": "cypress open -d"
+   },
+   "dependencies": {
+     "@firebase/database": "^0.5.24",
+@@ -73,10 +78,12 @@
+     "@types/supertest": "^2.0.8",
+     "@typescript-eslint/eslint-plugin": "^2.26.0",
+     "@typescript-eslint/parser": "^2.26.0",
++    "cypress": "^4.4.0",
+     "eslint": "^6.8.0",
+     "eslint-config-prettier": "^6.10.1",
+     "eslint-plugin-import": "^2.20.2",
+     "jest": "^25.2.4",
++    "pm2": "^4.2.3",
+     "prettier": "^1.19.1",
+     "supertest": "^4.0.2",
+     "ts-jest": "25.2.1",
+diff --git a/src/app.module.ts b/src/app.module.ts
+index bb9f3c4ac2e2b2bb7b054268fef24f3a75591f58..fc2f2aa4e75d306f683215684a1b7bae4313b9ae 100755
+--- a/src/app.module.ts
++++ b/src/app.module.ts
+@@ -1,14 +1,22 @@
+ import { Global, Module } from '@nestjs/common';
++import { ConfigModule } from '@nestjs/config';
+ 
++import { BillModule } from './bill/infrastructure/bill.module';
+ import { BootstrapModule } from './bootstrap.module';
+ import { GroupModule } from './group/infrastructure/group.module';
+ import { MemberModule } from './member/infrastructure/member.module';
+ import { UserModule } from './user/infrastructure/user.module';
+-import { BillModule } from './bill/infrastructure/bill.module';
+ 
+ @Global()
+ @Module({
+   imports: [
++    ConfigModule.forRoot({
++      envFilePath: [
++        `.env.${process.env.NODE_ENV}.local`,
++        `.env.${process.env.NODE_ENV}`,
++        '.env.local',
++      ],
++    }),
+     BootstrapModule,
+     GroupModule,
+     UserModule,
+diff --git a/src/config/database.config.ts b/src/config/database.config.ts
+index 0eedb212a086961c91553bb63fedb5d1976de79c..02b0551b29164ac7d8b25d880add090169605eff 100644
+--- a/src/config/database.config.ts
++++ b/src/config/database.config.ts
+@@ -1,3 +1,3 @@
+ export default {
+-  url: 'mongodb://localhost/database',
++  url: process.env.MONGO_URL || 'mongodb://localhost/daruma',
+ };
+diff --git a/src/config/eventstore.config.ts b/src/config/eventstore.config.ts
+index 735c2692609b42b7a0b22c01770fc0b57c4b8156..5558651d430c3ffe33b5a3bf00550498c34b1659 100644
+--- a/src/config/eventstore.config.ts
++++ b/src/config/eventstore.config.ts
+@@ -11,4 +11,5 @@ export default {
+     min: process.env.EVENT_STORE_POOLOPTIONS_MIN || 1,
+     max: process.env.EVENT_STORE_POOLOPTIONS_MAX || 10,
+   },
++  category: process.env.EVENT_STORE_CATEGORY || 'daruma',
+ };
+diff --git a/src/core/database/database.provider.ts b/src/core/database/database.provider.ts
+index c1cf55b009444afad59cee0a47278338e54d2d2e..1124b57a2c6995cd8965614adda5ac2d93e1a4e6 100644
+--- a/src/core/database/database.provider.ts
++++ b/src/core/database/database.provider.ts
+@@ -5,7 +5,10 @@ export const DatabaseProvider = [
+   {
+     provide: 'DATABASE_CONNECTION',
+     useFactory: async (config: ConfigService): Promise<Mongoose> =>
+-      connect(config.get('database').url, { useNewUrlParser: true }),
++      connect(config.get('database').url, {
++        useNewUrlParser: true,
++        useUnifiedTopology: true,
++      }),
+     inject: [ConfigService],
+   },
+ ];
+diff --git a/src/core/eventstore/eventstore.ts b/src/core/eventstore/eventstore.ts
+index 53362f0cffa7e36bc1f657518e34436dfe73483e..aa56b64f0b0766c922c134416e2e218f4dcf0d30 100644
+--- a/src/core/eventstore/eventstore.ts
++++ b/src/core/eventstore/eventstore.ts
+@@ -20,7 +20,7 @@ export class EventStore implements IEventPublisher, IMessageSource {
+   private _eventStoreHostUrl: string;
+ 
+   constructor(config: ConfigService, private readonly client: TCPClient) {
+-    this._category = 'iam';
++    this._category = config.get('eventstore').category;
+     this._eventStoreHostUrl =
+       config.get('eventstore').protocol +
+       `://${config.get('eventstore').hostname}:${
+@@ -108,13 +108,18 @@ export class EventStore implements IEventPublisher, IMessageSource {
+           rawData += chunk;
+         });
+         res.on('end', () => {
+-          const message = JSON.parse(rawData);
+-
+-          const eventType = message.content.eventType;
+-          const data = message.content.data;
+-          event = this._eventHandlers[eventType](...Object.values(data));
+-
+-          subject.next(event);
++          try {
++            const message = JSON.parse(rawData);
++
++            const eventType = message.content.eventType;
++            const data = message.content.data;
++            event = this._eventHandlers[eventType](...Object.values(data));
++
++            subject.next(event);
++          } catch (err) {
++            // tslint:disable-next-line:no-console
++            console.trace(err);
++          }
+         });
+       });
+     };
+diff --git a/src/core/firebase/firebase.auth.interface.ts b/src/core/firebase/firebase.auth.interface.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..52608097349982ebb25ae2c1c7a6fadf4dce923d
+--- /dev/null
++++ b/src/core/firebase/firebase.auth.interface.ts
+@@ -0,0 +1,7 @@
++import { UserId } from '../../user/domain/model';
++
++export interface FirebaseAuthInterface {
++  validateUser(token: string): Promise<UserId>;
++}
++
++export const FIREBASE_AUTH = 'FIREBASE_AUTH';
+diff --git a/src/core/firebase/firebase.auth.service.ts b/src/core/firebase/firebase.auth.service.ts
+index 44892913568245253b997b96df388ca25098d8f4..72101a0f1437049f48c9fa02ced27896336e99f8 100644
+--- a/src/core/firebase/firebase.auth.service.ts
++++ b/src/core/firebase/firebase.auth.service.ts
+@@ -3,10 +3,11 @@ import * as admin from 'firebase-admin';
+ 
+ import * as serviceAccount from '../../config/service-account-file.json';
+ import { UserId } from '../../user/domain/model';
++import { FirebaseAuthInterface } from './firebase.auth.interface';
+ import { FirebaseAuthenticationError } from './firebase.authentication.error';
+ 
+ @Injectable()
+-export class FirebaseAuthService {
++export class FirebaseAuthService implements FirebaseAuthInterface {
+   async validateUser(token: string): Promise<UserId> {
+     const config = {
+       credential: admin.credential.cert(serviceAccount as object),
+diff --git a/src/core/firebase/firebase.authfake.service.ts b/src/core/firebase/firebase.authfake.service.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..0dbf76662fbe2c3b59d4f78591559c094fdf0c62
+--- /dev/null
++++ b/src/core/firebase/firebase.authfake.service.ts
+@@ -0,0 +1,11 @@
++import { Injectable } from '@nestjs/common';
++
++import { UserId } from '../../user/domain/model';
++import { FirebaseAuthInterface } from './firebase.auth.interface';
++
++@Injectable()
++export class FirebaseAuthFakeService implements FirebaseAuthInterface {
++  async validateUser(token: string): Promise<UserId> {
++    return Promise.resolve(UserId.fromString(token));
++  }
++}
+diff --git a/src/core/firebase/firebase.module.ts b/src/core/firebase/firebase.module.ts
+index 49ba5f920a4b2afbc7116ba1bc05f22299c3d902..d3bd65675f1edd2cbcfd3cc3d55906defc0d1b88 100755
+--- a/src/core/firebase/firebase.module.ts
++++ b/src/core/firebase/firebase.module.ts
+@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common';
+ import { PassportModule } from '@nestjs/passport';
+ 
+ import { FirebaseDatabase } from './firebase';
+-import { FirebaseAuthService } from './firebase.auth.service';
++import { FirebaseProvider } from './firebase.provider';
+ import { FirebaseStrategy } from './firebase.strategy';
+ 
+ @Module({
+   imports: [PassportModule],
+-  providers: [FirebaseAuthService, FirebaseDatabase, FirebaseStrategy],
+-  exports: [FirebaseDatabase, FirebaseStrategy],
++  providers: [FirebaseDatabase, FirebaseStrategy, ...FirebaseProvider],
++  exports: [FirebaseDatabase, FirebaseStrategy, ...FirebaseProvider],
+ })
+ export class FirebaseModule {}
+diff --git a/src/core/firebase/firebase.provider.ts b/src/core/firebase/firebase.provider.ts
+index 61ecc874b4b814bd131050f8d198cec73dc73ef2..15d8166747a7ff28656d434962a99a373f9ad740 100755
+--- a/src/core/firebase/firebase.provider.ts
++++ b/src/core/firebase/firebase.provider.ts
+@@ -1,11 +1,13 @@
+-import { FirebaseDatabase } from './firebase';
++import { FIREBASE_AUTH } from './firebase.auth.interface';
++import { FirebaseAuthService } from './firebase.auth.service';
++import { FirebaseAuthFakeService } from './firebase.authfake.service';
+ 
+ export const FirebaseProvider = [
+   {
+-    provide: 'LOGIN',
+-    useFactory: async (): Promise<FirebaseDatabase> => {
+-      return new FirebaseDatabase();
+-    },
+-    inject: [],
++    provide: FIREBASE_AUTH,
++    useClass:
++      process.env.NODE_ENV === 'test'
++        ? FirebaseAuthFakeService
++        : FirebaseAuthService,
+   },
+ ];
+diff --git a/src/core/firebase/firebase.strategy.ts b/src/core/firebase/firebase.strategy.ts
+index c8d2394876788d1b0f733061dbac5aeb97b434aa..792cd35ce36ee3316e5a12a5f151c57f115943cf 100644
+--- a/src/core/firebase/firebase.strategy.ts
++++ b/src/core/firebase/firebase.strategy.ts
+@@ -1,13 +1,18 @@
+-import { Injectable } from '@nestjs/common';
++import { Inject, Injectable } from '@nestjs/common';
+ import { PassportStrategy } from '@nestjs/passport';
+ import { Strategy } from 'passport-http-bearer';
+ 
+ import { UserId } from '../../user/domain/model';
+-import { FirebaseAuthService } from './firebase.auth.service';
++import {
++  FIREBASE_AUTH,
++  FirebaseAuthInterface,
++} from './firebase.auth.interface';
+ 
+ @Injectable()
+ export class FirebaseStrategy extends PassportStrategy(Strategy) {
+-  constructor(private authService: FirebaseAuthService) {
++  constructor(
++    @Inject(FIREBASE_AUTH) private authService: FirebaseAuthInterface,
++  ) {
+     super();
+   }
+ 
+diff --git a/src/main.ts b/src/main.ts
+index 984e05c235be18bb1bca070f05a4dfb6ca970eea..1ec4f38b080293b06c9e526366298bbe2d807708 100755
+--- a/src/main.ts
++++ b/src/main.ts
+@@ -6,7 +6,12 @@ import { AppModule } from './app.module';
+ 
+ async function bootstrap() {
+   const app = await NestFactory.create(AppModule);
+-  const logger = new Logger('DARUMA');
++
++  const port = process.env.PORT || 3000;
++  const env = process.env.NODE_ENV || 'development';
++
++  const name = `DARUMA [${env}]`;
++  const logger = new Logger(name);
+ 
+   const options = new DocumentBuilder()
+     .setTitle('DARUMA')
+@@ -16,8 +21,8 @@ async function bootstrap() {
+   const document = SwaggerModule.createDocument(app, options);
+   SwaggerModule.setup('api', app, document);
+ 
+-  await app.listen(3000, '0.0.0.0', () => {
+-    logger.log('Started at http://localhost:3000/api');
++  await app.listen(port, '0.0.0.0', () => {
++    logger.log(`Started at http://localhost:${port}/api`);
+   });
+ }
+ bootstrap();
+diff --git a/tsconfig.json b/tsconfig.json
+index e6e7512db1dbe67bf6d9b1ae551d8054d54f5547..714d08efa5474ff396e27e39f562b81838050c27 100755
+--- a/tsconfig.json
++++ b/tsconfig.json
+@@ -13,7 +13,8 @@
+     "resolveJsonModule": true,
+     "paths": {
+       "@app/*": ["./src/*"]
+-    }
++    },
++    "skipLibCheck": true
+   },
+   "exclude": ["node_modules", "dist"],
+   "include": ["config.ts", "./src/**/*"]
