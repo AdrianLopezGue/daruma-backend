@@ -1,3 +1,3 @@
 export default {
-  url: 'mongodb://localhost/database',
+  url: process.env.MONGO_URL || 'mongodb://localhost/daruma',
 };

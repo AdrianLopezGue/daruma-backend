@@ -11,4 +11,5 @@ export default {
     min: process.env.EVENT_STORE_POOLOPTIONS_MIN || 1,
     max: process.env.EVENT_STORE_POOLOPTIONS_MAX || 10,
   },
+  category: process.env.EVENT_STORE_CATEGORY || 'daruma',
 };
