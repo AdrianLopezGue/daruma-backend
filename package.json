@@ -18,6 +18,7 @@
     "start": "nest start",
     "deploy": "firebase deploy --only functions,firestore",
     "start:dev": "nest start --watch",
+    "start:test": "env NODE_ENV=test nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "tslint -p tsconfig.json -c tslint.json",
@@ -25,7 +26,11 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "precypress:test": "pm2 start npm -- run start:test",
+    "cypress:test": "cypress run",
+    "postcypress:test": "pm2 delete npm",
+    "cypress:open": "cypress open -d"
   },
   "dependencies": {
     "@firebase/database": "^0.5.24",
@@ -73,10 +78,12 @@
     "@types/supertest": "^2.0.8",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
+    "cypress": "^4.4.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
     "eslint-plugin-import": "^2.20.2",
     "jest": "^25.2.4",
+    "pm2": "^4.2.3",
     "prettier": "^1.19.1",
     "supertest": "^4.0.2",
     "ts-jest": "25.2.1",

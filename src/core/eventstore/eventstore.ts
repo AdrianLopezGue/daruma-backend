@@ -20,7 +20,7 @@ export class EventStore implements IEventPublisher, IMessageSource {
   private _eventStoreHostUrl: string;
 
   constructor(config: ConfigService, private readonly client: TCPClient) {
-    this._category = 'iam';
+    this._category = config.get('eventstore').category;
     this._eventStoreHostUrl =
       config.get('eventstore').protocol +
       `://${config.get('eventstore').hostname}:${
@@ -108,13 +108,18 @@ export class EventStore implements IEventPublisher, IMessageSource {
           rawData += chunk;
         });
         res.on('end', () => {
-          const message = JSON.parse(rawData);
+          try {
+            const message = JSON.parse(rawData);
 
-          const eventType = message.content.eventType;
-          const data = message.content.data;
-          event = this._eventHandlers[eventType](...Object.values(data));
+            const eventType = message.content.eventType;
+            const data = message.content.data;
+            event = this._eventHandlers[eventType](...Object.values(data));
 
-          subject.next(event);
+            subject.next(event);
+          } catch (err) {
+            // tslint:disable-next-line:no-console
+            console.trace(err);
+          }
         });
       });
     };
