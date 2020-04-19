@@ -14,6 +14,7 @@ import {
   UsePipes,
   UseGuards,
   Request,
+  Param,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -87,9 +88,9 @@ export class GroupController {
   @ApiResponse({ status: 404, description: 'Not found' })
   @UseGuards(FirebaseAuthGuard)
   @Get(':id')
-  async getGroup(@Request() req, @Query('id') id: string): Promise<GroupView> {
+  async getGroup(@Request() req, @Param() params): Promise<GroupView> {
     try {
-      return await this.groupService.getGroup(id);
+      return this.groupService.getGroup(params.id);
     } catch (e) {
       if (e instanceof GroupIdNotFoundError) {
         throw new NotFoundException('Group not found');
@@ -108,13 +109,13 @@ export class GroupController {
   @HttpCode(204)
   @Put(':id')
   async changeNameGroup(
-    @Query('id') id: string,
+    @Param() params,
     @Body() changenamegroupDto: ChangeNameGroupDto,
     @Request() req
   ): Promise<void> {
     try {
       return await this.groupService.changeNameGroup(
-        id,
+        params.id,
         changenamegroupDto.name,
       );
     } catch (e) {

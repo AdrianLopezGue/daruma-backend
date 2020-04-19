@@ -9,7 +9,8 @@ import {
   Patch,
   ForbiddenException,
   Request,
-  UseGuards
+  UseGuards,
+  Param
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -31,9 +32,9 @@ export class MemberController {
   @ApiResponse({ status: 404, description: 'Not found' })
   @UseGuards(FirebaseAuthGuard)
   @Get(':id')
-  async getMembers(@Request() req, @Query('id') idGroup: string): Promise<MemberView[]> {
+  async getMembers(@Request() req, @Param() params): Promise<MemberView[]> {
     try {
-      return await this.memberService.getMembers(idGroup);
+      return await this.memberService.getMembers(params.id);
     } catch (e) {
       if (e instanceof GroupIdNotFoundError) {
         throw new NotFoundException('Group not found');

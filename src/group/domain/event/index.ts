@@ -10,6 +10,6 @@ export const groupEventHandlers = {
     groupname: string,
     groupcurrencycode: string,
   ) => new GroupWasCreated(id, name, groupname, groupcurrencycode),
-  GroupWasRenamed: (id: string, name: string) =>
+  GroupNameWasChanged: (id: string, name: string) =>
     new GroupNameWasChanged(id, name),
 };
