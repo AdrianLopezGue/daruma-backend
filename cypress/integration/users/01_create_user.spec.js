@@ -23,7 +23,7 @@ describe('POST /user', () => {
   it('Validate the status code', function() {
     post(this.users.johndoe.id, this.users.johndoe)
       .its('status')
-      .should('equal', 204);currencyCode
+      .should('equal', 204);
   });
 
   it('Validate the user belongs to group', function() {
