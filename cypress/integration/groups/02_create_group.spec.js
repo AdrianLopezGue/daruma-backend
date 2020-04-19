@@ -4,11 +4,6 @@ describe('POST /groups', () => {
   let userid = uuid.v4();
   let groupid = uuid.v4();
 
-  before(() => {
-    cy.task('db:clean');
-    cy.task('es:clean');
-  });
-
   beforeEach(() => {
     cy.fixture('users.json').as('users');
     cy.fixture('groups.json').as('groups');
