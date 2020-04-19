@@ -87,7 +87,7 @@ export class GroupController {
   @ApiResponse({ status: 404, description: 'Not found' })
   @UseGuards(FirebaseAuthGuard)
   @Get(':id')
-  async getGroup(@Query('id') id: string): Promise<GroupView> {
+  async getGroup(@Request() req, @Query('id') id: string): Promise<GroupView> {
     try {
       return await this.groupService.getGroup(id);
     } catch (e) {
@@ -102,7 +102,7 @@ export class GroupController {
   }
 
   @ApiOperation({ summary: 'Change Name Group' })
-  @ApiResponse({ status: 204, description: 'changeNameGroup' })
+  @ApiResponse({ status: 204, description: 'Group Name Changed' })
   @ApiResponse({ status: 404, description: 'Not found' })
   @UseGuards(FirebaseAuthGuard)
   @HttpCode(204)
@@ -110,7 +110,8 @@ export class GroupController {
   async changeNameGroup(
     @Query('id') id: string,
     @Body() changenamegroupDto: ChangeNameGroupDto,
-  ) {
+    @Request() req
+  ): Promise<void> {
     try {
       return await this.groupService.changeNameGroup(
         id,

@@ -20,6 +20,9 @@ import {
 import { CreateGroupCommand } from '../command/create-group.command';
 import { CreateGroupHandler } from './create-group.handler';
 import { UserId } from '../../../user/domain/model/user-id';
+import { OwnerDto } from '../../infrastructure/dto/owner.dto';
+import { MEMBERS } from '../../../member/domain/repository/index';
+import { Members } from '../../../../dist/member/domain/repository/members';
 
 describe('CreateGroupHandler', () => {
   let command$: CreateGroupHandler;
@@ -31,6 +34,10 @@ describe('CreateGroupHandler', () => {
   const name = GroupName.fromString('Group Name');
   const groupCurrencyCode = GroupCurrencyCode.fromString('EUR');
   const ownerId = UserId.fromString(uuid());
+  const owner = new OwnerDto(ownerId.value, 'Owner name');
+
+  const members: Partial<Members> = {};
+  const groupMembers = [];
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -39,6 +46,10 @@ describe('CreateGroupHandler', () => {
         {
           provide: GROUPS,
           useValue: groups,
+        },
+        {
+          provide: MEMBERS,
+          useValue: members,
         },
         {
           provide: CHECK_UNIQUE_GROUP_NAME,
@@ -50,6 +61,7 @@ describe('CreateGroupHandler', () => {
     command$ = module.get<CreateGroupHandler>(CreateGroupHandler);
     groups.find = jest.fn().mockResolvedValue(null);
     groups.save = jest.fn();
+    members.save = jest.fn();
     checkUniqueGroupName.with = jest.fn().mockResolvedValue(null);
   });
 
@@ -59,7 +71,8 @@ describe('CreateGroupHandler', () => {
         groupId.value,
         name.value,
         groupCurrencyCode.value,
-        ownerId.value,
+        owner,
+        groupMembers
       ),
     );
 
@@ -77,7 +90,8 @@ describe('CreateGroupHandler', () => {
           groupId.value,
           name.value,
           groupCurrencyCode.value,
-          ownerId.value,
+          owner,
+          groupMembers
         ),
       ),
     ).rejects.toThrow(GroupNameAlreadyRegisteredError);
@@ -96,7 +110,8 @@ describe('CreateGroupHandler', () => {
           groupId.value,
           name.value,
           groupCurrencyCode.value,
-          ownerId.value,
+          owner,
+          groupMembers
         ),
       ),
     ).rejects.toThrow(GroupIdAlreadyRegisteredError);

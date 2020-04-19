@@ -14,6 +14,7 @@ import { EventStoreModule } from '../../core/eventstore/eventstore.module';
 import { DatabaseModule } from '../../core/database/database.module';
 import { ProjectionHandlers } from './read-model/projection/index';
 import { MemberService } from '../../member/infrastructure/service/member.service';
+import { MemberModule } from '../../member/infrastructure/member.module';
 
 @Module({
   controllers: [GroupController],
@@ -21,6 +22,7 @@ import { MemberService } from '../../member/infrastructure/service/member.servic
     CqrsModule,
     FirebaseModule,
     DatabaseModule,
+    MemberModule,
     EventStoreModule.forRoot(),
   ],
   providers: [

@@ -13,16 +13,13 @@ import {
   GroupCurrencyCode,
 } from '../../domain/model';
 import { GROUPS, Groups } from '../../domain/repository';
-import {
-  CHECK_UNIQUE_GROUP_NAME,
-  CheckUniqueGroupName,
-} from '../../domain/services/check-unique-group-name.service';
 import { CreateGroupCommand } from '../command/create-group.command';
-import { MEMBERS, Members } from '../../../member/domain/repository/index';
 import { Member } from '../../../member/domain/model/member';
 import { UserId } from '../../../user/domain/model/user-id';
 import { MemberId } from '../../../member/domain/model/member-id';
 import { MemberName } from '../../../member/domain/model/member-name';
+import { CHECK_UNIQUE_GROUP_NAME, CheckUniqueGroupName } from '../../domain/services/check-unique-group-name.service';
+import { MEMBERS,  Members } from '../../../member/domain/repository/index';
 
 @CommandHandler(CreateGroupCommand)
 export class CreateGroupHandler implements ICommandHandler<CreateGroupCommand> {
@@ -48,7 +45,7 @@ export class CreateGroupHandler implements ICommandHandler<CreateGroupCommand> {
       throw GroupNameAlreadyRegisteredError.withString(command.name);
     }
 
-    const group = Group.add(groupId, name, currencyCode, UserId.fromString(command.owner.id));
+    const group = Group.add(groupId, name, currencyCode, ownerId);
 
     this.groups.save(group);
 
