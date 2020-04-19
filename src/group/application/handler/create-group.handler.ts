@@ -45,7 +45,7 @@ export class CreateGroupHandler implements ICommandHandler<CreateGroupCommand> {
       throw GroupNameAlreadyRegisteredError.withString(command.name);
     }
 
-    const group = Group.add(groupId, name, currencyCode, ownerId);
+    const group = Group.add(groupId, name, currencyCode, UserId.fromString(command.owner.id));
 
     this.groups.save(group);
 
