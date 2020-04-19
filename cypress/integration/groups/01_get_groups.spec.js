@@ -5,7 +5,7 @@ describe('GET /groups', () => {
 
   before(() => {
     cy.task('db:clean');
-    //cy.task('es:clean');
+    cy.task('es:clean');
   });
 
   beforeEach(() => {
