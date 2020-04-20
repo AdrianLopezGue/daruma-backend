@@ -12,7 +12,8 @@ import {
   ForbiddenException,
   ConflictException,
   Request,
-  UseGuards
+  UseGuards,
+  Param
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -23,6 +24,7 @@ import { BillDto } from '../dto/bill.dto';
 import { BillIdAlreadyRegisteredError } from '../../domain/exception/bill-id-already-registered.error';
 import { BillView } from '../read-model/schema/bill.schema';
 import { FirebaseAuthGuard } from '../../../core/firebase/firebase.auth.guard';
+import { CreatorIdNotFoundInGroup } from '../../domain/exception/creator-id-not-found-in-group.error';
 
 @ApiTags('Bills')
 @Controller('bills')
@@ -36,9 +38,9 @@ export class BillController {
   @ApiResponse({ status: 404, description: 'Not found' })
   @UseGuards(FirebaseAuthGuard)
   @Get(':id')
-  async getBills(@Request() req, @Query('id') idGroup: string): Promise<BillView[]> {
+  async getBills(@Request() req, @Param() params): Promise<BillView[]> {
     try {
-      return await this.billService.getBills(idGroup);
+      return await this.billService.getBills(params.id);
     } catch (e) {
       if (e instanceof GroupIdNotFoundError) {
         throw new NotFoundException('Group not found');
@@ -81,9 +83,12 @@ export class BillController {
     } catch (e) {
       if (e instanceof BillIdAlreadyRegisteredError) {
         throw new ConflictException(e.message);
+      } else if (e instanceof CreatorIdNotFoundInGroup) {
+        throw new ConflictException(e.message);
       } else if (e instanceof Error) {
         throw new BadRequestException(`Unexpected error: ${e.message}`);
-      } else {
+      }
+       else {
         throw new BadRequestException('Server error');
       }
     }

@@ -23,7 +23,7 @@ describe('Bill', () => {
   const groupId = GroupId.fromString(v4());
   const name = BillName.fromString('Bill Name');
   const amount = BillAmount.withMoneyAndCurrencyCode(
-    BillCurrencyUnit.fromBigInt(BigInt(100)),
+    BillCurrencyUnit.fromNumber(100),
     GroupCurrencyCode.fromString('EUR'),
   );
   const payers = [

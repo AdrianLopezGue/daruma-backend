@@ -7,7 +7,7 @@ export class CreateBillCommand implements ICommand {
     public readonly groupId: string,
     public readonly name: string,
     public readonly date: Date,
-    public readonly money: bigint,
+    public readonly money: number,
     public readonly currencyCode: string,
     public readonly payers: ParticipantDto[],
     public readonly debtors: ParticipantDto[],

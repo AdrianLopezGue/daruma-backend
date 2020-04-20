@@ -2,11 +2,11 @@ import { ValueObject } from '../../../core/domain';
 import { NegativeCurrencyUnitError } from '../exception/negative-currency-unit.error';
 
 interface Props {
-  value: bigint;
+  value: number;
 }
 
 export class BillCurrencyUnit extends ValueObject<Props> {
-  public static fromBigInt(currencyUnit: bigint): BillCurrencyUnit {
+  public static fromNumber(currencyUnit: number): BillCurrencyUnit {
     if (currencyUnit < 0) {
       throw NegativeCurrencyUnitError.withString();
     }
@@ -14,7 +14,7 @@ export class BillCurrencyUnit extends ValueObject<Props> {
     return new BillCurrencyUnit({ value: currencyUnit });
   }
 
-  get value(): bigint {
+  get value(): number {
     return this.props.value;
   }
 }

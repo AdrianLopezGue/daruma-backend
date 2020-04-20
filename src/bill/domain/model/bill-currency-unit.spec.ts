@@ -3,12 +3,12 @@ import { BillCurrencyUnit } from './bill-currency-unit';
 
 describe('BillCurrencyUnit', () => {
   it('should be a big int', () => {
-    expect(BillCurrencyUnit.fromBigInt(BigInt(100)).value).toBe(BigInt(100));
+    expect(BillCurrencyUnit.fromNumber(100).value).toBe(100);
   });
 
   it('should not be negative', () => {
     expect(() => {
-      BillCurrencyUnit.fromBigInt(BigInt(-10));
+      BillCurrencyUnit.fromNumber(-10);
     }).toThrow(NegativeCurrencyUnitError);
   });
 });
