@@ -7,7 +7,7 @@ const transformParticipants = participants => {
 };
 
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsDate } from 'class-validator';
+import { IsString, IsDateString, IsNumber } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class BillDto {
@@ -23,13 +23,13 @@ export class BillDto {
   @ApiProperty()
   readonly name!: string;
 
-  @IsDate()
+  @IsDateString()
   @ApiProperty()
   readonly date!: Date;
 
-  @IsString()
+  @IsNumber()
   @ApiProperty()
-  readonly money!: bigint;
+  readonly money!: number;
 
   @IsString()
   @ApiProperty()
@@ -51,9 +51,9 @@ export class BillDto {
 // tslint:disable-next-line: max-classes-per-file
 export class ParticipantDto {
   readonly id: string;
-  readonly money: bigint;
+  readonly money: number;
 
-  constructor(id: string, money:  bigint){
+  constructor(id: string, money:  number){
     this.id = id;
     this.money = money;
   }

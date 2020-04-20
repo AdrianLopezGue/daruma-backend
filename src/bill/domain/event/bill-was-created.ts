@@ -7,7 +7,7 @@ export class BillWasCreated implements DomainEvent {
     public readonly id: string,
     public readonly groupId: string,
     public readonly name: string,
-    public readonly money: bigint,
+    public readonly money: number,
     public readonly currencyCode: string,
     public readonly date: Date,
     public readonly payers: BillPayer[],

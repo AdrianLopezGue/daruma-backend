@@ -13,32 +13,40 @@ import { BillCurrencyUnit } from '../../domain/model/bill-currency-unit';
 import { BillPayer } from '../../domain/model/bill-payer';
 import { BillDebtor } from '../../domain/model/bill-debtor';
 import { MemberId } from '../../../member/domain/model/member-id';
+import { MemberService } from '../../../member/infrastructure/service/member.service';
+import { CreatorIdNotFoundInGroup } from '../../domain/exception/creator-id-not-found-in-group.error';
 
 @CommandHandler(CreateBillCommand)
 export class CreateBillHandler implements ICommandHandler<CreateBillCommand> {
   constructor(
     @Inject(BILLS) private readonly bills: Bills,
+    private readonly memberService: MemberService,
   ) {}
 
   async execute(command: CreateBillCommand) {
+
+    if (!(await this.memberService.checkIfMemberIsInGroup(command.groupId, command.creatorId))) {
+      throw new CreatorIdNotFoundInGroup(command.creatorId);
+    }
+
     const billId = BillId.fromString(command.billId);
     const groupId = BillId.fromString(command.groupId);
     const name = BillName.fromString(command.name);
     const amount = BillAmount.withMoneyAndCurrencyCode(
-      BillCurrencyUnit.fromBigInt(BigInt(command.money)),
+      BillCurrencyUnit.fromNumber(command.money),
       GroupCurrencyCode.fromString(command.currencyCode),
     );
     const payers = command.payers.map(payer =>
       BillPayer.withMemberIdAndAmount(
         MemberId.fromString(payer.id),
-        BillCurrencyUnit.fromBigInt(BigInt(payer.money)),
+        BillCurrencyUnit.fromNumber(payer.money),
       ),
     );
 
     const debtors = command.debtors.map(debtor =>
       BillDebtor.withMemberIdAndAmount(
         MemberId.fromString(debtor.id),
-        BillCurrencyUnit.fromBigInt(BigInt(debtor.money)),
+        BillCurrencyUnit.fromNumber(debtor.money),
       ),
     );
 

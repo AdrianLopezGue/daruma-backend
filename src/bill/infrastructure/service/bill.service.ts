@@ -5,7 +5,6 @@ import { Model } from 'mongoose';
 import { BILL_MODEL, BillView } from '../read-model/schema/bill.schema';
 import { CreateBillCommand } from '../../application/command/create-bill.command';
 import { ParticipantDto } from '../dto/bill.dto';
-
 @Injectable()
 export class BillService {
   constructor(
@@ -17,7 +16,7 @@ export class BillService {
     billId: string,
     groupId: string,
     name: string,
-    money: bigint,
+    money: number,
     currencyCode: string,
     payers: ParticipantDto[],
     debtors: ParticipantDto[],

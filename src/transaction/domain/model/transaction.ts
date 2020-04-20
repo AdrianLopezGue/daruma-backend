@@ -55,7 +55,7 @@ export class Transaction extends AggregateRoot {
     this._transactionId = TransactionId.fromString(event.id);
     this._memberId = MemberId.fromString(event.id);
     this._amount = BillAmount.withMoneyAndCurrencyCode(
-      BillCurrencyUnit.fromBigInt(BigInt(event.money)),
+      BillCurrencyUnit.fromNumber(event.money),
       GroupCurrencyCode.fromString(event.currencyCode),
     );
   }

@@ -6,7 +6,7 @@ export const billEventHandlers = {
     id: string,
     groupId: string,
     name: string,
-    money: bigint,
+    money: number,
     currencyCode: string,
     date: Date,
     payers: BillPayer[],

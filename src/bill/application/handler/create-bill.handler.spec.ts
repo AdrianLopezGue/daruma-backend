@@ -27,7 +27,7 @@ describe('CreateBillHandler', () => {
   const groupId = GroupId.fromString(v4());
   const name = BillName.fromString('Bill name');
   const amount = BillAmount.withMoneyAndCurrencyCode(
-    BillCurrencyUnit.fromBigInt(BigInt(100)),
+    BillCurrencyUnit.fromNumber(100),
     GroupCurrencyCode.fromString('EUR'),
   );
   const date = BillDate.fromDate(new Date('2019-11-15T17:43:50'));
@@ -76,14 +76,14 @@ describe('CreateBillHandler', () => {
     const billPayers = payers.map(payer =>
       BillPayer.withMemberIdAndAmount(
         MemberId.fromString(payer.id),
-        BillCurrencyUnit.fromBigInt(payer.money),
+        BillCurrencyUnit.fromNumber(payer.money),
       ),
     );
 
     const billDebtors = debtors.map(debtor =>
       BillDebtor.withMemberIdAndAmount(
         MemberId.fromString(debtor.id),
-        BillCurrencyUnit.fromBigInt(debtor.money),
+        BillCurrencyUnit.fromNumber(debtor.money),
       ),
     );
 

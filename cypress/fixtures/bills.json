@@ -1,0 +1,9 @@
+{
+    "example": {
+      "id": "176c0843-41ea-4126-8003-4d7b3077bf5f",
+      "name": "Example Bill",
+      "date": "2020-04-20T11:38:01.444",
+      "money": 3000,
+      "currencyCode": "EUR"
+    }
+}

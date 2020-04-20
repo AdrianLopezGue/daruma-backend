@@ -1,0 +1,14 @@
+{
+  "firstPayer": {
+    "id": "7150c2b3-239e-41c3-9264-37396057c756",
+    "money": 100
+  },
+  "secondPayer": {
+    "id": "2d811427-ff8e-4886-89b9-240ae6024549",
+    "money": 200
+  },
+  "thirdPayer": {
+    "id": "5333dee0-a52c-4993-86ee-2a97211d29b2",
+    "money": 300
+  }
+}

@@ -96,7 +96,7 @@ export class Bill extends AggregateRoot {
     this._groupId = GroupId.fromString(event.groupId);
     this._name = BillName.fromString(event.name);
     this._amount = BillAmount.withMoneyAndCurrencyCode(
-      BillCurrencyUnit.fromBigInt(BigInt(event.money)),
+      BillCurrencyUnit.fromNumber(event.money),
       GroupCurrencyCode.fromString(event.currencyCode),
     );
     this._date = BillDate.fromDate(event.date);

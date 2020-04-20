@@ -4,7 +4,7 @@ export class TransactionWasCreated implements DomainEvent {
   constructor(
     public readonly id: string,
     public readonly memberId: string,
-    public readonly money: bigint,
+    public readonly money: number,
     public readonly currencyCode: string,
   ) {}
 }
