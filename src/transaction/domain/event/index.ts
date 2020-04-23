@@ -1,7 +1,7 @@
 import { DebtTransactionWasCreated } from './debt-transaction-was-created';
 import { DepositTransactionWasCreated } from './deposit-transaction-was-created';
 
-export const billEventHandlers = {
+export const transactionEventHandlers = {
   DebtTransactionWasCreated: (
     id: string,
     idMember: string,
