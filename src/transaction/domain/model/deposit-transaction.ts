@@ -1,15 +1,16 @@
 import { AggregateRoot } from '../../../core/domain/models/aggregate-root';
-
 import { GroupCurrencyCode } from '../../../group/domain/model/group-currency-code';
-import { TransactionId } from './transaction-id';
 import { MemberId } from '../../../member/domain/model/member-id';
-import { TransactionWasCreated } from '../event/transaction-was-created';
+import { TransactionId } from './transaction-id';
 import { BillAmount } from '../../../bill/domain/model/bill-amount';
+import { BillId } from '../../../bill/domain/model/bill-id';
 import { BillCurrencyUnit } from '../../../bill/domain/model/bill-currency-unit';
+import { DepositTransactionWasCreated } from '../event/deposit-transaction-was-created';
 
-export class Transaction extends AggregateRoot {
+export class DepositTransaction extends AggregateRoot {
   private _transactionId: TransactionId;
   private _memberId: MemberId;
+  private _billId: BillId;
   private _amount: BillAmount;
 
   private constructor() {
@@ -19,20 +20,22 @@ export class Transaction extends AggregateRoot {
   public static add(
     transactionId: TransactionId,
     memberId: MemberId,
+    billId: BillId,
     amount: BillAmount,
-  ): Transaction {
-    const transaction = new Transaction();
+  ): DepositTransaction {
+    const debtTransaction = new DepositTransaction();
 
-    transaction.apply(
-      new TransactionWasCreated(
+    debtTransaction.apply(
+      new DepositTransactionWasCreated(
         transactionId.value,
         memberId.value,
+        billId.value,
         amount.money.value,
         amount.currencyCode.value,
       ),
     );
 
-    return transaction;
+    return debtTransaction;
   }
 
   public aggregateId(): string {
@@ -43,17 +46,22 @@ export class Transaction extends AggregateRoot {
     return this._transactionId;
   }
 
-  get expenseId(): MemberId {
+  get memberId(): MemberId {
     return this._memberId;
+  }
+
+  get billId(): BillId {
+    return this._billId;
   }
 
   get amount(): BillAmount {
     return this._amount;
   }
 
-  private onTransactionWasCreated(event: TransactionWasCreated) {
+  private onDepositTransactionWasCreated(event: DepositTransactionWasCreated) {
     this._transactionId = TransactionId.fromString(event.id);
-    this._memberId = MemberId.fromString(event.id);
+    this._memberId = MemberId.fromString(event.idMember);
+    this._billId = BillId.fromString(event.idBill);
     this._amount = BillAmount.withMoneyAndCurrencyCode(
       BillCurrencyUnit.fromNumber(event.money),
       GroupCurrencyCode.fromString(event.currencyCode),
