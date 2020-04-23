@@ -6,6 +6,7 @@ import { BootstrapModule } from './bootstrap.module';
 import { GroupModule } from './group/infrastructure/group.module';
 import { MemberModule } from './member/infrastructure/member.module';
 import { UserModule } from './user/infrastructure/user.module';
+import { TransactionModule } from './transaction/infrastructure/transaction.module';
 
 @Global()
 @Module({
@@ -22,6 +23,7 @@ import { UserModule } from './user/infrastructure/user.module';
     UserModule,
     MemberModule,
     BillModule,
+    TransactionModule
   ],
 })
 export class AppModule {}
