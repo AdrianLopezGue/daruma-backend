@@ -6,6 +6,7 @@ import { Transactions } from '../../domain/repository/transactions';
 import { DepositTransaction } from '../../domain/model/deposit-transaction';
 import { DebtTransaction } from '../../domain/model/debt-transaction';
 import { TransactionId } from '../../domain/model/transaction-id';
+import { TransferTransaction } from '../../domain/model/transfer-transaction';
 
 @Injectable()
 export class TransactionEventStore implements Transactions {
@@ -38,5 +39,18 @@ export class TransactionEventStore implements Transactions {
   saveDebtTransaction(debtTransaction: DebtTransaction): void{
     debtTransaction = this.publisher.mergeObjectContext(debtTransaction);
     debtTransaction.commit();
+  }
+
+  async getTransferTransaction(transactionId: TransactionId): Promise<TransferTransaction>{
+    return this.eventStore.read(TransferTransaction, transactionId.value);
+  }
+
+  async findTransferTransaction(transactionId: TransactionId): Promise<TransferTransaction> | null{
+    return this.eventStore.read(TransferTransaction, transactionId.value);
+  }
+
+  saveTransferTransaction(transferTransaction: TransferTransaction): void{
+    transferTransaction = this.publisher.mergeObjectContext(transferTransaction);
+    transferTransaction.commit();
   }
 }

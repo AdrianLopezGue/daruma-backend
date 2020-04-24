@@ -10,9 +10,10 @@ import { TransactionService } from './service/transaction.service';
 import { TransactionEventStore } from './eventstore/transaction.event-store';
 import { transactionEventHandlers } from '../domain/event/index';
 import { TransactionProviders } from './transaction.provider';
+import { TransactionController } from './controller/transaction.controller';
 
 @Module({
-  controllers: [],
+  controllers: [TransactionController],
   imports: [CqrsModule, DatabaseModule, EventStoreModule.forRoot()],
   providers: [
     ...CommandHandlers,
