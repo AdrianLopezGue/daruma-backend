@@ -11,6 +11,9 @@ import { BillAmount } from './bill-amount';
 import { BillWasCreated } from '../event/bill-was-created';
 import { BillCurrencyUnit } from './bill-currency-unit';
 import { MemberId } from '../../../member/domain/model/member-id';
+import { TransactionId } from '../../../transaction/domain/model/transaction-id';
+import { DepositTransaction } from '../../../transaction/domain/model/deposit-transaction';
+import { DebtTransaction } from '../../../transaction/domain/model/debt-transaction';
 
 export class Bill extends AggregateRoot {
   private _billId: BillId;
@@ -53,6 +56,32 @@ export class Bill extends AggregateRoot {
     );
 
     return bill;
+  }
+
+  public addDepositTransaction(
+    transactionId: TransactionId,
+    memberId: MemberId,
+    amount: BillAmount,
+  ) : DepositTransaction {
+    return DepositTransaction.add(
+      transactionId,
+      memberId,
+      this.id,
+      amount
+    );
+  }
+
+  public addDebtTransaction(
+    transactionId: TransactionId,
+    memberId: MemberId,
+    amount: BillAmount,
+  ) : DebtTransaction {
+    return DebtTransaction.add(
+      transactionId,
+      memberId,
+      this.id,
+      amount
+    );
   }
 
   public aggregateId(): string {

@@ -14,6 +14,7 @@ import { BillEventStore } from './eventstore/bill.event-store';
 import { BillController } from './controller/bill.controller';
 import { billEventHandlers } from '../domain/event/index';
 import { MemberService } from '../../member/infrastructure/service/member.service';
+import { TransactionModule } from '../../transaction/infrastructure/transaction.module';
 
 @Module({
   controllers: [BillController],
@@ -22,6 +23,7 @@ import { MemberService } from '../../member/infrastructure/service/member.servic
     FirebaseModule,
     DatabaseModule,
     EventStoreModule.forRoot(),
+    TransactionModule
   ],
   providers: [
     ...CommandHandlers,
@@ -30,7 +32,7 @@ import { MemberService } from '../../member/infrastructure/service/member.servic
     BillService,
     BillEventStore,
     FirebaseDatabase,
-    MemberService
+    MemberService,
   ],
 })
 export class BillModule implements OnModuleInit {

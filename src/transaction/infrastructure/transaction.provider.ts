@@ -1,6 +1,6 @@
 import { Connection } from 'mongoose';
 import { DepositTransactionSchema, DEPOSIT_TRANSACTION_MODEL } from './read-model/schema/deposit-transaction.schema';
-import { DEBT_TRANSACTION_MODEL } from './read-model/schema/debt-transaction.schema';
+import { DEBT_TRANSACTION_MODEL, DebtTransactionSchema } from './read-model/schema/debt-transaction.schema';
 import { TRANSACTIONS } from '../domain/repository/index';
 import { TransactionEventStore } from './eventstore/transaction.event-store';
 
@@ -14,7 +14,7 @@ export const TransactionProviders = [
   {
     provide: DEPOSIT_TRANSACTION_MODEL,
     useFactory: (connection: Connection) =>
-      connection.model('DepositTransactions', DepositTransactionSchema),
+      connection.model('DepositTransactions', DebtTransactionSchema),
     inject: ['DATABASE_CONNECTION'],
   },
   {
