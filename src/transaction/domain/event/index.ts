@@ -1,5 +1,6 @@
 import { DebtTransactionWasCreated } from './debt-transaction-was-created';
 import { DepositTransactionWasCreated } from './deposit-transaction-was-created';
+import { TransferTransactionWasCreated } from './transfer-transaction-was-created';
 
 export const transactionEventHandlers = {
   DebtTransactionWasCreated: (
@@ -27,6 +28,20 @@ export const transactionEventHandlers = {
     id,
     idMember,
     idBill,
+    money,
+    currencyCode,
+  ),
+  TransferTransactionWasCreated: (
+    id: string,
+    idSender: string,
+    idBeneficiary: string,
+    money: number,
+    currencyCode: string,
+  ) =>
+  new TransferTransactionWasCreated(
+    id,
+    idSender,
+    idBeneficiary,
     money,
     currencyCode,
   )
