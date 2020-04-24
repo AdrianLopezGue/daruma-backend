@@ -3,6 +3,7 @@ import { DepositTransactionSchema, DEPOSIT_TRANSACTION_MODEL } from './read-mode
 import { DEBT_TRANSACTION_MODEL, DebtTransactionSchema } from './read-model/schema/debt-transaction.schema';
 import { TRANSACTIONS } from '../domain/repository/index';
 import { TransactionEventStore } from './eventstore/transaction.event-store';
+import { TRANSFER_TRANSACTION_MODEL, TransferTransactionSchema } from './read-model/schema/transfer-transaction.schema';
 
 export const TransactionProviders = [
   {
@@ -15,6 +16,12 @@ export const TransactionProviders = [
     provide: DEPOSIT_TRANSACTION_MODEL,
     useFactory: (connection: Connection) =>
       connection.model('DepositTransactions', DebtTransactionSchema),
+    inject: ['DATABASE_CONNECTION'],
+  },
+  {
+    provide: TRANSFER_TRANSACTION_MODEL,
+    useFactory: (connection: Connection) =>
+      connection.model('TransferTransactions', TransferTransactionSchema),
     inject: ['DATABASE_CONNECTION'],
   },
   {
