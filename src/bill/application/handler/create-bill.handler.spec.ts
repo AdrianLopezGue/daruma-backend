@@ -17,11 +17,14 @@ import { BillPayer } from '../../domain/model/bill-payer';
 import { BillDebtor } from '../../domain/model/bill-debtor';
 import { ParticipantDto } from '../../infrastructure/dto/bill.dto';
 import { MemberId } from '../../../member/domain/model/member-id';
+import { TRANSACTIONS } from '../../../transaction/domain/repository/index';
+import { Transactions } from '../../../../dist/transaction/domain/repository/transactions';
 
 describe('CreateBillHandler', () => {
   let command$: CreateBillHandler;
 
   const bills: Partial<Bills> = {};
+  const transactions: Partial<Transactions> = {};
 
   const billId = BillId.fromString(v4());
   const groupId = GroupId.fromString(v4());
@@ -51,6 +54,10 @@ describe('CreateBillHandler', () => {
           provide: BILLS,
           useValue: bills,
         },
+        {
+          provide: TRANSACTIONS,
+          useValue: transactions,
+        }
       ],
     }).compile();
 

@@ -87,8 +87,7 @@ export class BillController {
         throw new ConflictException(e.message);
       } else if (e instanceof Error) {
         throw new BadRequestException(`Unexpected error: ${e.message}`);
-      }
-       else {
+      } else {
         throw new BadRequestException('Server error');
       }
     }

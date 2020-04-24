@@ -15,17 +15,28 @@ import { BillDebtor } from '../../domain/model/bill-debtor';
 import { MemberId } from '../../../member/domain/model/member-id';
 import { MemberService } from '../../../member/infrastructure/service/member.service';
 import { CreatorIdNotFoundInGroup } from '../../domain/exception/creator-id-not-found-in-group.error';
+import { DepositTransaction } from '../../../transaction/domain/model/deposit-transaction';
+import { TransactionId } from '../../../transaction/domain/model/transaction-id';
+import { v4 } from 'uuid';
+import { TRANSACTIONS } from '../../../transaction/domain/repository/index';
+import { Transactions } from '../../../transaction/domain/repository/transactions';
+import { DebtTransaction } from '../../../transaction/domain/model/debt-transaction';
 
 @CommandHandler(CreateBillCommand)
 export class CreateBillHandler implements ICommandHandler<CreateBillCommand> {
   constructor(
     @Inject(BILLS) private readonly bills: Bills,
+    @Inject(TRANSACTIONS) private readonly transactions: Transactions,
     private readonly memberService: MemberService,
   ) {}
 
   async execute(command: CreateBillCommand) {
-
-    if (!(await this.memberService.checkIfMemberIsInGroup(command.groupId, command.creatorId))) {
+    if (
+      !(await this.memberService.checkIfMemberIsInGroup(
+        command.groupId,
+        command.creatorId,
+      ))
+    ) {
       throw new CreatorIdNotFoundInGroup(command.creatorId);
     }
 
@@ -62,9 +73,43 @@ export class CreateBillHandler implements ICommandHandler<CreateBillCommand> {
       date,
       payers,
       debtors,
-      creatorId
+      creatorId,
     );
 
     this.bills.save(bill);
+
+    const depositTransactionsAdded: DepositTransaction[] = [];
+
+    payers.forEach(payer => {
+      depositTransactionsAdded.push(
+        bill.addDepositTransaction(
+          TransactionId.fromString(v4()),
+          payer.memberId,
+          BillAmount.withMoneyAndCurrencyCode(
+            payer.amount,
+            GroupCurrencyCode.fromString(command.currencyCode),
+          ),
+        ),
+      );
+    });
+
+    depositTransactionsAdded.map((transaction) => this.transactions.saveDepositTransaction(transaction));
+
+    const debtTransactionsAdded: DebtTransaction[] = [];
+
+    debtors.forEach(debtor => {
+      debtTransactionsAdded.push(
+        bill.addDebtTransaction(
+          TransactionId.fromString(v4()),
+          debtor.memberId,
+          BillAmount.withMoneyAndCurrencyCode(
+            debtor.amount,
+            GroupCurrencyCode.fromString(command.currencyCode),
+          ),
+        ),
+      );
+    });
+
+    debtTransactionsAdded.map((transaction) => this.transactions.saveDebtTransaction(transaction));
   }
 }
