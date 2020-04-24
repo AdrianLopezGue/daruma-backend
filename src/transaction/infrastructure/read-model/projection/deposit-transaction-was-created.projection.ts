@@ -1,16 +1,15 @@
 import { Inject } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { Model } from 'mongoose';
-import { DebtTransactionWasCreated } from '@app/transaction/domain/event/debt-transaction-was-created';
-import { DebtTransactionView } from '../schema/debt-transaction.schema';
 import { DepositTransactionWasCreated } from '../../../domain/event/deposit-transaction-was-created';
+import { DepositTransactionView } from '../schema/deposit-transaction.schema';
 
 
-@EventsHandler(DebtTransactionWasCreated)
+@EventsHandler(DepositTransactionWasCreated)
 export class DepositTransactionWasCreatedProjection
   implements IEventHandler<DepositTransactionWasCreated> {
   constructor(
-    @Inject('DEPOSIT_TRANSACTION_MODEL') private readonly depositTransactionModel: Model<DebtTransactionView>,
+    @Inject('DEPOSIT_TRANSACTION_MODEL') private readonly depositTransactionModel: Model<DepositTransactionView>,
   ) {}
 
   async handle(event: DepositTransactionWasCreated) {
