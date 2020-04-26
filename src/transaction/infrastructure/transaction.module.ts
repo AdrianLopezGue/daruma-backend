@@ -11,15 +11,18 @@ import { TransactionEventStore } from './eventstore/transaction.event-store';
 import { transactionEventHandlers } from '../domain/event/index';
 import { TransactionProviders } from './transaction.provider';
 import { TransactionController } from './controller/transaction.controller';
+import { BalanceController } from './controller/balance.controller';
+import { BalanceService } from './service/balance.service';
 
 @Module({
-  controllers: [TransactionController],
+  controllers: [TransactionController, BalanceController],
   imports: [CqrsModule, DatabaseModule, EventStoreModule.forRoot()],
   providers: [
     ...CommandHandlers,
     ...ProjectionHandlers,
     ...TransactionProviders,
     TransactionService,
+    BalanceService,
     TransactionEventStore,
   ],
 })
