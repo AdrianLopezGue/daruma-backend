@@ -33,7 +33,7 @@ export class BalanceProjection
   ) {
     if (event instanceof MemberWasCreated) {
       const balanceView = new this.balanceModel({
-        _id: event.idUser,
+        _id: event.id,
         idGroup: event.idGroup,
         money: 0,
       });
