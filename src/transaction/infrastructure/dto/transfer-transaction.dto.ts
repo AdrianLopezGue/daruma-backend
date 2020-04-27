@@ -22,8 +22,4 @@ export class TransferTransactionDto {
   @IsString()
   @ApiProperty()
   readonly currencyCode!: string;
-
-  @IsString()
-  @ApiProperty()
-  readonly idUser!: string;
 }
