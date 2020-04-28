@@ -9,6 +9,7 @@ import { USERS, Users } from '../../domain/repository/users';
 import { User } from '../../domain/model/user';
 import { UserIdAlreadyRegisteredError } from '../../domain/exception/user-id-already-registered.error';
 import { UserEmailAlreadyRegisteredError } from '../../domain/exception/user-email-already-registered.error';
+import { UserPaypal } from '../../domain/model/user-paypal';
 import {
   CHECK_UNIQUE_USER_EMAIL,
   CheckUniqueUserEmail,
@@ -26,6 +27,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
     const userId = UserId.fromString(command.userId);
     const username = UserName.fromString(command.username);
     const useremail = UserEmail.fromString(command.useremail);
+    const userpaypal = UserPaypal.fromString(command.userpaypal);
 
     if ((await this.users.find(userId)) instanceof User) {
       throw UserIdAlreadyRegisteredError.withString(command.userId);
@@ -37,7 +39,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
       throw UserEmailAlreadyRegisteredError.withString(command.useremail);
     }
 
-    const user = User.add(userId, username, useremail);
+    const user = User.add(userId, username, useremail, userpaypal);
 
     this.users.save(user);
   }

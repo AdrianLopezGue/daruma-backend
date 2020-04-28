@@ -15,6 +15,7 @@ export class UserWasCreatedProjection implements IEventHandler<UserWasCreated> {
       _id: event.id,
       name: event.username,
       email: event.useremail,
+      paypal: event.userpaypal,
     });
 
     return userView.save();
