@@ -36,6 +36,10 @@ export class MemberService {
     return this.memberModel.distinct('groupId', { userId: userId }).exec();
   }
 
+  async updateUser(newUserId: string, newName: string){
+    this.memberModel.updateMany({userId: newUserId}, { $set: { name: newName} }).exec();
+  }
+
   async checkIfMemberIsInGroup(
     groupId: string,
     userId: string,

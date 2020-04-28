@@ -7,12 +7,14 @@ import { UserId } from '../../../user/domain/model';
 import { MemberId } from '../../../member/domain/model/member-id';
 import { MemberName } from '../../../member/domain/model/member-name';
 import { Member } from '../../../member/domain/model/member';
+import { GroupWasRemoved } from '../event/group-was-removed.event';
 
 export class Group extends AggregateRoot {
   private _groupId: GroupId;
   private _name: GroupName;
   private _currencyCode: GroupCurrencyCode;
   private _ownerId: UserId;
+  private _isRemoved: boolean;
 
   private constructor() {
     super();
@@ -66,6 +68,10 @@ export class Group extends AggregateRoot {
     return this._ownerId;
   }
 
+  get isRemoved(): boolean {
+    return this._isRemoved;
+  }
+
   rename(name: GroupName) {
     if (name.equals(this._name)) {
       return;
@@ -74,14 +80,27 @@ export class Group extends AggregateRoot {
     this.apply(new GroupNameWasChanged(this._groupId.value, name.value));
   }
 
+  remove() {
+    if (this._isRemoved) {
+      return;
+    }
+
+    this.apply(new GroupWasRemoved(this._groupId.value));
+  }
+
   private onGroupWasCreated(event: GroupWasCreated) {
     this._groupId = GroupId.fromString(event.id);
     this._name = GroupName.fromString(event.name);
     this._currencyCode = GroupCurrencyCode.fromString(event.currencyCode);
     this._ownerId = UserId.fromString(event.ownerId);
+    this._isRemoved = false;
   }
 
   private onGroupNameWasChanged(event: GroupNameWasChanged) {
     this._name = GroupName.fromString(event.name);
+  }
+
+  private onGroupWasRemoved(event: GroupWasRemoved) {
+    this._isRemoved = true;
   }
 }

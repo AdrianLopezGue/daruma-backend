@@ -10,6 +10,7 @@ import { Model } from 'mongoose';
 import { MemberService } from '../../../member/infrastructure/service/member.service';
 import { MemberDto } from '../dto/group.dto';
 import { OwnerDto } from '../dto/owner.dto';
+import { RemoveGroupCommand } from '../../application/command/remove-group.command';
 
 @Injectable()
 export class GroupService {
@@ -33,6 +34,10 @@ export class GroupService {
 
   async changeNameGroup(id: string, name: string) {
     return this.commandBus.execute(new ChangeGroupNameCommand(id, name));
+  }
+
+  async removeGroup(id: string) {
+    return this.commandBus.execute(new RemoveGroupCommand(id));
   }
 
   async getGroup(id: string): Promise<GroupView> {

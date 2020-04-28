@@ -9,12 +9,14 @@ import {
 import { USER_MODEL, UserView } from '../read-model/schema/user.schema';
 import { UserIdNotFoundError } from '../../domain/exception/user-id-not-found.error';
 import { ChangeUserPaypalCommand } from '../../application/command/change-user-paypal.command';
+import { MemberService } from '../../../member/infrastructure/service/member.service';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly commandBus: CommandBus,
     @Inject(USER_MODEL) private readonly userModel: Model<UserView>,
+    private readonly memberService: MemberService,
   ) {}
 
   async createUser(id: string, name: string, email: string, paypal?: string) {
@@ -25,6 +27,7 @@ export class UserService {
 
   async updateUser(id: string, name: string, paypal: string) {
     await this.commandBus.execute(new ChangeUserNameCommand(id, name));
+    await this.memberService.updateUser(id, name);
     if (paypal !== '') {
       await this.commandBus.execute(new ChangeUserPaypalCommand(id, paypal));
     }
