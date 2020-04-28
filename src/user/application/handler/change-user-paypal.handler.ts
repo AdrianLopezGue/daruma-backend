@@ -26,9 +26,5 @@ export class ChangeUserPaypalHandler
     user.changePaypal(paypal);
 
     await this.users.save(user);
-
-    const user2 = await this.users.find(userId);
-
-    console.debug(user2);
   }
 }

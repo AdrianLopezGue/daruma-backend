@@ -11,6 +11,7 @@ import { UserEventStore } from './eventstore/user.event-store';
 import { userEventHandlers } from '../domain/event/index';
 import { UserProviders } from './user.provider';
 import { UserController } from './controller/user.controller';
+import { MemberService } from '../../member/infrastructure/service/member.service';
 
 @Module({
   controllers: [UserController],
@@ -21,6 +22,7 @@ import { UserController } from './controller/user.controller';
     ...UserProviders,
     UserService,
     UserEventStore,
+    MemberService
   ],
 })
 export class UserModule implements OnModuleInit {

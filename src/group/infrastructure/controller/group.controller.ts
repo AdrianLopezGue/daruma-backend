@@ -15,6 +15,7 @@ import {
   UseGuards,
   Request,
   Param,
+  Delete,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -113,6 +114,25 @@ export class GroupController {
         params.id,
         changenamegroupDto.name,
       );
+    } catch (e) {
+      if (e instanceof GroupIdNotFoundError) {
+        throw new NotFoundException('Group not found');
+      } else if (e instanceof Error) {
+        throw new BadRequestException(`Unexpected error: ${e.message}`);
+      } else {
+        throw new BadRequestException('Server error');
+      }
+    }
+  }
+  @ApiOperation({ summary: 'Delete Group' })
+  @ApiResponse({ status: 204, description: 'Delete Group' })
+  @ApiResponse({ status: 404, description: 'Not found' })
+  @UseGuards(FirebaseAuthGuard)
+  @HttpCode(204)
+  @Delete(':id')
+  async removeGroup(@Param() params) {
+    try {
+      return await this.groupService.removeGroup(params.id);
     } catch (e) {
       if (e instanceof GroupIdNotFoundError) {
         throw new NotFoundException('Group not found');
