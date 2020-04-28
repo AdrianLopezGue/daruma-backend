@@ -72,7 +72,7 @@ describe('CreateGroupHandler', () => {
         name.value,
         groupCurrencyCode.value,
         owner,
-        groupMembers
+        groupMembers,
       ),
     );
 
@@ -91,7 +91,7 @@ describe('CreateGroupHandler', () => {
           name.value,
           groupCurrencyCode.value,
           owner,
-          groupMembers
+          groupMembers,
         ),
       ),
     ).rejects.toThrow(GroupNameAlreadyRegisteredError);
@@ -111,7 +111,7 @@ describe('CreateGroupHandler', () => {
           name.value,
           groupCurrencyCode.value,
           owner,
-          groupMembers
+          groupMembers,
         ),
       ),
     ).rejects.toThrow(GroupIdAlreadyRegisteredError);

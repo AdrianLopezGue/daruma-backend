@@ -1,6 +1,9 @@
 const transformParticipants = participants => {
   if (Array.isArray(participants)) {
-    return participants.map(participant => ({ id: participant.id, money: participant.money }));
+    return participants.map(participant => ({
+      id: participant.id,
+      money: participant.money,
+    }));
   } else {
     return participants;
   }
@@ -53,7 +56,7 @@ export class ParticipantDto {
   readonly id: string;
   readonly money: number;
 
-  constructor(id: string, money:  number){
+  constructor(id: string, money: number) {
     this.id = id;
     this.money = money;
   }

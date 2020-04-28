@@ -23,7 +23,7 @@ import { TransactionModule } from './transaction/infrastructure/transaction.modu
     UserModule,
     MemberModule,
     BillModule,
-    TransactionModule
+    TransactionModule,
   ],
 })
 export class AppModule {}

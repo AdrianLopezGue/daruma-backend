@@ -10,7 +10,7 @@ import {
   ForbiddenException,
   Request,
   UseGuards,
-  Param
+  Param,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -55,7 +55,7 @@ export class MemberController {
   async registerMemberAsUser(
     @Query('id') id: string,
     @Body() memberDto: RegisterMemberAsUserDto,
-    @Request() req
+    @Request() req,
   ) {
     const idUser: UserId = req.user;
 

@@ -1,14 +1,14 @@
 {
-    "firstDebtor": {
-      "id": "7150c2b3-239e-41c3-9264-37396057c756",
-      "money": 10
-    },
-    "secondDebtor": {
-      "id": "b6672012-4ca5-4aff-b346-b1e43ebdfa91",
-      "money": 20
-    },
-    "thirdDebtor": {
-      "id": "93ea82bf-f182-4811-86ef-4d2d505b1fc7",
-      "money": 30
-    }
+  "firstDebtor": {
+    "id": "7150c2b3-239e-41c3-9264-37396057c756",
+    "money": 10
+  },
+  "secondDebtor": {
+    "id": "b6672012-4ca5-4aff-b346-b1e43ebdfa91",
+    "money": 20
+  },
+  "thirdDebtor": {
+    "id": "93ea82bf-f182-4811-86ef-4d2d505b1fc7",
+    "money": 30
   }
+}

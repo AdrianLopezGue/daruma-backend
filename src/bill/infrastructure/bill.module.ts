@@ -23,7 +23,7 @@ import { TransactionModule } from '../../transaction/infrastructure/transaction.
     FirebaseModule,
     DatabaseModule,
     EventStoreModule.forRoot(),
-    TransactionModule
+    TransactionModule,
   ],
   providers: [
     ...CommandHandlers,

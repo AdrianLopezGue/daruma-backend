@@ -7,7 +7,7 @@ interface Props {
   amount: BillCurrencyUnit;
 }
 
-export class BillPayer extends ValueObject<Props>{
+export class BillPayer extends ValueObject<Props> {
   static withMemberIdAndAmount(
     memberId: MemberId,
     amount: BillCurrencyUnit,

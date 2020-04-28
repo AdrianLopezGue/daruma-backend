@@ -30,7 +30,5 @@ export class ChangeUserPaypalHandler
     const user2 = await this.users.find(userId);
 
     console.debug(user2);
-
-
   }
 }

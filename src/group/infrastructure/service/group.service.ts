@@ -41,7 +41,9 @@ export class GroupService {
 
   async getGroups(ownerId: string): Promise<GroupView[]> {
     const idGroups = await this.memberService.getGroups(ownerId);
-    const arr = Object.keys(idGroups).map(function (id) { return idGroups[id]; });
+    const arr = Object.keys(idGroups).map(function(id) {
+      return idGroups[id];
+    });
     return this.groupModel.find({ _id: { $in: arr } }).exec();
   }
 }

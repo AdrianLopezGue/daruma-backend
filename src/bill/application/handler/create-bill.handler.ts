@@ -93,7 +93,9 @@ export class CreateBillHandler implements ICommandHandler<CreateBillCommand> {
       );
     });
 
-    depositTransactionsAdded.map((transaction) => this.transactions.saveDepositTransaction(transaction));
+    depositTransactionsAdded.map(transaction =>
+      this.transactions.saveDepositTransaction(transaction),
+    );
 
     const debtTransactionsAdded: DebtTransaction[] = [];
 
@@ -110,6 +112,8 @@ export class CreateBillHandler implements ICommandHandler<CreateBillCommand> {
       );
     });
 
-    debtTransactionsAdded.map((transaction) => this.transactions.saveDebtTransaction(transaction));
+    debtTransactionsAdded.map(transaction =>
+      this.transactions.saveDebtTransaction(transaction),
+    );
   }
 }

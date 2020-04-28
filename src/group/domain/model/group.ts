@@ -43,12 +43,7 @@ export class Group extends AggregateRoot {
     name: MemberName,
     userId = UserId.fromString(''),
   ): Member {
-    return Member.add(
-      memberId,
-      this.id,
-      name,
-      userId
-    );
+    return Member.add(memberId, this.id, name, userId);
   }
 
   public aggregateId(): string {

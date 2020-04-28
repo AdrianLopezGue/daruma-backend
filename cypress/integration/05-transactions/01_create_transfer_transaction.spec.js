@@ -1,7 +1,6 @@
 import * as uuid from 'uuid';
 
 describe('POST /transactions', () => {
-
   beforeEach(() => {
     cy.fixture('users.json').as('users');
     cy.fixture('groups.json').as('groups');
@@ -19,13 +18,18 @@ describe('POST /transactions', () => {
         senderId: sender.id,
         beneficiaryId: beneficiary.id,
         money: transaction.money,
-        currencyCode: transaction.currencyCode
+        currencyCode: transaction.currencyCode,
       },
       failOnStatusCode: false,
     });
 
   it('Validate the status code', function() {
-    post(this.users.johndoe.id, this.users.johndoe, this.users.tommytoe, this.transactions.example)
+    post(
+      this.users.johndoe.id,
+      this.users.johndoe,
+      this.users.tommytoe,
+      this.transactions.example,
+    )
       .its('status')
       .should('equal', 204);
   });

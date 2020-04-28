@@ -4,8 +4,8 @@ import { TransferTransactionWasCreatedProjection } from './transfer-transaction-
 import { BalanceProjection } from './balance.projection';
 
 export const ProjectionHandlers = [
-    DebtTransactionWasCreatedProjection,
-    DepositTransactionWasCreatedProjection,
-    TransferTransactionWasCreatedProjection,
-    BalanceProjection,
+  DebtTransactionWasCreatedProjection,
+  DepositTransactionWasCreatedProjection,
+  TransferTransactionWasCreatedProjection,
+  BalanceProjection,
 ];

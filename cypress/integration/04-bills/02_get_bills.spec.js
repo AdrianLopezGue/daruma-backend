@@ -12,7 +12,7 @@ describe('GET /bills/idGroup', () => {
     cy.request({
       method: 'GET',
       url: `bills/${id}`,
-      auth: { bearer: auth }
+      auth: { bearer: auth },
     });
 
   it('Validate the status code', function() {
@@ -22,7 +22,6 @@ describe('GET /bills/idGroup', () => {
   });
 
   it('Validate group can be found after creation', function() {
-
     get(this.users.johndoe.id, this.groups.example.id)
       .its('body.length')
       .should('equal', 1);

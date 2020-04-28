@@ -2,7 +2,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 
 import { Model } from 'mongoose';
-import { BALANCE_MODEL, BalanceView } from '../read-model/schema/balance.transaction.schema';
+import {
+  BALANCE_MODEL,
+  BalanceView,
+} from '../read-model/schema/balance.transaction.schema';
 @Injectable()
 export class BalanceService {
   constructor(
@@ -11,6 +14,6 @@ export class BalanceService {
   ) {}
 
   async getBalance(groupId: string): Promise<BalanceView[]> {
-    return this.balanceModel.find({ 'idGroup': "" + groupId + "" }).exec();
+    return this.balanceModel.find({ idGroup: '' + groupId + '' }).exec();
   }
 }

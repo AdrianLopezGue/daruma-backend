@@ -9,7 +9,7 @@ export const BalanceSchema = new Schema({
 
 export interface BalanceView extends Document {
   readonly _id: string;
-  readonly idGroup: string,
+  readonly idGroup: string;
   readonly money: number;
 }
 

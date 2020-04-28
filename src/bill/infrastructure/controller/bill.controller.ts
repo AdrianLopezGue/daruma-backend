@@ -13,7 +13,7 @@ import {
   ConflictException,
   Request,
   UseGuards,
-  Param
+  Param,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -29,9 +29,7 @@ import { CreatorIdNotFoundInGroup } from '../../domain/exception/creator-id-not-
 @ApiTags('Bills')
 @Controller('bills')
 export class BillController {
-  constructor(
-    private readonly billService: BillService,
-  ) {}
+  constructor(private readonly billService: BillService) {}
 
   @ApiOperation({ summary: 'Get Bills of Group' })
   @ApiResponse({ status: 204, description: 'Get Bills of Group.' })
@@ -58,10 +56,7 @@ export class BillController {
   @UsePipes(new ValidationPipe({ transform: true }))
   @HttpCode(204)
   @Post()
-  async createBill(
-    @Body() billDto: BillDto,
-    @Request() req
-  ): Promise<void> {
+  async createBill(@Body() billDto: BillDto, @Request() req): Promise<void> {
     const idUser: UserId = req.user;
 
     if (idUser.value !== billDto.creatorId) {
@@ -78,7 +73,7 @@ export class BillController {
         billDto.payers,
         billDto.debtors,
         billDto.date,
-        billDto.creatorId
+        billDto.creatorId,
       );
     } catch (e) {
       if (e instanceof BillIdAlreadyRegisteredError) {

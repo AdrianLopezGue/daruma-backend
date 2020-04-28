@@ -1,7 +1,6 @@
 import * as uuid from 'uuid';
 
 describe('PUT /users', () => {
-
   const userName = 'User name';
   const userPaypal = 'User paypal';
 
@@ -17,11 +16,11 @@ describe('PUT /users', () => {
       auth: { bearer: auth },
       body: {
         name: name,
-        paypal: paypal
+        paypal: paypal,
       },
     });
 
-  const get = (user) => 
+  const get = user =>
     cy.request({
       method: 'GET',
       url: `users/${user.id}`,
@@ -29,7 +28,6 @@ describe('PUT /users', () => {
     });
 
   it('Validate user name has changed', function() {
-
     const result = [
       {
         _id: this.users.johndoe.id,
@@ -44,15 +42,14 @@ describe('PUT /users', () => {
       .its('body')
       .should('deep.equal', result[0]);
   });
-  
-  it('Validate paypal has changed', function() {
 
+  it('Validate paypal has changed', function() {
     const result = [
       {
         _id: this.users.johndoe.id,
         name: userName,
         email: this.users.johndoe.email,
-        paypal: userPaypal
+        paypal: userPaypal,
       },
     ];
 
@@ -61,7 +58,7 @@ describe('PUT /users', () => {
     get(this.users.johndoe)
       .its('body')
       .should('deep.equal', result[0]);
-  }); 
+  });
 
   it('Validate name abd paypal has changed', function() {
     const newuserName = 'New User name';
@@ -72,14 +69,19 @@ describe('PUT /users', () => {
         _id: this.users.johndoe.id,
         name: newuserName,
         email: this.users.johndoe.email,
-        paypal: newuserPaypal
+        paypal: newuserPaypal,
       },
     ];
 
-    put(this.users.johndoe.id, newuserName, newuserPaypal, this.users.johndoe.id);
+    put(
+      this.users.johndoe.id,
+      newuserName,
+      newuserPaypal,
+      this.users.johndoe.id,
+    );
 
     get(this.users.johndoe)
       .its('body')
       .should('deep.equal', result[0]);
-  }); 
+  });
 });

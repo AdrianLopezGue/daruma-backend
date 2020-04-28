@@ -51,7 +51,7 @@ export class Bill extends AggregateRoot {
         date.value,
         payers,
         debtors,
-        creatorId.value
+        creatorId.value,
       ),
     );
 
@@ -62,26 +62,16 @@ export class Bill extends AggregateRoot {
     transactionId: TransactionId,
     memberId: MemberId,
     amount: BillAmount,
-  ) : DepositTransaction {
-    return DepositTransaction.add(
-      transactionId,
-      memberId,
-      this.id,
-      amount
-    );
+  ): DepositTransaction {
+    return DepositTransaction.add(transactionId, memberId, this.id, amount);
   }
 
   public addDebtTransaction(
     transactionId: TransactionId,
     memberId: MemberId,
     amount: BillAmount,
-  ) : DebtTransaction {
-    return DebtTransaction.add(
-      transactionId,
-      memberId,
-      this.id,
-      amount
-    );
+  ): DebtTransaction {
+    return DebtTransaction.add(transactionId, memberId, this.id, amount);
   }
 
   public aggregateId(): string {

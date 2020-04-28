@@ -29,7 +29,7 @@ export class BalanceProjection
       | MemberWasCreated
       | DebtTransactionWasCreated
       | DepositTransactionWasCreated
-      | TransferTransactionWasCreated
+      | TransferTransactionWasCreated,
   ) {
     if (event instanceof MemberWasCreated) {
       const balanceView = new this.balanceModel({
@@ -39,12 +39,23 @@ export class BalanceProjection
       });
       return balanceView.save();
     } else if (event instanceof DebtTransactionWasCreated) {
-      this.balanceModel.updateOne({ _id: event.idMember }, { $inc: { money: -event.money } }).exec();
+      this.balanceModel
+        .updateOne({ _id: event.idMember }, { $inc: { money: -event.money } })
+        .exec();
     } else if (event instanceof DepositTransactionWasCreated) {
-      this.balanceModel.updateOne({ _id: event.idMember }, { $inc: { money: event.money } }).exec();
+      this.balanceModel
+        .updateOne({ _id: event.idMember }, { $inc: { money: event.money } })
+        .exec();
     } else if (event instanceof TransferTransactionWasCreated) {
-      this.balanceModel.updateOne({ _id: event.idSender }, { $inc: { money: event.money } }).exec();
-      this.balanceModel.updateOne({ _id: event.idBeneficiary }, { $inc: { money: -event.money } }).exec();
+      this.balanceModel
+        .updateOne({ _id: event.idSender }, { $inc: { money: event.money } })
+        .exec();
+      this.balanceModel
+        .updateOne(
+          { _id: event.idBeneficiary },
+          { $inc: { money: -event.money } },
+        )
+        .exec();
     }
   }
 }
