@@ -19,8 +19,7 @@ describe('POST /transactions', () => {
         senderId: sender.id,
         beneficiaryId: beneficiary.id,
         money: transaction.money,
-        currencyCode: transaction.currencyCode,
-        idUser: sender.id
+        currencyCode: transaction.currencyCode
       },
       failOnStatusCode: false,
     });
@@ -29,12 +28,5 @@ describe('POST /transactions', () => {
     post(this.users.johndoe.id, this.users.johndoe, this.users.tommytoe, this.transactions.example)
       .its('status')
       .should('equal', 204);
-  });
-
-  it('Validate user validation', function() {
-    const otherUser = uuid.v4();
-    post(otherUser, this.users.johndoe, this.users.tommytoe, this.transactions)
-      .its('status')
-      .should('equal', 403);
   });
 });

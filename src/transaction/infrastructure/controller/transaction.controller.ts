@@ -13,7 +13,6 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FirebaseAuthGuard } from '../../../core/firebase/firebase.auth.guard';
 import { TransactionService } from '../service/transaction.service';
 import { TransferTransactionDto } from '../dto/transfer-transaction.dto';
-import { UserId } from '../../../user/domain/model/user-id';
 
 @ApiTags('Transactions')
 @Controller('transactions')
