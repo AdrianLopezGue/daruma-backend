@@ -5,6 +5,7 @@ import { BillEventStore } from './eventstore/bill.event-store';
 import { MEMBER_MODEL, MemberSchema } from '../../member/infrastructure/read-model/schema/member.schema';
 import { TRANSACTIONS } from '../../transaction/domain/repository/index';
 import { TransactionEventStore } from '../../transaction/infrastructure/eventstore/transaction.event-store';
+import { MEMBER_SERVICE, MemberService } from '../../member/infrastructure/service/member.service';
 
 export const BillProviders = [
   {
@@ -26,5 +27,5 @@ export const BillProviders = [
   {
     provide: BILLS,
     useClass: BillEventStore,
-  },
+  }
 ];

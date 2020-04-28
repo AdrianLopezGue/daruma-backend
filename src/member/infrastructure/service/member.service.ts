@@ -50,3 +50,5 @@ export class MemberService {
     return result;
   }
 }
+
+export const MEMBER_SERVICE = 'MEMBER_SERVICE';
