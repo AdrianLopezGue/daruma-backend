@@ -7,6 +7,7 @@ import { User } from './user';
 import { UserName } from './user-name';
 import { UserEmail } from './user-email';
 import { UserId } from './user-id';
+import { UserPaypal } from './user-paypal';
 
 describe('User', () => {
   let user: User;
@@ -16,6 +17,7 @@ describe('User', () => {
   const userId = UserId.fromString(v4());
   const name = UserName.fromString('User Name');
   const email = UserEmail.fromString('User Email');
+  const paypal = UserPaypal.fromString('');
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -33,7 +35,7 @@ describe('User', () => {
 
     expect(eventBus$.publish).toHaveBeenCalledTimes(1);
     expect(eventBus$.publish).toHaveBeenCalledWith(
-      new UserWasCreated(userId.value, name.value, email.value),
+      new UserWasCreated(userId.value, name.value, email.value, ''),
     );
   });
 
@@ -47,5 +49,9 @@ describe('User', () => {
 
   it('has an email', () => {
     expect(user.email.equals(email)).toBeTruthy();
+  });
+
+  it('not has a paypal', () => {
+    expect(user.paypal.equals(paypal)).toBeTruthy();
   });
 });

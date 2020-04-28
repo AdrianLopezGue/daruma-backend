@@ -9,6 +9,7 @@ import { CreateUserCommand } from '../command';
 import { User } from '../../domain/model/user';
 import { CheckUniqueUserEmail } from '../../../../dist/user/domain/services/check-unique-user-email.service';
 import { CHECK_UNIQUE_USER_EMAIL } from '../../domain/services/check-unique-user-email.service';
+import { UserPaypal } from '../../domain/model/user-paypal';
 
 describe('CreateUserHandler', () => {
   let command$: CreateUserHandler;
@@ -19,6 +20,7 @@ describe('CreateUserHandler', () => {
   const userId = UserId.fromString('1111111');
   const username = UserName.fromString('john');
   const useremail = UserEmail.fromString('john@john.com');
+  const userPaypal = UserPaypal.fromString('johnDoe');
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -43,11 +45,11 @@ describe('CreateUserHandler', () => {
 
   it('should creates a new user', async () => {
     await command$.execute(
-      new CreateUserCommand(userId.value, username.value, useremail.value),
+      new CreateUserCommand(userId.value, username.value, useremail.value, userPaypal.value),
     );
 
     expect(users.save).toHaveBeenCalledWith(
-      User.add(userId, username, useremail),
+      User.add(userId, username, useremail, userPaypal),
     );
   });
 });

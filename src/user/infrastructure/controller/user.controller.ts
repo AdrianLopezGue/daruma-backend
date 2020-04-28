@@ -7,23 +7,49 @@ import {
   Post,
   ForbiddenException,
   UseGuards,
-  Request
+  Request,
+  Get,
+  NotFoundException,
+  Param,
+  Put
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import {
   UserIdAlreadyRegisteredError,
   UserEmailAlreadyRegisteredError,
+  UserIdNotFoundError,
 } from '../../domain/exception';
 import { UserDto } from '../dto/user.dto';
 import { UserService } from '../service/user.service';
 import { UserId } from '../../domain/model/user-id';
 import { FirebaseAuthGuard } from '../../../core/firebase/firebase.auth.guard';
+import { UserView } from '../read-model/schema/user.schema';
+import { UpdateUserDto } from '../dto/update-user.dto';
 
 @ApiTags('Users')
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @ApiOperation({ summary: 'Get User' })
+  @ApiResponse({ status: 204, description: 'Get User.' })
+  @ApiResponse({ status: 404, description: 'Not found' })
+  @UseGuards(FirebaseAuthGuard)
+  @Get(':id')
+  async getUser(@Request() req, @Param() params): Promise<UserView> {
+    try {
+      return await this.userService.getUser(params.id);
+    } catch (e) {
+      if (e instanceof UserIdNotFoundError) {
+        throw new NotFoundException('User not found');
+      } else if (e instanceof Error) {
+        throw new BadRequestException(`Unexpected error: ${e.message}`);
+      } else {
+        throw new BadRequestException('Server error');
+      }
+    }
+  }
 
   @ApiOperation({ summary: 'Create User' })
   @ApiResponse({ status: 204, description: 'Create User.' })
@@ -51,6 +77,34 @@ export class UserController {
         throw new ConflictException(e.message);
       } else if (e instanceof UserEmailAlreadyRegisteredError) {
         throw new ConflictException(e.message);
+      } else if (e instanceof Error) {
+        throw new BadRequestException(`Unexpected error: ${e.message}`);
+      } else {
+        throw new BadRequestException('Server error');
+      }
+    }
+  }
+
+  @ApiOperation({ summary: 'Update User' })
+  @ApiResponse({ status: 204, description: 'Update User' })
+  @ApiResponse({ status: 404, description: 'Not found' })
+  @UseGuards(FirebaseAuthGuard)
+  @HttpCode(204)
+  @Put(':id')
+  async updateUser(
+    @Param() params,
+    @Body() updateUserDto: UpdateUserDto,
+    @Request() req
+  ): Promise<void> {
+    try {
+      return await this.userService.updateUser(
+        params.id,
+        updateUserDto.name,
+        updateUserDto.paypal,
+      );
+    } catch (e) {
+      if (e instanceof UserIdNotFoundError) {
+        throw new NotFoundException('User not found');
       } else if (e instanceof Error) {
         throw new BadRequestException(`Unexpected error: ${e.message}`);
       } else {
