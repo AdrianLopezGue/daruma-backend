@@ -1,7 +1,6 @@
 import * as uuid from 'uuid';
 
 describe('POST /user', () => {
-
   beforeEach(() => {
     cy.fixture('users.json').as('users');
     cy.fixture('groups.json').as('groups');

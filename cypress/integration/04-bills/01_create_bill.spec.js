@@ -1,27 +1,26 @@
 import * as uuid from 'uuid';
 
 describe('POST /bills', () => {
-
   const payers = [
     {
-      "id": "7150c2b3-239e-41c3-9264-37396057c756",
-      "money": 100
+      id: '7150c2b3-239e-41c3-9264-37396057c756',
+      money: 100,
     },
     {
-      "id": "2d811427-ff8e-4886-89b9-240ae6024549",
-      "money": 200
-    }
+      id: '2d811427-ff8e-4886-89b9-240ae6024549',
+      money: 200,
+    },
   ];
 
   const debtors = [
     {
-      "id": "7150c2b3-239e-41c3-9264-37396057c756",
-      "money": 10
+      id: '7150c2b3-239e-41c3-9264-37396057c756',
+      money: 10,
     },
     {
-      "id": "b6672012-4ca5-4aff-b346-b1e43ebdfa91",
-      "money": 20
-    }
+      id: 'b6672012-4ca5-4aff-b346-b1e43ebdfa91',
+      money: 20,
+    },
   ];
 
   beforeEach(() => {
@@ -51,7 +50,7 @@ describe('POST /bills', () => {
       failOnStatusCode: false,
     });
 
-  it('Validate the status code', function() {    
+  it('Validate the status code', function() {
     post(
       this.users.johndoe.id,
       this.bills.example,
@@ -65,7 +64,7 @@ describe('POST /bills', () => {
   });
 
   it('Validate the creator is an authenticated user', function() {
-    const otherUser = uuid.v4();    
+    const otherUser = uuid.v4();
     post(
       otherUser,
       this.bills.example,
@@ -79,7 +78,6 @@ describe('POST /bills', () => {
   });
 
   it('Validate the creator is a member of the group', function() {
-    
     cy.request({
       method: 'POST',
       url: 'users',
@@ -91,11 +89,11 @@ describe('POST /bills', () => {
       },
       failOnStatusCode: false,
     })
-    .its('status')
-    .should('equal', 204);
+      .its('status')
+      .should('equal', 204);
 
     post(
-      this.users.tommytoe.id ,
+      this.users.tommytoe.id,
       this.bills.example,
       this.users.tommytoe,
       this.groups.example,

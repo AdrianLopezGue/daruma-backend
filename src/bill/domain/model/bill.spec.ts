@@ -50,7 +50,6 @@ describe('Bill', () => {
   const date = BillDate.fromDate(new Date('2019-11-15T17:43:50'));
   const creatorId = MemberId.fromString(v4());
 
-
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [CqrsModule],
@@ -78,7 +77,7 @@ describe('Bill', () => {
         date.value,
         payers,
         debtors,
-        creatorId.value
+        creatorId.value,
       ),
     );
   });
@@ -97,9 +96,7 @@ describe('Bill', () => {
 
   it('has an amount', () => {
     expect(bill.amount.money.equals(amount.money)).toBeTruthy();
-    expect(
-      bill.amount.currencyCode.equals(amount.currencyCode),
-    ).toBeTruthy();
+    expect(bill.amount.currencyCode.equals(amount.currencyCode)).toBeTruthy();
   });
 
   it('has an date', () => {

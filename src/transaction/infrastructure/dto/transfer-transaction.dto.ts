@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNumber } from 'class-validator';
 
-
 export class TransferTransactionDto {
   @IsString()
   @ApiProperty()

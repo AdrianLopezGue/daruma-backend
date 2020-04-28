@@ -33,16 +33,14 @@ import { FirebaseAuthGuard } from '../../../core/firebase/firebase.auth.guard';
 @ApiTags('Groups')
 @Controller('groups')
 export class GroupController {
-  constructor(
-    private readonly groupService: GroupService,
-  ) {}
+  constructor(private readonly groupService: GroupService) {}
 
   @ApiOperation({ summary: 'Get Groups' })
   @ApiResponse({ status: 200, description: 'Get Groups.' })
   @UseGuards(FirebaseAuthGuard)
   @Get()
   async getGroups(@Request() req): Promise<GroupView[]> {
-    const ownerId : UserId = req.user;
+    const ownerId: UserId = req.user;
     return this.groupService.getGroups(ownerId.value);
   }
 
@@ -52,10 +50,7 @@ export class GroupController {
   @UsePipes(new ValidationPipe({ transform: true }))
   @HttpCode(204)
   @Post()
-  async createGroup(
-    @Body() groupDto: GroupDto,
-    @Request() req
-  ): Promise<void> {
+  async createGroup(@Body() groupDto: GroupDto, @Request() req): Promise<void> {
     const idUser: UserId = req.user;
 
     if (idUser.value !== groupDto.owner.id) {
@@ -68,7 +63,7 @@ export class GroupController {
         groupDto.name,
         groupDto.currencyCode,
         groupDto.owner,
-        groupDto.members
+        groupDto.members,
       );
     } catch (e) {
       if (e instanceof GroupIdAlreadyRegisteredError) {
@@ -111,7 +106,7 @@ export class GroupController {
   async changeNameGroup(
     @Param() params,
     @Body() changenamegroupDto: ChangeNameGroupDto,
-    @Request() req
+    @Request() req,
   ): Promise<void> {
     try {
       return await this.groupService.changeNameGroup(

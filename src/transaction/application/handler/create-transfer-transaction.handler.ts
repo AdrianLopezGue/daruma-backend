@@ -14,23 +14,25 @@ import { TransferTransaction } from '../../domain/model/transfer-transaction';
 @CommandHandler(CreateTransferTransactionCommand)
 export class CreateTransferTransactionHandler
   implements ICommandHandler<CreateTransferTransactionCommand> {
-  constructor(@Inject(TRANSACTIONS) private readonly transactions: Transactions) {}
+  constructor(
+    @Inject(TRANSACTIONS) private readonly transactions: Transactions,
+  ) {}
 
   async execute(command: CreateTransferTransactionCommand) {
     const transactionId = TransactionId.fromString(command.transactionId);
     const senderId = MemberId.fromString(command.senderId);
     const beneficiaryId = MemberId.fromString(command.beneficiaryId);
     const amount = BillAmount.withMoneyAndCurrencyCode(
-        BillCurrencyUnit.fromNumber(command.money),
-        GroupCurrencyCode.fromString(command.currencyCode),
+      BillCurrencyUnit.fromNumber(command.money),
+      GroupCurrencyCode.fromString(command.currencyCode),
     );
 
     const transaction = TransferTransaction.add(
-        transactionId,
-        senderId,
-        beneficiaryId,
-        amount,
-      );
+      transactionId,
+      senderId,
+      beneficiaryId,
+      amount,
+    );
 
     this.transactions.saveTransferTransaction(transaction);
   }

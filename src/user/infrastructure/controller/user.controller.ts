@@ -11,7 +11,7 @@ import {
   Get,
   NotFoundException,
   Param,
-  Put
+  Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -56,10 +56,7 @@ export class UserController {
   @UseGuards(FirebaseAuthGuard)
   @HttpCode(204)
   @Post()
-  async createUser(
-    @Body() userDto: UserDto,
-    @Request() req
-  ): Promise<UserDto> {
+  async createUser(@Body() userDto: UserDto, @Request() req): Promise<UserDto> {
     const idUser: UserId = req.user;
 
     if (idUser.value !== userDto.id) {
@@ -94,7 +91,7 @@ export class UserController {
   async updateUser(
     @Param() params,
     @Body() updateUserDto: UpdateUserDto,
-    @Request() req
+    @Request() req,
   ): Promise<void> {
     try {
       return await this.userService.updateUser(

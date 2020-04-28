@@ -4,12 +4,12 @@ import { Model } from 'mongoose';
 import { TransferTransactionWasCreated } from '../../../domain/event/transfer-transaction-was-created';
 import { TransferTransactionView } from '../schema/transfer-transaction.schema';
 
-
 @EventsHandler(TransferTransactionWasCreated)
 export class TransferTransactionWasCreatedProjection
   implements IEventHandler<TransferTransactionWasCreated> {
   constructor(
-    @Inject('TRANSFER_TRANSACTION_MODEL') private readonly transferTransactionModel: Model<TransferTransactionView>,
+    @Inject('TRANSFER_TRANSACTION_MODEL')
+    private readonly transferTransactionModel: Model<TransferTransactionView>,
   ) {}
 
   async handle(event: TransferTransactionWasCreated) {

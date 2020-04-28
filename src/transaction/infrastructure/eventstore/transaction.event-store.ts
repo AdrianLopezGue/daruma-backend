@@ -15,42 +15,56 @@ export class TransactionEventStore implements Transactions {
     private readonly publisher: EventPublisher,
   ) {}
 
-  async getDepositTransaction(transactionId: TransactionId): Promise<DepositTransaction>{
+  async getDepositTransaction(
+    transactionId: TransactionId,
+  ): Promise<DepositTransaction> {
     return this.eventStore.read(DepositTransaction, transactionId.value);
   }
 
-  async findDepositTransaction(transactionId: TransactionId): Promise<DepositTransaction> | null{
+  async findDepositTransaction(
+    transactionId: TransactionId,
+  ): Promise<DepositTransaction> | null {
     return this.eventStore.read(DepositTransaction, transactionId.value);
   }
 
-  saveDepositTransaction(depositTransaction: DepositTransaction): void{
+  saveDepositTransaction(depositTransaction: DepositTransaction): void {
     depositTransaction = this.publisher.mergeObjectContext(depositTransaction);
     depositTransaction.commit();
   }
 
-  async getDebtTransaction(transactionId: TransactionId): Promise<DebtTransaction>{
+  async getDebtTransaction(
+    transactionId: TransactionId,
+  ): Promise<DebtTransaction> {
     return this.eventStore.read(DebtTransaction, transactionId.value);
   }
 
-  async findDebtTransaction(transactionId: TransactionId): Promise<DebtTransaction> | null{
+  async findDebtTransaction(
+    transactionId: TransactionId,
+  ): Promise<DebtTransaction> | null {
     return this.eventStore.read(DebtTransaction, transactionId.value);
   }
 
-  saveDebtTransaction(debtTransaction: DebtTransaction): void{
+  saveDebtTransaction(debtTransaction: DebtTransaction): void {
     debtTransaction = this.publisher.mergeObjectContext(debtTransaction);
     debtTransaction.commit();
   }
 
-  async getTransferTransaction(transactionId: TransactionId): Promise<TransferTransaction>{
+  async getTransferTransaction(
+    transactionId: TransactionId,
+  ): Promise<TransferTransaction> {
     return this.eventStore.read(TransferTransaction, transactionId.value);
   }
 
-  async findTransferTransaction(transactionId: TransactionId): Promise<TransferTransaction> | null{
+  async findTransferTransaction(
+    transactionId: TransactionId,
+  ): Promise<TransferTransaction> | null {
     return this.eventStore.read(TransferTransaction, transactionId.value);
   }
 
-  saveTransferTransaction(transferTransaction: TransferTransaction): void{
-    transferTransaction = this.publisher.mergeObjectContext(transferTransaction);
+  saveTransferTransaction(transferTransaction: TransferTransaction): void {
+    transferTransaction = this.publisher.mergeObjectContext(
+      transferTransaction,
+    );
     transferTransaction.commit();
   }
 }

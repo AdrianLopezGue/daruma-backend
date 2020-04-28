@@ -49,7 +49,6 @@ describe('Change User Paypal', () => {
       new ChangeUserPaypalCommand(userId.value, newNickname.value),
     );
 
-
     expect(users.save).toHaveBeenCalledTimes(1);
     expect(users.save).toHaveBeenCalledWith(user);
   });

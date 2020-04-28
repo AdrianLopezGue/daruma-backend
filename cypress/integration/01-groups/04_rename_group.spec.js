@@ -1,7 +1,6 @@
 import * as uuid from 'uuid';
 
 describe('PUT /groups', () => {
-
   beforeEach(() => {
     cy.fixture('users.json').as('users');
     cy.fixture('groups.json').as('groups');
@@ -13,7 +12,7 @@ describe('PUT /groups', () => {
       url: `groups/${id}`,
       auth: { bearer: auth },
       body: {
-        name: name
+        name: name,
       },
       failOnStatusCode: false,
     });

@@ -14,8 +14,9 @@ export class CheckUniqueGroupNameFromReadModel implements CheckUniqueGroupName {
   ) {}
 
   async with(name: GroupName, idOwner: UserId): Promise<GroupId> {
-
-    const groupView = await this.groupModel.findOne({ $and: [{ 'ownerId': idOwner.value }, { 'name': name.value }]}).exec();
+    const groupView = await this.groupModel
+      .findOne({ $and: [{ ownerId: idOwner.value }, { name: name.value }] })
+      .exec();
     if (groupView === null) {
       return null;
     }

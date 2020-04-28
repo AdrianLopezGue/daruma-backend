@@ -4,12 +4,12 @@ import { Model } from 'mongoose';
 import { DebtTransactionWasCreated } from '@app/transaction/domain/event/debt-transaction-was-created';
 import { DebtTransactionView } from '../schema/debt-transaction.schema';
 
-
 @EventsHandler(DebtTransactionWasCreated)
 export class DebtTransactionWasCreatedProjection
   implements IEventHandler<DebtTransactionWasCreated> {
   constructor(
-    @Inject('DEBT_TRANSACTION_MODEL') private readonly debtTransactionModel: Model<DebtTransactionView>,
+    @Inject('DEBT_TRANSACTION_MODEL')
+    private readonly debtTransactionModel: Model<DebtTransactionView>,
   ) {}
 
   async handle(event: DebtTransactionWasCreated) {

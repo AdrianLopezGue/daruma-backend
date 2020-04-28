@@ -15,23 +15,25 @@ import { DebtTransaction } from '../../domain/model/debt-transaction';
 @CommandHandler(CreateDebtTransactionCommand)
 export class CreateDebtTransactionHandler
   implements ICommandHandler<CreateDebtTransactionCommand> {
-  constructor(@Inject(TRANSACTIONS) private readonly transactions: Transactions) {}
+  constructor(
+    @Inject(TRANSACTIONS) private readonly transactions: Transactions,
+  ) {}
 
   async execute(command: CreateDebtTransactionCommand) {
     const transactionId = TransactionId.fromString(command.transactionId);
     const memberId = MemberId.fromString(command.memberId);
     const billId = BillId.fromString(command.billId);
     const amount = BillAmount.withMoneyAndCurrencyCode(
-        BillCurrencyUnit.fromNumber(command.money),
-        GroupCurrencyCode.fromString(command.currencyCode),
+      BillCurrencyUnit.fromNumber(command.money),
+      GroupCurrencyCode.fromString(command.currencyCode),
     );
 
     const transaction = DebtTransaction.add(
-        transactionId,
-        memberId,
-        billId,
-        amount,
-      );
+      transactionId,
+      memberId,
+      billId,
+      amount,
+    );
 
     this.transactions.saveDebtTransaction(transaction);
   }

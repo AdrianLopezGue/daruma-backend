@@ -2,7 +2,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { Model } from 'mongoose';
 
-import { CreateUserCommand, ChangeUserNameCommand } from '../../application/command';
+import {
+  CreateUserCommand,
+  ChangeUserNameCommand,
+} from '../../application/command';
 import { USER_MODEL, UserView } from '../read-model/schema/user.schema';
 import { UserIdNotFoundError } from '../../domain/exception/user-id-not-found.error';
 import { ChangeUserPaypalCommand } from '../../application/command/change-user-paypal.command';
@@ -22,7 +25,7 @@ export class UserService {
 
   async updateUser(id: string, name: string, paypal: string) {
     await this.commandBus.execute(new ChangeUserNameCommand(id, name));
-    if(paypal !== ''){
+    if (paypal !== '') {
       await this.commandBus.execute(new ChangeUserPaypalCommand(id, paypal));
     }
   }

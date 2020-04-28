@@ -11,7 +11,7 @@ export const billEventHandlers = {
     date: Date,
     payers: BillPayer[],
     debtors: BillDebtor[],
-    creatorId: string
+    creatorId: string,
   ) =>
     new BillWasCreated(
       id,
@@ -22,6 +22,6 @@ export const billEventHandlers = {
       date,
       payers,
       debtors,
-      creatorId
+      creatorId,
     ),
 };

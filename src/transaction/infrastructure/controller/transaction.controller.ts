@@ -24,7 +24,10 @@ export class TransactionController {
   @UseGuards(FirebaseAuthGuard)
   @HttpCode(204)
   @Post()
-  async createTransferTransaction(@Body() transferTransactionDto: TransferTransactionDto, @Request() req): Promise<void> {
+  async createTransferTransaction(
+    @Body() transferTransactionDto: TransferTransactionDto,
+    @Request() req,
+  ): Promise<void> {
     try {
       return await this.transactionService.createTransferTransaction(
         transferTransactionDto.transactionId,

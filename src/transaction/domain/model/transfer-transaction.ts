@@ -57,7 +57,9 @@ export class TransferTransaction extends AggregateRoot {
     return this._amount;
   }
 
-  private onTransferTransactionWasCreated(event: TransferTransactionWasCreated) {
+  private onTransferTransactionWasCreated(
+    event: TransferTransactionWasCreated,
+  ) {
     this._transactionId = TransactionId.fromString(event.id);
     this._senderId = MemberId.fromString(event.idSender);
     this._beneficiaryId = MemberId.fromString(event.idBeneficiary);

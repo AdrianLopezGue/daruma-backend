@@ -9,14 +9,7 @@ export const transactionEventHandlers = {
     idBill: string,
     money: number,
     currencyCode: string,
-  ) =>
-    new DebtTransactionWasCreated(
-      id,
-      idMember,
-      idBill,
-      money,
-      currencyCode,
-    ),
+  ) => new DebtTransactionWasCreated(id, idMember, idBill, money, currencyCode),
   DepositTransactionWasCreated: (
     id: string,
     idMember: string,
@@ -24,13 +17,7 @@ export const transactionEventHandlers = {
     money: number,
     currencyCode: string,
   ) =>
-  new DepositTransactionWasCreated(
-    id,
-    idMember,
-    idBill,
-    money,
-    currencyCode,
-  ),
+    new DepositTransactionWasCreated(id, idMember, idBill, money, currencyCode),
   TransferTransactionWasCreated: (
     id: string,
     idSender: string,
@@ -38,11 +25,11 @@ export const transactionEventHandlers = {
     money: number,
     currencyCode: string,
   ) =>
-  new TransferTransactionWasCreated(
-    id,
-    idSender,
-    idBeneficiary,
-    money,
-    currencyCode,
-  )
+    new TransferTransactionWasCreated(
+      id,
+      idSender,
+      idBeneficiary,
+      money,
+      currencyCode,
+    ),
 };

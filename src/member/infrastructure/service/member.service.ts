@@ -29,21 +29,25 @@ export class MemberService {
   }
 
   async getMembers(groupId: string): Promise<MemberView[]> {
-    return this.memberModel.find({ 'groupId': "" + groupId + "" }).exec();
+    return this.memberModel.find({ groupId: '' + groupId + '' }).exec();
   }
 
   async getGroups(userId: string): Promise<string[]> {
     return this.memberModel.distinct('groupId', { userId: userId }).exec();
   }
 
-  async checkIfMemberIsInGroup(groupId: string, userId: string): Promise<boolean>{
-    const member = await this.memberModel.findOne({$and: [{ 'groupId': "" + groupId + "" }, { 'userId': "" + userId + "" }]});
+  async checkIfMemberIsInGroup(
+    groupId: string,
+    userId: string,
+  ): Promise<boolean> {
+    const member = await this.memberModel.findOne({
+      $and: [{ groupId: '' + groupId + '' }, { userId: '' + userId + '' }],
+    });
 
     let result = true;
-    if(member != null){
+    if (member != null) {
       result = true;
-    }
-    else{
+    } else {
       result = false;
     }
 

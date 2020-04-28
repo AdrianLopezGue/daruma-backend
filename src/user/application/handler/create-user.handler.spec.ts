@@ -45,7 +45,12 @@ describe('CreateUserHandler', () => {
 
   it('should creates a new user', async () => {
     await command$.execute(
-      new CreateUserCommand(userId.value, username.value, useremail.value, userPaypal.value),
+      new CreateUserCommand(
+        userId.value,
+        username.value,
+        useremail.value,
+        userPaypal.value,
+      ),
     );
 
     expect(users.save).toHaveBeenCalledWith(
