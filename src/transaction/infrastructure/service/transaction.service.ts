@@ -71,6 +71,7 @@ export class TransactionService {
     beneficiaryId: string,
     money: number,
     currencyCode: string,
+    groupId: string,
   ) {
     return this.commandBus.execute(
       new CreateTransferTransactionCommand(
@@ -79,6 +80,7 @@ export class TransactionService {
         beneficiaryId,
         money,
         currencyCode,
+        groupId
       ),
     );
   }

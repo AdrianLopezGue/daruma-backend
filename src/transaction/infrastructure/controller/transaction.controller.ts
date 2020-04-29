@@ -4,7 +4,6 @@ import {
   Controller,
   HttpCode,
   Post,
-  ForbiddenException,
   UseGuards,
   Request,
 } from '@nestjs/common';
@@ -35,6 +34,7 @@ export class TransactionController {
         transferTransactionDto.beneficiaryId,
         transferTransactionDto.money,
         transferTransactionDto.currencyCode,
+        transferTransactionDto.groupId,
       );
     } catch (e) {
       if (e instanceof Error) {

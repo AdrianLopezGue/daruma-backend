@@ -24,6 +24,7 @@ export const transactionEventHandlers = {
     idBeneficiary: string,
     money: number,
     currencyCode: string,
+    idGroup: string,
   ) =>
     new TransferTransactionWasCreated(
       id,
@@ -31,5 +32,6 @@ export const transactionEventHandlers = {
       idBeneficiary,
       money,
       currencyCode,
+      idGroup
     ),
 };

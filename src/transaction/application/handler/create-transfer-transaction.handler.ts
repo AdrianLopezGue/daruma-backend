@@ -10,6 +10,7 @@ import { GroupCurrencyCode } from '../../../group/domain/model/group-currency-co
 import { BillAmount } from '../../../bill/domain/model/bill-amount';
 import { CreateTransferTransactionCommand } from '../command/create-transfer-transaction.command';
 import { TransferTransaction } from '../../domain/model/transfer-transaction';
+import { GroupId } from '../../../group/domain/model/group-id';
 
 @CommandHandler(CreateTransferTransactionCommand)
 export class CreateTransferTransactionHandler
@@ -26,12 +27,14 @@ export class CreateTransferTransactionHandler
       BillCurrencyUnit.fromNumber(command.money),
       GroupCurrencyCode.fromString(command.currencyCode),
     );
+    const groupId = GroupId.fromString(command.groupId);
 
     const transaction = TransferTransaction.add(
       transactionId,
       senderId,
       beneficiaryId,
       amount,
+      groupId
     );
 
     this.transactions.saveTransferTransaction(transaction);

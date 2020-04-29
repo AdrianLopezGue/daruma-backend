@@ -6,6 +6,7 @@ export const TransferTransactionSchema = new Schema({
   idBeneficiary: String,
   money: Number,
   currencyCode: String,
+  idGroup: String,
   __v: { type: Number, select: false },
 });
 
@@ -15,6 +16,7 @@ export interface TransferTransactionView extends Document {
   readonly idBeneficiary: string;
   readonly money: number;
   readonly currencyCode: string;
+  readonly idGroup: string;
 }
 
 export const TRANSFER_TRANSACTION_MODEL = 'TRANSFER_TRANSACTION_MODEL';
