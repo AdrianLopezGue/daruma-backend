@@ -5,6 +5,7 @@ import { MemberName } from './member-name';
 import { GroupId } from '../../../group/domain/model/group-id';
 import { UserId } from '../../../user/domain/model/user-id';
 import { MemberWasRegisteredAsUser } from '../event/member-was-registered-as-user.event';
+import { MemberNameWasChanged } from '../event';
 
 export class Member extends AggregateRoot {
   private _memberId: MemberId;
@@ -66,6 +67,14 @@ export class Member extends AggregateRoot {
     );
   }
 
+  rename(name: MemberName) {
+    if (name.equals(this._membername)) {
+      return;
+    }
+
+    this.apply(new MemberNameWasChanged(this._memberId.value, name.value));
+  }
+
   private onMemberWasCreated(event: MemberWasCreated) {
     this._memberId = MemberId.fromString(event.id);
     this._groupId = GroupId.fromString(event.idGroup);
@@ -75,5 +84,9 @@ export class Member extends AggregateRoot {
 
   private onMemberWasRegisteredAsUser(event: MemberWasRegisteredAsUser) {
     this._userId = UserId.fromString(event.idUser);
+  }
+
+  private onMemberNameWasChanged(event: MemberNameWasChanged) {
+    this._membername = MemberName.fromString(event.name);
   }
 }

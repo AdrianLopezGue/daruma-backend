@@ -27,7 +27,7 @@ export class UserService {
 
   async updateUser(id: string, name: string, paypal: string) {
     await this.commandBus.execute(new ChangeUserNameCommand(id, name));
-    await this.memberService.updateUser(id, name);
+
     if (paypal !== '') {
       await this.commandBus.execute(new ChangeUserPaypalCommand(id, paypal));
     }

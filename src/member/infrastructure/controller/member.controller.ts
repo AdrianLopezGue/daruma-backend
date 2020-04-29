@@ -34,7 +34,7 @@ export class MemberController {
   @Get(':id')
   async getMembers(@Request() req, @Param() params): Promise<MemberView[]> {
     try {
-      return await this.memberService.getMembers(params.id);
+      return await this.memberService.getMembersByGroupId(params.id);
     } catch (e) {
       if (e instanceof GroupIdNotFoundError) {
         throw new NotFoundException('Group not found');
