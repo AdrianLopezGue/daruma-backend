@@ -11,6 +11,7 @@ import { MemberService } from './service/member.service';
 import { MemberEventStore } from './eventstore/members.event-store';
 import { memberEventHandlers } from '../domain/event/index';
 import { MemberController } from './controller/member.controller';
+import { MemberSagas } from './sagas/member.saga';
 
 @Module({
   controllers: [MemberController],
@@ -21,6 +22,7 @@ import { MemberController } from './controller/member.controller';
     ...MemberProviders,
     MemberService,
     MemberEventStore,
+    MemberSagas
   ],
 })
 export class MemberModule implements OnModuleInit {

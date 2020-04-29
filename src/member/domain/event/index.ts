@@ -1,6 +1,10 @@
 import { MemberWasCreated } from './member-was-created.event';
 import { MemberWasRegisteredAsUser } from './member-was-registered-as-user.event';
+import { MemberNameWasChanged } from './member-name-was-changed.event';
+
 export { MemberWasCreated };
+export { MemberWasRegisteredAsUser };
+export { MemberNameWasChanged };
 
 export const memberEventHandlers = {
   MemberWasCreated: (
@@ -11,4 +15,6 @@ export const memberEventHandlers = {
   ) => new MemberWasCreated(id, idGroup, name, idUser),
   MemberWasRegisteredAsUser: (id: string, idUser: string) =>
     new MemberWasRegisteredAsUser(id, idUser),
+  MemberNameWasChanged: (id: string, name: string) =>
+    new MemberNameWasChanged(id, name),
 };

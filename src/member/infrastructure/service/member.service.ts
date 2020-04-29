@@ -28,15 +28,19 @@ export class MemberService {
     return this.commandBus.execute(new RegisterMemberAsUserCommand(id, idUser));
   }
 
-  async getMembers(groupId: string): Promise<MemberView[]> {
+  async getMembersByGroupId(groupId: string): Promise<MemberView[]> {
     return this.memberModel.find({ groupId: '' + groupId + '' }).exec();
+  }
+
+  async getMembersIdByUserId(userId: string): Promise<string[]> {
+    return this.memberModel.distinct('_id', { userId: userId }).exec();;
   }
 
   async getGroups(userId: string): Promise<string[]> {
     return this.memberModel.distinct('groupId', { userId: userId }).exec();
   }
 
-  async updateUser(newUserId: string, newName: string){
+  async updateMember(newUserId: string, newName: string){
     this.memberModel.updateMany({userId: newUserId}, { $set: { name: newName} }).exec();
   }
 
