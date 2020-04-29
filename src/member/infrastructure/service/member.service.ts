@@ -36,6 +36,10 @@ export class MemberService {
     return this.memberModel.distinct('_id', { userId: userId }).exec();;
   }
 
+  async getMembersIdByGroupId(groupId: string): Promise<string[]> {
+    return this.memberModel.distinct('_id', { groupId: groupId }).exec();;
+  }
+
   async getGroups(userId: string): Promise<string[]> {
     return this.memberModel.distinct('groupId', { userId: userId }).exec();
   }

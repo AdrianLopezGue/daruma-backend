@@ -8,6 +8,7 @@ import { GroupId } from './group-id';
 import { GroupName } from './group-name';
 import { GroupCurrencyCode } from './group-currency-code';
 import { UserId } from '../../../user/domain/model';
+import { GroupWasRemoved } from '../event/group-was-removed.event';
 
 describe('Group', () => {
   let group: Group;
@@ -74,5 +75,18 @@ describe('Group', () => {
     );
 
     expect(group.name.equals(newName)).toBeTruthy();
+  });
+
+  it('can be removed', () => {
+    group = eventPublisher$.mergeObjectContext(group);
+    group.remove();
+    group.commit();
+
+    expect(eventBus$.publish).toHaveBeenCalledTimes(1);
+    expect(eventBus$.publish).toHaveBeenCalledWith(
+      new GroupWasRemoved(groupId.value),
+    );
+
+    expect(group.isRemoved).toBeTruthy();
   });
 });

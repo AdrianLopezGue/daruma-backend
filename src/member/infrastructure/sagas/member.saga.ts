@@ -5,11 +5,12 @@ import { ICommand, Saga, ofType } from '@nestjs/cqrs';
 import { UserNameWasChanged } from '../../../user/domain/event/user-name-was-changed.event';
 import { MemberService } from '../service/member.service';
 import { ChangeMembersNameCommand } from '../../application/command/change-members-name.command';
+import { GroupWasRemoved } from '../../../group/domain/event/group-was-removed.event';
+import { RemoveMembersCommand } from '../../application/command/remove-members.command';
 
 @Injectable()
 export class MemberSagas {
-  constructor(private readonly memberService: MemberService) {}
-
+  
   @Saga()
   userNameWasChangedPublished = (
     events$: Observable<any>,
@@ -17,18 +18,16 @@ export class MemberSagas {
     return events$.pipe(
       ofType(UserNameWasChanged),
       map(event => new ChangeMembersNameCommand(event.id, event.username)),
-      /*{
-        const idMembers = this.memberService.getMembersIdByUserId(event.id);
-        const arr = Object.keys(idMembers).map(function(id) {
-          return idMembers[id];
-        });
+    );
+  }
 
-        arr.map(
-          memberId => new ChangeMemberNameCommand(memberId, event.username),
-        );
-
-        return null;
-      }*/
+  @Saga()
+  groupWasRemoved = (
+    events$: Observable<any>,
+  ): Observable<ICommand> => {
+    return events$.pipe(
+      ofType(GroupWasRemoved),
+      map(event => new RemoveMembersCommand(event.id)),
     );
   };
 }

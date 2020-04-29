@@ -7,6 +7,8 @@ import { MemberName } from './member-name';
 import { GroupId } from '../../../group/domain/model/group-id';
 import { MemberWasCreated } from '../event/member-was-created.event';
 import { UserId } from '../../../user/domain/model/user-id';
+import { MemberNameWasChanged } from '../event/member-name-was-changed.event';
+import { MemberWasRemoved } from '../event/member-was-removed.event';
 
 describe('Member', () => {
   let member: Member;
@@ -59,5 +61,32 @@ describe('Member', () => {
 
   it('has an userId', () => {
     expect(member.userId.equals(userId)).toBeTruthy();
+  });
+
+  it('can be renamed', () => {
+    const newName = MemberName.fromString('New name');
+    member = eventPublisher$.mergeObjectContext(member);
+    member.rename(newName);
+    member.commit();
+
+    expect(eventBus$.publish).toHaveBeenCalledTimes(1);
+    expect(eventBus$.publish).toHaveBeenCalledWith(
+      new MemberNameWasChanged(memberId.value, newName.value),
+    );
+
+    expect(member.name.equals(newName)).toBeTruthy();
+  });
+
+  it('can be removed', () => {
+    member = eventPublisher$.mergeObjectContext(member);
+    member.remove();
+    member.commit();
+
+    expect(eventBus$.publish).toHaveBeenCalledTimes(1);
+    expect(eventBus$.publish).toHaveBeenCalledWith(
+      new MemberWasRemoved(memberId.value),
+    );
+
+    expect(member.isRemoved).toBeTruthy();
   });
 });
