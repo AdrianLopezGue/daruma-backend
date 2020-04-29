@@ -5,12 +5,14 @@ import { TransactionId } from './transaction-id';
 import { BillAmount } from '../../../bill/domain/model/bill-amount';
 import { BillCurrencyUnit } from '../../../bill/domain/model/bill-currency-unit';
 import { TransferTransactionWasCreated } from '../event/transfer-transaction-was-created';
+import { GroupId } from '../../../group/domain/model/group-id';
 
 export class TransferTransaction extends AggregateRoot {
   private _transactionId: TransactionId;
   private _senderId: MemberId;
   private _beneficiaryId: MemberId;
   private _amount: BillAmount;
+  private _groupId: GroupId;
 
   private constructor() {
     super();
@@ -21,6 +23,7 @@ export class TransferTransaction extends AggregateRoot {
     senderId: MemberId,
     beneficiaryId: MemberId,
     amount: BillAmount,
+    groupId: GroupId,
   ): TransferTransaction {
     const transferTransaction = new TransferTransaction();
 
@@ -31,6 +34,7 @@ export class TransferTransaction extends AggregateRoot {
         beneficiaryId.value,
         amount.money.value,
         amount.currencyCode.value,
+        groupId.value,
       ),
     );
 
@@ -57,6 +61,10 @@ export class TransferTransaction extends AggregateRoot {
     return this._amount;
   }
 
+  get groupId(): GroupId {
+    return this._groupId;
+  }
+
   private onTransferTransactionWasCreated(
     event: TransferTransactionWasCreated,
   ) {
@@ -67,5 +75,6 @@ export class TransferTransaction extends AggregateRoot {
       BillCurrencyUnit.fromNumber(event.money),
       GroupCurrencyCode.fromString(event.currencyCode),
     );
+    this._groupId = GroupId.fromString(event.idGroup);
   }
 }

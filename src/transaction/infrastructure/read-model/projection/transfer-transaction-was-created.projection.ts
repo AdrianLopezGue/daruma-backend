@@ -19,6 +19,7 @@ export class TransferTransactionWasCreatedProjection
       idBeneficiary: event.idBeneficiary,
       money: event.money,
       currencyCode: event.currencyCode,
+      idGroup: event.idGroup,
     });
 
     return transferTransactionView.save();

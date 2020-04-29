@@ -19,6 +19,7 @@ describe('POST /transactions', () => {
         beneficiaryId: beneficiary.id,
         money: transaction.money,
         currencyCode: transaction.currencyCode,
+        groupId: transaction.groupId,
       },
       failOnStatusCode: false,
     });

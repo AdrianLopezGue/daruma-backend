@@ -7,5 +7,6 @@ export class TransferTransactionWasCreated implements DomainEvent {
     public readonly idBeneficiary: string,
     public readonly money: number,
     public readonly currencyCode: string,
+    public readonly idGroup: string,
   ) {}
 }

@@ -7,5 +7,6 @@ export class CreateTransferTransactionCommand implements ICommand {
     public readonly beneficiaryId: string,
     public readonly money: number,
     public readonly currencyCode: string,
+    public readonly groupId: string,
   ) {}
 }
