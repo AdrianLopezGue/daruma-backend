@@ -15,6 +15,8 @@ import { DatabaseModule } from '../../core/database/database.module';
 import { ProjectionHandlers } from './read-model/projection/index';
 import { MemberService } from '../../member/infrastructure/service/member.service';
 import { MemberModule } from '../../member/infrastructure/member.module';
+import { BalanceService } from '../../transaction/infrastructure/service/balance.service';
+import { TransactionModule } from '../../transaction/infrastructure/transaction.module';
 
 @Module({
   controllers: [GroupController],
@@ -23,6 +25,7 @@ import { MemberModule } from '../../member/infrastructure/member.module';
     FirebaseModule,
     DatabaseModule,
     MemberModule,
+    TransactionModule,
     EventStoreModule.forRoot(),
   ],
   providers: [
@@ -33,6 +36,7 @@ import { MemberModule } from '../../member/infrastructure/member.module';
     GroupEventStore,
     FirebaseDatabase,
     MemberService,
+    BalanceService,
   ],
 })
 export class GroupModule implements OnModuleInit {
