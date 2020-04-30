@@ -1,6 +1,7 @@
-import { BillWasCreated } from './bill-was-created';
+import { BillWasCreated } from './bill-was-created.event';
 import { BillPayer } from '../model/bill-payer';
 import { BillDebtor } from '../model/bill-debtor';
+import { BillWasRemoved } from './bill-was-removed.event';
 export const billEventHandlers = {
   BillWasCreated: (
     id: string,
@@ -24,4 +25,6 @@ export const billEventHandlers = {
       debtors,
       creatorId,
     ),
+  BillWasRemoved: (id: string) =>
+    new BillWasRemoved(id),
 };

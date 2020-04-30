@@ -41,4 +41,8 @@ export class BillService {
   async getBills(groupId: string): Promise<BillView[]> {
     return this.billModel.find({ groupId: '' + groupId + '' }).exec();
   }
+
+  async getBillsIdByGroupId(groupId: string): Promise<string[]> {
+    return this.billModel.distinct('_id', { groupId: groupId }).exec();
+  }
 }

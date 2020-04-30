@@ -1,7 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { Model } from 'mongoose';
-import { BillWasCreated } from '../../../domain/event/bill-was-created';
+import { BillWasCreated } from '../../../domain/event/bill-was-created.event';
 import { BillView } from '../schema/bill.schema';
 
 @EventsHandler(BillWasCreated)
