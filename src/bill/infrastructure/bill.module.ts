@@ -15,6 +15,7 @@ import { BillController } from './controller/bill.controller';
 import { billEventHandlers } from '../domain/event/index';
 import { MemberService } from '../../member/infrastructure/service/member.service';
 import { TransactionModule } from '../../transaction/infrastructure/transaction.module';
+import { BillSagas } from './sagas/bill.saga';
 
 @Module({
   controllers: [BillController],
@@ -33,6 +34,7 @@ import { TransactionModule } from '../../transaction/infrastructure/transaction.
     BillEventStore,
     FirebaseDatabase,
     MemberService,
+    BillSagas
   ],
 })
 export class BillModule implements OnModuleInit {

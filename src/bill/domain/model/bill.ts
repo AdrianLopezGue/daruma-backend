@@ -8,12 +8,13 @@ import { GroupId } from '../../../group/domain/model/group-id';
 import { BillPayer } from './bill-payer';
 import { BillDebtor } from './bill-debtor';
 import { BillAmount } from './bill-amount';
-import { BillWasCreated } from '../event/bill-was-created';
+import { BillWasCreated } from '../event/bill-was-created.event';
 import { BillCurrencyUnit } from './bill-currency-unit';
 import { MemberId } from '../../../member/domain/model/member-id';
 import { TransactionId } from '../../../transaction/domain/model/transaction-id';
 import { DepositTransaction } from '../../../transaction/domain/model/deposit-transaction';
 import { DebtTransaction } from '../../../transaction/domain/model/debt-transaction';
+import { BillWasRemoved } from '../event/bill-was-removed.event';
 
 export class Bill extends AggregateRoot {
   private _billId: BillId;
@@ -24,6 +25,7 @@ export class Bill extends AggregateRoot {
   private _payers: BillPayer[];
   private _debtors: BillDebtor[];
   private _creatorId: MemberId;
+  private _isRemoved: boolean;
 
   private constructor() {
     super();
@@ -110,6 +112,18 @@ export class Bill extends AggregateRoot {
     return this._creatorId;
   }
 
+  get isRemoved(): boolean {
+    return this._isRemoved;
+  }
+
+  remove() {
+    if (this._isRemoved) {
+      return;
+    }
+
+    this.apply(new BillWasRemoved(this._billId.value));
+  }
+
   private onBillWasCreated(event: BillWasCreated) {
     this._billId = BillId.fromString(event.id);
     this._groupId = GroupId.fromString(event.groupId);
@@ -122,5 +136,10 @@ export class Bill extends AggregateRoot {
     this._payers = event.payers;
     this._debtors = event.debtors;
     this._creatorId = MemberId.fromString(event.creatorId);
+    this._isRemoved = false;
+  }
+
+  private onBillWasRemoved(event: BillWasRemoved) {
+    this._isRemoved = true;
   }
 }

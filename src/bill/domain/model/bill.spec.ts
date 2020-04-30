@@ -9,10 +9,11 @@ import { BillDate } from './bill-date';
 import { GroupId } from '../../../group/domain/model/group-id';
 import { BillAmount } from './bill-amount';
 import { BillCurrencyUnit } from './bill-currency-unit';
-import { BillWasCreated } from '../event/bill-was-created';
+import { BillWasCreated } from '../event/bill-was-created.event';
 import { MemberId } from '../../../member/domain/model/member-id';
 import { BillPayer } from './bill-payer';
 import { BillDebtor } from './bill-debtor';
+import { BillWasRemoved } from '../event/bill-was-removed.event';
 
 describe('Bill', () => {
   let bill: Bill;
@@ -101,5 +102,18 @@ describe('Bill', () => {
 
   it('has an date', () => {
     expect(bill.date.equals(date)).toBeTruthy();
+  });
+
+  it('can be removed', () => {
+    bill = eventPublisher$.mergeObjectContext(bill);
+    bill.remove();
+    bill.commit();
+
+    expect(eventBus$.publish).toHaveBeenCalledTimes(1);
+    expect(eventBus$.publish).toHaveBeenCalledWith(
+      new BillWasRemoved(billId.value),
+    );
+
+    expect(bill.isRemoved).toBeTruthy();
   });
 });
