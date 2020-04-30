@@ -26,7 +26,7 @@ export class RemoveMembersHandler
         const newMemberId = MemberId.fromString(memberId);
         const member = await this.members.find(newMemberId);
 
-        if (!(member instanceof Member)) {
+        if (!(member instanceof Member) || member.isRemoved) {
           throw MemberIdNotFoundError.withString(memberId);
         }
 

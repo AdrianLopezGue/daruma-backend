@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { BILL_MODEL, BillView } from '../read-model/schema/bill.schema';
 import { CreateBillCommand } from '../../application/command/create-bill.command';
 import { ParticipantDto } from '../dto/bill.dto';
+import { RemoveBillCommand } from '../../application/command/remove-bill.command';
 @Injectable()
 export class BillService {
   constructor(
@@ -36,6 +37,10 @@ export class BillService {
         creatorId,
       ),
     );
+  }
+
+  async removeBill(id: string) {
+    this.commandBus.execute(new RemoveBillCommand(id));
   }
 
   async getBills(groupId: string): Promise<BillView[]> {

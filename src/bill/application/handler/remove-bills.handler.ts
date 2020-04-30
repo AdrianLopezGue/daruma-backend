@@ -26,7 +26,7 @@ export class RemoveBillsHandler
         const newBillId = BillId.fromString(billId);
         const bill = await this.bills.find(newBillId);
 
-        if (!(bill instanceof Bill)) {
+        if (!(bill instanceof Bill) || bill.isRemoved) {
           throw BillIdNotFoundError.withString(billId);
         }
 
