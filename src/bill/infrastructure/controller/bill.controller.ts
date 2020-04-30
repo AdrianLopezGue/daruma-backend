@@ -14,6 +14,7 @@ import {
   Request,
   UseGuards,
   Param,
+  Delete,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -80,6 +81,26 @@ export class BillController {
         throw new ConflictException(e.message);
       } else if (e instanceof CreatorIdNotFoundInGroup) {
         throw new ConflictException(e.message);
+      } else if (e instanceof Error) {
+        throw new BadRequestException(`Unexpected error: ${e.message}`);
+      } else {
+        throw new BadRequestException('Server error');
+      }
+    }
+  }
+
+  @ApiOperation({ summary: 'Delete Bill' })
+  @ApiResponse({ status: 204, description: 'Delete Bill' })
+  @ApiResponse({ status: 404, description: 'Not found' })
+  @UseGuards(FirebaseAuthGuard)
+  @HttpCode(204)
+  @Delete(':id')
+  async removeGroup(@Param() params) {
+    try {
+      return await this.billService.removeBill(params.id);
+    } catch (e) {
+      if (e instanceof GroupIdNotFoundError) {
+        throw new NotFoundException('Group not found');
       } else if (e instanceof Error) {
         throw new BadRequestException(`Unexpected error: ${e.message}`);
       } else {
