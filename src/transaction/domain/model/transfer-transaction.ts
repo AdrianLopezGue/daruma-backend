@@ -4,8 +4,9 @@ import { MemberId } from '../../../member/domain/model/member-id';
 import { TransactionId } from './transaction-id';
 import { BillAmount } from '../../../bill/domain/model/bill-amount';
 import { BillCurrencyUnit } from '../../../bill/domain/model/bill-currency-unit';
-import { TransferTransactionWasCreated } from '../event/transfer-transaction-was-created';
+import { TransferTransactionWasCreated } from '../event/transfer-transaction-was-created.event';
 import { GroupId } from '../../../group/domain/model/group-id';
+import { TransferTransactionWasRemoved } from '../event/transfer-transaction-was-removed.event';
 
 export class TransferTransaction extends AggregateRoot {
   private _transactionId: TransactionId;
@@ -13,6 +14,7 @@ export class TransferTransaction extends AggregateRoot {
   private _beneficiaryId: MemberId;
   private _amount: BillAmount;
   private _groupId: GroupId;
+  private _isRemoved: boolean;
 
   private constructor() {
     super();
@@ -65,6 +67,18 @@ export class TransferTransaction extends AggregateRoot {
     return this._groupId;
   }
 
+  get isRemoved(): boolean {
+    return this._isRemoved;
+  }
+
+  remove() {
+    if (this._isRemoved) {
+      return;
+    }
+
+    this.apply(new TransferTransactionWasRemoved(this._transactionId.value));
+  }
+
   private onTransferTransactionWasCreated(
     event: TransferTransactionWasCreated,
   ) {
@@ -76,5 +90,10 @@ export class TransferTransaction extends AggregateRoot {
       GroupCurrencyCode.fromString(event.currencyCode),
     );
     this._groupId = GroupId.fromString(event.idGroup);
+    this._isRemoved = false;
+  }
+
+  private onTransferTransactionWasRemoved(event: TransferTransactionWasRemoved) {
+    this._isRemoved = true;
   }
 }

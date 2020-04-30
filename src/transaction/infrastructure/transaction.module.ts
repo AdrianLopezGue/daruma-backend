@@ -13,6 +13,7 @@ import { TransactionProviders } from './transaction.provider';
 import { TransactionController } from './controller/transaction.controller';
 import { BalanceController } from './controller/balance.controller';
 import { BalanceService } from './service/balance.service';
+import { TransactionSagas } from './sagas/transaction.saga';
 
 @Module({
   controllers: [TransactionController, BalanceController],
@@ -24,6 +25,7 @@ import { BalanceService } from './service/balance.service';
     TransactionService,
     BalanceService,
     TransactionEventStore,
+    TransactionSagas
   ],
 })
 export class TransactionModule implements OnModuleInit {

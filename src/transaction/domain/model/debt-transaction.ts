@@ -4,14 +4,16 @@ import { MemberId } from '../../../member/domain/model/member-id';
 import { TransactionId } from './transaction-id';
 import { BillAmount } from '../../../bill/domain/model/bill-amount';
 import { BillId } from '../../../bill/domain/model/bill-id';
-import { DebtTransactionWasCreated } from '../event/debt-transaction-was-created';
+import { DebtTransactionWasCreated } from '../event/debt-transaction-was-created.event';
 import { BillCurrencyUnit } from '../../../bill/domain/model/bill-currency-unit';
+import { DebtTransactionWasRemoved } from '../event/debt-transaction-was-removed.event';
 
 export class DebtTransaction extends AggregateRoot {
   private _transactionId: TransactionId;
   private _memberId: MemberId;
   private _billId: BillId;
   private _amount: BillAmount;
+  private _isRemoved: boolean;
 
   private constructor() {
     super();
@@ -58,6 +60,18 @@ export class DebtTransaction extends AggregateRoot {
     return this._amount;
   }
 
+  get isRemoved(): boolean {
+    return this._isRemoved;
+  }
+
+  remove() {
+    if (this._isRemoved) {
+      return;
+    }
+
+    this.apply(new DebtTransactionWasRemoved(this._transactionId.value));
+  }
+
   private onDebtTransactionWasCreated(event: DebtTransactionWasCreated) {
     this._transactionId = TransactionId.fromString(event.id);
     this._memberId = MemberId.fromString(event.idMember);
@@ -66,5 +80,10 @@ export class DebtTransaction extends AggregateRoot {
       BillCurrencyUnit.fromNumber(event.money),
       GroupCurrencyCode.fromString(event.currencyCode),
     );
+    this._isRemoved = false;
+  }
+
+  private onDebtTransactionWasRemoved(event: DebtTransactionWasRemoved) {
+    this._isRemoved = true;
   }
 }
