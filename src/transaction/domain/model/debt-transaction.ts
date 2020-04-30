@@ -69,7 +69,7 @@ export class DebtTransaction extends AggregateRoot {
       return;
     }
 
-    this.apply(new DebtTransactionWasRemoved(this._transactionId.value));
+    this.apply(new DebtTransactionWasRemoved(this._transactionId.value, this._amount.money.value));
   }
 
   private onDebtTransactionWasCreated(event: DebtTransactionWasCreated) {
