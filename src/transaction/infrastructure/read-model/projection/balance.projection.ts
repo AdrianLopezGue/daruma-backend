@@ -1,9 +1,9 @@
 import { Inject } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { Model } from 'mongoose';
-import { TransferTransactionWasCreated } from '../../../domain/event/transfer-transaction-was-created';
-import { DebtTransactionWasCreated } from '../../../domain/event/debt-transaction-was-created';
-import { DepositTransactionWasCreated } from '../../../domain/event/deposit-transaction-was-created';
+import { TransferTransactionWasCreated } from '../../../domain/event/transfer-transaction-was-created.event';
+import { DebtTransactionWasCreated } from '../../../domain/event/debt-transaction-was-created.event';
+import { DepositTransactionWasCreated } from '../../../domain/event/deposit-transaction-was-created.event';
 import { BalanceView } from '../schema/balance.transaction.schema';
 import { MemberWasCreated } from '../../../../member/domain/event/member-was-created.event';
 

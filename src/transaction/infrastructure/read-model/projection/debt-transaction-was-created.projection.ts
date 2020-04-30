@@ -1,7 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { Model } from 'mongoose';
-import { DebtTransactionWasCreated } from '@app/transaction/domain/event/debt-transaction-was-created';
+import { DebtTransactionWasCreated } from '@app/transaction/domain/event/debt-transaction-was-created.event';
 import { DebtTransactionView } from '../schema/debt-transaction.schema';
 
 @EventsHandler(DebtTransactionWasCreated)

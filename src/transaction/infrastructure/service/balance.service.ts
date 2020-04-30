@@ -13,7 +13,11 @@ export class BalanceService {
     @Inject(BALANCE_MODEL) private readonly balanceModel: Model<BalanceView>,
   ) {}
 
-  async getBalance(groupId: string): Promise<BalanceView[]> {
-    return this.balanceModel.find({ idGroup: '' + groupId + '' }).exec();
+  async getBalance(idGroup: string): Promise<BalanceView[]> {
+    return this.balanceModel.find({ idGroup: '' + idGroup + '' }).exec();
+  }
+
+  async deleteBalances(idGroup: string){
+    this.balanceModel.deleteMany({ idGroup: '' + idGroup + '' }).exec();
   }
 }

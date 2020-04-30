@@ -1,6 +1,9 @@
-import { DebtTransactionWasCreated } from './debt-transaction-was-created';
-import { DepositTransactionWasCreated } from './deposit-transaction-was-created';
-import { TransferTransactionWasCreated } from './transfer-transaction-was-created';
+import { DebtTransactionWasCreated } from './debt-transaction-was-created.event';
+import { DepositTransactionWasCreated } from './deposit-transaction-was-created.event';
+import { TransferTransactionWasCreated } from './transfer-transaction-was-created.event';
+import { DebtTransactionWasRemoved } from './debt-transaction-was-removed.event';
+import { DepositTransactionWasRemoved } from './deposit-transaction-was-removed.event';
+import { TransferTransactionWasRemoved } from './transfer-transaction-was-removed.event';
 
 export const transactionEventHandlers = {
   DebtTransactionWasCreated: (
@@ -32,6 +35,9 @@ export const transactionEventHandlers = {
       idBeneficiary,
       money,
       currencyCode,
-      idGroup
+      idGroup,
     ),
+  DebtTransactionWasRemoved: (id: string) => new DebtTransactionWasRemoved(id),
+  DepositTransactionWasRemoved: (id: string) => new DepositTransactionWasRemoved(id),
+  TransferTransactionWasRemoved: (id: string) => new TransferTransactionWasRemoved(id),
 };

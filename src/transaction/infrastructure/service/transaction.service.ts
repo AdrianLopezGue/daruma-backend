@@ -114,4 +114,16 @@ export class TransactionService {
       .find({ idBeneficiary: '' + idBeneficiary + '' })
       .exec();
   }
+
+  async getDebtTransactionIdsByBillId(billId: string): Promise<string[]> {
+    return this.debtTransactionModel.distinct('_id', { idBill: billId }).exec();
+  }
+
+  async getDepositTransactionIdsByBillId(billId: string): Promise<string[]> {
+    return this.depositTransactionModel.distinct('_id', { idBill: billId }).exec();
+  }
+
+  async getTransferTransactionIdsByGroupId(idGroup: string): Promise<string[]> {
+    return this.transferTransactionModel.distinct('_id', { idGroup: idGroup }).exec();
+  }
 }
