@@ -26,7 +26,7 @@ export class RemoveTransferTransactionsHandler
         const transactionId = TransactionId.fromString(transferTransactionId);
         const transferTransaction = await this.transactions.findTransferTransaction(transactionId);
 
-        if (!(transferTransaction instanceof TransferTransaction)) {
+        if (!(transferTransaction instanceof TransferTransaction) || transferTransaction.isRemoved) {
           throw TransactionIdNotFoundError.withString(transactionId.value);
         }
 

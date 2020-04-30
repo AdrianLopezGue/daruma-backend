@@ -76,7 +76,14 @@ export class TransferTransaction extends AggregateRoot {
       return;
     }
 
-    this.apply(new TransferTransactionWasRemoved(this._transactionId.value));
+    this.apply(
+      new TransferTransactionWasRemoved(
+        this._transactionId.value,
+        this._senderId.value,
+        this._beneficiaryId.value,
+        this._amount.money.value,
+      ),
+    );
   }
 
   private onTransferTransactionWasCreated(
@@ -93,7 +100,9 @@ export class TransferTransaction extends AggregateRoot {
     this._isRemoved = false;
   }
 
-  private onTransferTransactionWasRemoved(event: TransferTransactionWasRemoved) {
+  private onTransferTransactionWasRemoved(
+    event: TransferTransactionWasRemoved,
+  ) {
     this._isRemoved = true;
   }
 }

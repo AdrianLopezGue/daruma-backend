@@ -28,7 +28,7 @@ export class RemoveDebtAndDepositTransactionsHandler
         const transactionId = TransactionId.fromString(debtTransactionId);
         const debtTransaction = await this.transactions.findDebtTransaction(transactionId);
 
-        if (!(debtTransaction instanceof DebtTransaction)) {
+        if (!(debtTransaction instanceof DebtTransaction) || debtTransaction.isRemoved) {
           throw TransactionIdNotFoundError.withString(transactionId.value);
         }
 
@@ -46,7 +46,7 @@ export class RemoveDebtAndDepositTransactionsHandler
         const transactionId = TransactionId.fromString(depositTransactionId);
         const depositTransaction = await this.transactions.findDepositTransaction(transactionId);
 
-        if (!(depositTransaction instanceof DepositTransaction)) {
+        if (!(depositTransaction instanceof DepositTransaction) || depositTransaction.isRemoved) {
           throw TransactionIdNotFoundError.withString(transactionId.value);
         }
 

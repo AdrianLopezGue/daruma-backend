@@ -6,11 +6,17 @@ import { DebtTransactionWasCreated } from '../../../domain/event/debt-transactio
 import { DepositTransactionWasCreated } from '../../../domain/event/deposit-transaction-was-created.event';
 import { BalanceView } from '../schema/balance.transaction.schema';
 import { MemberWasCreated } from '../../../../member/domain/event/member-was-created.event';
+import { DebtTransactionWasRemoved } from '../../../domain/event/debt-transaction-was-removed.event';
+import { DepositTransactionWasRemoved } from '../../../domain/event/deposit-transaction-was-removed.event';
+import { TransferTransactionWasRemoved } from '../../../domain/event/transfer-transaction-was-removed.event';
 
 @EventsHandler(
   DebtTransactionWasCreated,
   DepositTransactionWasCreated,
   TransferTransactionWasCreated,
+  DebtTransactionWasRemoved,
+  DepositTransactionWasRemoved,
+  TransferTransactionWasRemoved,
   MemberWasCreated,
 )
 export class BalanceProjection
@@ -18,6 +24,9 @@ export class BalanceProjection
     IEventHandler<DebtTransactionWasCreated>,
     IEventHandler<DepositTransactionWasCreated>,
     IEventHandler<TransferTransactionWasCreated>,
+    IEventHandler<DebtTransactionWasRemoved>,
+    IEventHandler<DepositTransactionWasRemoved>,
+    IEventHandler<TransferTransactionWasRemoved>,
     IEventHandler<MemberWasCreated> {
   constructor(
     @Inject('BALANCE_MODEL')
@@ -29,7 +38,10 @@ export class BalanceProjection
       | MemberWasCreated
       | DebtTransactionWasCreated
       | DepositTransactionWasCreated
-      | TransferTransactionWasCreated,
+      | TransferTransactionWasCreated
+      | DebtTransactionWasRemoved
+      | DepositTransactionWasRemoved
+      | TransferTransactionWasRemoved,
   ) {
     if (event instanceof MemberWasCreated) {
       const balanceView = new this.balanceModel({
@@ -54,6 +66,24 @@ export class BalanceProjection
         .updateOne(
           { _id: event.idBeneficiary },
           { $inc: { money: -event.money } },
+        )
+        .exec();
+    } else if (event instanceof DebtTransactionWasRemoved) {
+      this.balanceModel
+        .updateOne({ _id: event.id }, { $inc: { money: event.money } })
+        .exec();
+    } else if (event instanceof DepositTransactionWasRemoved) {
+      this.balanceModel
+        .updateOne({ _id: event.id }, { $inc: { money: -event.money } })
+        .exec();
+    } else if (event instanceof TransferTransactionWasRemoved) {
+      this.balanceModel
+        .updateOne({ _id: event.idSender }, { $inc: { money: -event.money } })
+        .exec();
+      this.balanceModel
+        .updateOne(
+          { _id: event.idBeneficiary },
+          { $inc: { money: event.money } },
         )
         .exec();
     }
