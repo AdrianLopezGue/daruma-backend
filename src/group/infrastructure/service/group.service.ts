@@ -11,6 +11,7 @@ import { MemberService } from '../../../member/infrastructure/service/member.ser
 import { MemberDto } from '../dto/group.dto';
 import { OwnerDto } from '../dto/owner.dto';
 import { RemoveGroupCommand } from '../../application/command/remove-group.command';
+import { BalanceService } from '../../../transaction/infrastructure/service/balance.service';
 
 @Injectable()
 export class GroupService {
@@ -18,6 +19,7 @@ export class GroupService {
     private readonly commandBus: CommandBus,
     @Inject(GROUP_MODEL) private readonly groupModel: Model<GroupView>,
     private readonly memberService: MemberService,
+    private readonly balanceService: BalanceService,
   ) {}
 
   async createGroup(
@@ -37,7 +39,8 @@ export class GroupService {
   }
 
   async removeGroup(id: string) {
-    return this.commandBus.execute(new RemoveGroupCommand(id));
+    this.commandBus.execute(new RemoveGroupCommand(id));
+    this.balanceService.deleteBalances(id);
   }
 
   async getGroup(id: string): Promise<GroupView> {

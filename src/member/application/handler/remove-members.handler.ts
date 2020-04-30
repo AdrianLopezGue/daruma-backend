@@ -1,7 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { MemberName } from '../../domain/model/member-name';
 import { MemberId } from '../../domain/model/member-id';
 import { MemberIdNotFoundError } from '../../domain/exception/member-id-not-found.error';
 import { Member } from '../../domain/model/member';

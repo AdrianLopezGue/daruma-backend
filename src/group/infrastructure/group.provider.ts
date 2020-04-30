@@ -6,6 +6,7 @@ import { GROUP_MODEL, GroupSchema } from './read-model/schema/group.schema';
 import { Connection } from 'mongoose';
 import { MemberEventStore } from '../../member/infrastructure/eventstore/members.event-store';
 import { MEMBERS } from '../../member/domain/repository/index';
+import { BALANCE_MODEL, BalanceSchema } from '../../transaction/infrastructure/read-model/schema/balance.transaction.schema';
 import {
   MEMBER_MODEL,
   MemberSchema,
@@ -22,6 +23,12 @@ export const GroupProviders = [
     provide: MEMBER_MODEL,
     useFactory: (connection: Connection) =>
       connection.model('Member', MemberSchema),
+    inject: ['DATABASE_CONNECTION'],
+  },
+  {
+    provide: BALANCE_MODEL,
+    useFactory: (connection: Connection) =>
+      connection.model('Balance', BalanceSchema),
     inject: ['DATABASE_CONNECTION'],
   },
   {
