@@ -37,10 +37,10 @@ export const transactionEventHandlers = {
       currencyCode,
       idGroup,
     ),
-  DebtTransactionWasRemoved: (id: string, money: number) =>
-    new DebtTransactionWasRemoved(id, money),
-  DepositTransactionWasRemoved: (id: string, money: number) =>
-    new DepositTransactionWasRemoved(id, money),
+  DebtTransactionWasRemoved: (id: string, idMember: string, money: number) =>
+    new DebtTransactionWasRemoved(id, idMember, money),
+  DepositTransactionWasRemoved: (id: string, idMember: string, money: number) =>
+    new DepositTransactionWasRemoved(id, idMember, money),
   TransferTransactionWasRemoved: (
     id: string,
     idSender: string,
