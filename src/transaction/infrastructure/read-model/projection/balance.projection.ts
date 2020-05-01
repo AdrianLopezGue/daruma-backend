@@ -70,13 +70,15 @@ export class BalanceProjection
         .exec();
     } else if (event instanceof DebtTransactionWasRemoved) {
       this.balanceModel
-        .updateOne({ _id: event.id }, { $inc: { money: event.money } })
+        .updateOne({ _id: event.idMember }, { $inc: { money: event.money } })
         .exec();
     } else if (event instanceof DepositTransactionWasRemoved) {
+
       this.balanceModel
-        .updateOne({ _id: event.id }, { $inc: { money: -event.money } })
+        .updateOne({ _id: event.idMember }, { $inc: { money: -event.money } })
         .exec();
     } else if (event instanceof TransferTransactionWasRemoved) {
+
       this.balanceModel
         .updateOne({ _id: event.idSender }, { $inc: { money: -event.money } })
         .exec();
