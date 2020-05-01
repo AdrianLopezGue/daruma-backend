@@ -47,7 +47,7 @@ describe('RemoveGroupHandler', () => {
     expect(groups.save).toHaveBeenCalledWith(group);
   });
 
-  it('should throw an error if scope does not exists', async () => {
+  it('should throw an error if group does not exists', async () => {
     groups.find = jest.fn().mockResolvedValue(null);
 
     expect(
@@ -57,7 +57,7 @@ describe('RemoveGroupHandler', () => {
     expect(groups.save).toHaveBeenCalledTimes(0);
   });
 
-  it('should throw an error if scope was removed', async () => {
+  it('should throw an error if group was removed', async () => {
     const group = Group.add(groupId, name, groupCurrencyCode, ownerId);
     group.remove();
     groups.find = jest.fn().mockResolvedValue(group);

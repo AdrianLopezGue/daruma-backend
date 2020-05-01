@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { v4 as uuid } from 'uuid';
 
 import { UserName, UserEmail, User, UserId } from '../../domain/model';
 import { USERS, Users } from '../../domain/repository';
