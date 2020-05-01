@@ -13,7 +13,6 @@ import { BillCurrencyUnit } from '../../domain/model/bill-currency-unit';
 import { BillPayer } from '../../domain/model/bill-payer';
 import { BillDebtor } from '../../domain/model/bill-debtor';
 import { MemberId } from '../../../member/domain/model/member-id';
-import { MemberService } from '../../../member/infrastructure/service/member.service';
 import { CreatorIdNotFoundInGroup } from '../../domain/exception/creator-id-not-found-in-group.error';
 import { DepositTransaction } from '../../../transaction/domain/model/deposit-transaction';
 import { TransactionId } from '../../../transaction/domain/model/transaction-id';
@@ -21,21 +20,22 @@ import { v4 } from 'uuid';
 import { TRANSACTIONS } from '../../../transaction/domain/repository/index';
 import { Transactions } from '../../../transaction/domain/repository/transactions';
 import { DebtTransaction } from '../../../transaction/domain/model/debt-transaction';
+import { CHECK_USER_IN_GROUP, CheckUserInGroup } from '../../../member/domain/services/check-user-in-group.service';
+import { GroupId } from '../../../group/domain/model/group-id';
+import { UserId } from '../../../user/domain/model/user-id';
 
 @CommandHandler(CreateBillCommand)
 export class CreateBillHandler implements ICommandHandler<CreateBillCommand> {
   constructor(
     @Inject(BILLS) private readonly bills: Bills,
     @Inject(TRANSACTIONS) private readonly transactions: Transactions,
-    private readonly memberService: MemberService,
+    @Inject(CHECK_USER_IN_GROUP)
+    private readonly checkUserInGroup: CheckUserInGroup,
   ) {}
 
   async execute(command: CreateBillCommand) {
     if (
-      !(await this.memberService.checkIfMemberIsInGroup(
-        command.groupId,
-        command.creatorId,
-      ))
+      (await this.checkUserInGroup.with(UserId.fromString(command.creatorId) , GroupId.fromString(command.groupId))) instanceof MemberId
     ) {
       throw new CreatorIdNotFoundInGroup(command.creatorId);
     }

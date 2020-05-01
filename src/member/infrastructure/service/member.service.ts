@@ -43,24 +43,6 @@ export class MemberService {
   async getGroups(userId: string): Promise<string[]> {
     return this.memberModel.distinct('groupId', { userId: userId }).exec();
   }
-
-  async checkIfMemberIsInGroup(
-    groupId: string,
-    userId: string,
-  ): Promise<boolean> {
-    const member = await this.memberModel.findOne({
-      $and: [{ groupId: '' + groupId + '' }, { userId: '' + userId + '' }],
-    });
-
-    let result = true;
-    if (member != null) {
-      result = true;
-    } else {
-      result = false;
-    }
-
-    return result;
-  }
 }
 
 export const MEMBER_SERVICE = 'MEMBER_SERVICE';

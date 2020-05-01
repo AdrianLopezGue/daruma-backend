@@ -8,11 +8,8 @@ import {
 } from '../../member/infrastructure/read-model/schema/member.schema';
 import { TRANSACTIONS } from '../../transaction/domain/repository/index';
 import { TransactionEventStore } from '../../transaction/infrastructure/eventstore/transaction.event-store';
-import {
-  MEMBER_SERVICE,
-  MemberService,
-} from '../../member/infrastructure/service/member.service';
-
+import { CHECK_USER_IN_GROUP } from '../../member/domain/services/check-user-in-group.service';
+import { CheckUserInGroupFromReadModel } from '../../member/infrastructure/service/check-user-in-group.service';
 export const BillProviders = [
   {
     provide: BILL_MODEL,
@@ -34,4 +31,8 @@ export const BillProviders = [
     provide: BILLS,
     useClass: BillEventStore,
   },
+  {
+    provide: CHECK_USER_IN_GROUP,
+    useClass: CheckUserInGroupFromReadModel,
+  }
 ];
