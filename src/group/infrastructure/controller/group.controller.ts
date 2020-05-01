@@ -8,7 +8,6 @@ import {
   NotFoundException,
   Post,
   Put,
-  Query,
   ForbiddenException,
   ValidationPipe,
   UsePipes,

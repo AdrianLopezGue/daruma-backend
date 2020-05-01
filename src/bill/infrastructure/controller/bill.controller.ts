@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   NotFoundException,
-  Query,
   ValidationPipe,
   HttpCode,
   UsePipes,

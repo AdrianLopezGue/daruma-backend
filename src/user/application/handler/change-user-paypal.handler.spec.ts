@@ -1,10 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { v4 as uuid } from 'uuid';
 
 import { UserName, UserEmail, User, UserId } from '../../domain/model';
 import { USERS, Users } from '../../domain/repository';
 
-import { ChangeUserNameHandler } from './change-user-name.handler';
 import { UserIdNotFoundError } from '../../domain/exception/user-id-not-found.error';
 import { ChangeUserPaypalHandler } from './change-user-paypal.handler';
 import { UserPaypal } from '../../domain/model/user-paypal';
