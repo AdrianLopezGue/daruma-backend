@@ -11,6 +11,8 @@ import {
   Request,
   UseGuards,
   Param,
+  Post,
+  ConflictException,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -21,6 +23,9 @@ import { MemberIdNotFoundError } from '../../domain/exception/member-id-not-foun
 import { UserId } from '../../../user/domain/model/user-id';
 import { MemberService } from '../service/member.service';
 import { FirebaseAuthGuard } from '../../../core/firebase/firebase.auth.guard';
+import { MemberDto } from '../dto/member.dto';
+import { MemberNameAlreadyRegisteredError } from '../../domain/exception/member-name-in-group.error';
+import { MemberIdAlreadyRegisteredError } from '../../domain/exception/member-id-already-registered.error';
 
 @ApiTags('Members')
 @Controller('members')
@@ -38,6 +43,32 @@ export class MemberController {
     } catch (e) {
       if (e instanceof GroupIdNotFoundError) {
         throw new NotFoundException('Group not found');
+      } else if (e instanceof Error) {
+        throw new BadRequestException(`Unexpected error: ${e.message}`);
+      } else {
+        throw new BadRequestException('Server error');
+      }
+    }
+  }
+
+  @ApiOperation({ summary: 'Create Member' })
+  @ApiResponse({ status: 204, description: 'Create Member.' })
+  @UseGuards(FirebaseAuthGuard)
+  @HttpCode(204)
+  @Post()
+  async createMember(@Body() memberDto: MemberDto, @Request() req): Promise<MemberDto> {
+
+    try {
+      return await this.memberService.createMember(
+        memberDto.id,
+        memberDto.groupId,
+        memberDto.name,
+      );
+    } catch (e) {
+      if (e instanceof MemberIdAlreadyRegisteredError) {
+        throw new ConflictException(e.message);
+      } else if (e instanceof MemberNameAlreadyRegisteredError) {
+        throw new ConflictException(e.message);
       } else if (e instanceof Error) {
         throw new BadRequestException(`Unexpected error: ${e.message}`);
       } else {
