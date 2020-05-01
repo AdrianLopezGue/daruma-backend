@@ -25,6 +25,7 @@ import { BillIdAlreadyRegisteredError } from '../../domain/exception/bill-id-alr
 import { BillView } from '../read-model/schema/bill.schema';
 import { FirebaseAuthGuard } from '../../../core/firebase/firebase.auth.guard';
 import { CreatorIdNotFoundInGroup } from '../../domain/exception/creator-id-not-found-in-group.error';
+import { BillIdNotFoundError } from '../../domain/exception/bill-id-not-found.error';
 
 @ApiTags('Bills')
 @Controller('bills')
@@ -79,7 +80,7 @@ export class BillController {
       if (e instanceof BillIdAlreadyRegisteredError) {
         throw new ConflictException(e.message);
       } else if (e instanceof CreatorIdNotFoundInGroup) {
-        throw new ConflictException(e.message);
+        throw new NotFoundException(e.message);
       } else if (e instanceof Error) {
         throw new BadRequestException(`Unexpected error: ${e.message}`);
       } else {
@@ -94,12 +95,12 @@ export class BillController {
   @UseGuards(FirebaseAuthGuard)
   @HttpCode(204)
   @Delete(':id')
-  async removeGroup(@Param() params) {
+  async removeBill(@Param() params) {
     try {
       return await this.billService.removeBill(params.id);
     } catch (e) {
-      if (e instanceof GroupIdNotFoundError) {
-        throw new NotFoundException('Group not found');
+      if (e instanceof BillIdNotFoundError) {
+        throw new NotFoundException('Bill not found');
       } else if (e instanceof Error) {
         throw new BadRequestException(`Unexpected error: ${e.message}`);
       } else {
