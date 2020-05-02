@@ -1,13 +1,13 @@
 {
   "example": {
-    "id": "176c0843-41ea-4126-8003-4d7b3077bf5f",
+    "id": null,
     "name": "Example Bill",
     "date": "2020-04-20T11:38:01.444",
     "money": 3000,
     "currencyCode": "EUR"
   },
   "second": {
-    "id": "5bfa9f62-697f-46ff-9a7e-a149bfe6be02",
+    "id": null,
     "name": "Example Bill 2",
     "date": "2020-04-20T11:38:01.444",
     "money": 4000,

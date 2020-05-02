@@ -11,6 +11,9 @@ import { MemberName } from '../../domain/model/member-name';
 import { Member } from '../../domain/model/member';
 import { MemberIdAlreadyRegisteredError } from '../../domain/exception/member-id-already-registered.error';
 import { MemberNameAlreadyRegisteredError } from '../../domain/exception/member-name-in-group.error';
+import { GROUPS, Groups } from '../../../group/domain/repository/index';
+import { GroupIdNotFoundError } from '../../../group/domain/exception/group-id-not-found.error';
+import { Group } from '../../../group/domain/model/group';
 import {
   CHECK_UNIQUE_MEMBER_NAME,
   CheckUniqueMemberName,
@@ -21,6 +24,7 @@ export class CreateMemberHandler
   implements ICommandHandler<CreateMemberCommand> {
   constructor(
     @Inject(MEMBERS) private readonly members: Members,
+    @Inject(GROUPS) private readonly groups: Groups,
     @Inject(CHECK_UNIQUE_MEMBER_NAME)
     private readonly checkUniqueMemberName: CheckUniqueMemberName,
   ) {}
@@ -33,6 +37,10 @@ export class CreateMemberHandler
 
     if ((await this.members.find(memberId)) instanceof Member) {
       throw MemberIdAlreadyRegisteredError.withString(command.memberId);
+    }
+
+    if ((await this.groups.find(groupId)) === null) {
+      throw GroupIdNotFoundError.withString(command.groupId);
     }
 
     if (
