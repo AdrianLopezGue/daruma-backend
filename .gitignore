@@ -41,8 +41,6 @@ lerna-debug.log*
 # Enviroment dotfiles
 /.env.local
 /.env.*.local
-/.env
-/.env.test
 
 # Cypress
 /cypress/screenshots
