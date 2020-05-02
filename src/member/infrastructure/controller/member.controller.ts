@@ -13,10 +13,11 @@ import {
   Param,
   Post,
   ConflictException,
+  Delete,
+  NotAcceptableException,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { GroupIdNotFoundError } from '../../../group/domain/exception/group-id-not-found.error';
 import { MemberView } from '../read-model/schema/member.schema';
 import { RegisterMemberAsUserDto } from '../dto/register-member-as-user.dto';
 import { MemberIdNotFoundError } from '../../domain/exception/member-id-not-found.error';
@@ -26,14 +27,15 @@ import { FirebaseAuthGuard } from '../../../core/firebase/firebase.auth.guard';
 import { MemberDto } from '../dto/member.dto';
 import { MemberNameAlreadyRegisteredError } from '../../domain/exception/member-name-in-group.error';
 import { MemberIdAlreadyRegisteredError } from '../../domain/exception/member-id-already-registered.error';
+import { MemberMadeTransactionError } from '../../domain/exception/member-made-transaction.error';
 
 @ApiTags('Members')
 @Controller('members')
 export class MemberController {
   constructor(private readonly memberService: MemberService) {}
 
-  @ApiOperation({ summary: 'Get Members of Group' })
-  @ApiResponse({ status: 204, description: 'Get Members of Group.' })
+  @ApiOperation({ summary: 'Get Members of Member' })
+  @ApiResponse({ status: 204, description: 'Get Members of Member.' })
   @ApiResponse({ status: 404, description: 'Not found' })
   @UseGuards(FirebaseAuthGuard)
   @Get(':id')
@@ -41,8 +43,8 @@ export class MemberController {
     try {
       return await this.memberService.getMembersByGroupId(params.id);
     } catch (e) {
-      if (e instanceof GroupIdNotFoundError) {
-        throw new NotFoundException('Group not found');
+      if (e instanceof MemberIdNotFoundError) {
+        throw new NotFoundException('Member not found');
       } else if (e instanceof Error) {
         throw new BadRequestException(`Unexpected error: ${e.message}`);
       } else {
@@ -69,6 +71,28 @@ export class MemberController {
         throw new ConflictException(e.message);
       } else if (e instanceof MemberNameAlreadyRegisteredError) {
         throw new ConflictException(e.message);
+      } else if (e instanceof Error) {
+        throw new BadRequestException(`Unexpected error: ${e.message}`);
+      } else {
+        throw new BadRequestException('Server error');
+      }
+    }
+  }
+
+  @ApiOperation({ summary: 'Delete Member' })
+  @ApiResponse({ status: 204, description: 'Delete Member' })
+  @ApiResponse({ status: 404, description: 'Not found' })
+  @UseGuards(FirebaseAuthGuard)
+  @HttpCode(204)
+  @Delete(':id')
+  async removeMember(@Param() params) {
+    try {
+      return await this.memberService.removeMember(params.id);
+    } catch (e) {
+      if (e instanceof MemberIdNotFoundError) {
+        throw new NotFoundException('Member not found');
+      } else if (e instanceof MemberMadeTransactionError) {
+        throw new BadRequestException(e.message);
       } else if (e instanceof Error) {
         throw new BadRequestException(`Unexpected error: ${e.message}`);
       } else {
