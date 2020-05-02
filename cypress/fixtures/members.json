@@ -1,0 +1,12 @@
+{
+    "johndoe": {
+      "id": null,
+      "groupId": null,
+      "name": "John Doe"
+    },
+    "tommytoe": {
+      "id": null,
+      "groupId": null,
+      "name": "Tommy Toe"
+    }
+  }

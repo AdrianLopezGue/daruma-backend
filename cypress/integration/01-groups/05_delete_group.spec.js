@@ -1,10 +1,8 @@
 import * as uuid from 'uuid';
 
-describe('POST /groups', () => {
-
-  beforeEach(() => {
-    cy.task('db:clean');
-  });
+describe('DELETE /groups', () => {
+  let userid;
+  let groupid;
 
   const post = (auth, group, ownerid) =>
     cy.request({
@@ -21,10 +19,22 @@ describe('POST /groups', () => {
       failOnStatusCode: false,
     });
 
-  it('Creates a group', function() {
+    const deleteGroup = (auth, id) =>
+    cy.request({
+      method: 'DELETE',
+      url: `groups/${id}`,
+      auth: { bearer: auth },
+      failOnStatusCode: false,
+    });
+
+  beforeEach(() => {
+    cy.task('db:clean');
+
+    userid = uuid.v4();
+    groupid = uuid.v4();
+
     cy.fixture('groups.json').then(groups => {
-      const userid = uuid.v4();
-      groups.example.id = uuid.v4();
+      groups.example.id = groupid;
 
       post(userid, groups.example, userid)
         .its('status')
@@ -32,15 +42,13 @@ describe('POST /groups', () => {
     });
   });
 
-  it('Validate the user belongs to group', function() {
+  it('Validate group has been deleted', function() {
     cy.fixture('groups.json').then(groups => {
-      const userid = uuid.v4();
-      const otherUser = uuid.v4();
-      groups.example.id = uuid.v4();
+    groups.example.id = groupid;
 
-      post(otherUser, groups.example, userid)
+    deleteGroup(userid, groups.example.id)
         .its('status')
-        .should('equal', 403);
-    });
+        .should('equal', 204);
+    });   
   });
 });

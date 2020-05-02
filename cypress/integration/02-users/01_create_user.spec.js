@@ -2,8 +2,7 @@ import * as uuid from 'uuid';
 
 describe('POST /user', () => {
   beforeEach(() => {
-    cy.fixture('users.json').as('users');
-    cy.fixture('groups.json').as('groups');
+    cy.task('db:clean');
   });
 
   const post = (auth, user) =>
@@ -19,16 +18,24 @@ describe('POST /user', () => {
       failOnStatusCode: false,
     });
 
-  it('Validate the status code', function() {
-    post(this.users.johndoe.id, this.users.johndoe)
-      .its('status')
-      .should('equal', 204);
+  it('creates an user', function() {
+    cy.fixture('users.json').then(users => {
+      users.johndoe.id = uuid.v4();
+
+      post(users.johndoe.id, users.johndoe)
+        .its('status')
+        .should('equal', 204);
+    });
   });
 
-  it('Validate the user belongs to group', function() {
-    const otherUser = uuid.v4();
-    post(otherUser, this.users.johndoe)
-      .its('status')
-      .should('equal', 403);
+  it('check user is logged', function() {
+    cy.fixture('users.json').then(users => {
+      users.johndoe.id = uuid.v4();
+      const otherUser = uuid.v4();
+
+      post(otherUser, users.johndoe)
+        .its('status')
+        .should('equal', 403);
+    });
   });
 });

@@ -6,6 +6,7 @@ import { RegisterMemberAsUserCommand } from '../../application/command/register-
 import { MemberView, MEMBER_MODEL } from '../read-model/schema/member.schema';
 import { Model } from 'mongoose';
 import { RemoveMemberCommand } from '../../application/command/remove-member.command';
+import { GroupIdNotFoundError } from '../../../group/domain/exception/group-id-not-found.error';
 
 @Injectable()
 export class MemberService {
@@ -34,7 +35,13 @@ export class MemberService {
   }
 
   async getMembersByGroupId(groupId: string): Promise<MemberView[]> {
-    return this.memberModel.find({ groupId: '' + groupId + '' }).exec();
+    const members = await this.memberModel.find({ groupId: '' + groupId + '' }).exec();
+
+    if (members.length === 0){
+      throw GroupIdNotFoundError.withString(groupId);
+    }
+
+    return members;
   }
 
   async getMembersIdByUserId(userId: string): Promise<string[]> {

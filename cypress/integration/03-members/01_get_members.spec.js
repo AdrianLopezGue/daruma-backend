@@ -1,21 +1,10 @@
 import * as uuid from 'uuid';
 
 describe('GET /members', () => {
-  let userid = uuid.v4();
+  let userid;
+  let groupid;
 
-  beforeEach(() => {
-    cy.fixture('groups.json').as('groups');
-    cy.fixture('users.json').as('users');
-  });
-
-  const get = (auth, id) =>
-    cy.request({
-      method: 'GET',
-      url: `members/${id}`,
-      auth: { bearer: auth },
-    });
-
-  const post = (auth, group, owner) =>
+  const post = (auth, group, ownerid) =>
     cy.request({
       method: 'POST',
       url: 'groups',
@@ -24,23 +13,54 @@ describe('GET /members', () => {
         groupId: group.id,
         name: group.name,
         currencyCode: group.currencyCode,
-        owner: { id: owner.id, name: owner.name },
+        owner: { id: ownerid, name: 'John Doe' },
         members: [],
       },
       failOnStatusCode: false,
     });
 
-  it('Validate the status code', function() {
-    get(this.users.johndoe.id, this.groups.example.id)
-      .its('status')
-      .should('equal', 200);
+  const get = (auth, id) =>
+    cy.request({
+      method: 'GET',
+      url: `members/${id}`,
+      auth: { bearer: auth },
+      failOnStatusCode: false,
+    });
+
+  beforeEach(() => {
+    cy.task('db:clean');
+
+    userid = uuid.v4();
+    groupid = uuid.v4();
+
+    cy.fixture('groups.json').then(groups => {
+      groups.example.id = groupid;
+
+      post(userid, groups.example, userid)
+        .its('status')
+        .should('equal', 204);
+    });
   });
 
-  it('Validate that owner of group is a member', function() {
-    post(this.users.johndoe.id, this.groups.example, this.users.johndoe);
+  it('Validate the status code', function() {
+    cy.fixture('users.json').then(users => {
+      users.johndoe.id = userid;
 
-    get(this.users.johndoe.id, this.groups.example.id)
-      .its('body')
-      .should('have.length', 1);
+      get(users.johndoe.id, groupid)
+      .its('status')
+      .should('equal', 200);
+
+    });    
+  });
+
+  it('Validate that cannot access to unknown group', function() {
+    cy.fixture('users.json').then(users => {
+      const otherGroup = uuid.v4();
+      users.johndoe.id = userid;
+
+      get(users.johndoe.id, otherGroup)
+      .its('status')
+      .should('equal', 404);
+    });    
   });
 });

@@ -10,6 +10,9 @@ import { CheckMemberMadeAnyTransactionFromReadModel } from '../../transaction/in
 import { CHECK_MEMBER_MADE_ANY_TRANSACTION } from '../../transaction/domain/services/check-member-made-transaction.service';
 import { DEBT_TRANSACTION_MODEL, DebtTransactionSchema } from '../../transaction/infrastructure/read-model/schema/debt-transaction.schema';
 import { DepositTransactionSchema, DEPOSIT_TRANSACTION_MODEL } from '../../transaction/infrastructure/read-model/schema/deposit-transaction.schema';
+import { GroupEventStore } from '../../group/infrastructure/eventstore/groups.event-store';
+import { GROUPS } from '../../group/domain/repository/index';
+import { MEMBER_SERVICE, MemberService } from './service/member.service';
 
 export const MemberProviders = [
   {
@@ -33,6 +36,14 @@ export const MemberProviders = [
   {
     provide: MEMBERS,
     useClass: MemberEventStore,
+  },
+  {
+    provide: MEMBER_SERVICE,
+    useValue: MemberService,
+  },
+  {
+    provide: GROUPS,
+    useClass: GroupEventStore,
   },
   {
     provide: CHECK_UNIQUE_MEMBER_NAME,
