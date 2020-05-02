@@ -6,12 +6,28 @@ import { CheckUniqueMemberNameFromReadModel } from './service/check-unique-membe
 import { CHECK_UNIQUE_MEMBER_NAME } from '../domain/services/check-unique-member-name.service';
 import { CHECK_USER_IN_GROUP } from '../domain/services/check-user-in-group.service';
 import { CheckUserInGroupFromReadModel } from './service/check-user-in-group.service';
+import { CheckMemberMadeAnyTransactionFromReadModel } from '../../transaction/infrastructure/service/check-member-made-transaction.service';
+import { CHECK_MEMBER_MADE_ANY_TRANSACTION } from '../../transaction/domain/services/check-member-made-transaction.service';
+import { DEBT_TRANSACTION_MODEL, DebtTransactionSchema } from '../../transaction/infrastructure/read-model/schema/debt-transaction.schema';
+import { DepositTransactionSchema, DEPOSIT_TRANSACTION_MODEL } from '../../transaction/infrastructure/read-model/schema/deposit-transaction.schema';
 
 export const MemberProviders = [
   {
     provide: MEMBER_MODEL,
     useFactory: (connection: Connection) =>
       connection.model('Member', MemberSchema),
+    inject: ['DATABASE_CONNECTION'],
+  },
+  {
+    provide: DEBT_TRANSACTION_MODEL,
+    useFactory: (connection: Connection) =>
+      connection.model('DebtTransactions', DebtTransactionSchema),
+    inject: ['DATABASE_CONNECTION'],
+  },
+  {
+    provide: DEPOSIT_TRANSACTION_MODEL,
+    useFactory: (connection: Connection) =>
+      connection.model('DepositTransactions', DepositTransactionSchema),
     inject: ['DATABASE_CONNECTION'],
   },
   {
@@ -25,5 +41,9 @@ export const MemberProviders = [
   {
     provide: CHECK_USER_IN_GROUP,
     useClass: CheckUserInGroupFromReadModel,
+  },
+  {
+    provide: CHECK_MEMBER_MADE_ANY_TRANSACTION,
+    useClass: CheckMemberMadeAnyTransactionFromReadModel,
   }
 ];

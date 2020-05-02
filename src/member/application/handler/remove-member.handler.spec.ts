@@ -10,11 +10,13 @@ import { RemoveMemberHandler } from './remove-member.handler';
 import { Member } from '../../domain/model/member';
 import { RemoveMemberCommand } from '../command/remove-member.command';
 import { MemberIdNotFoundError } from '../../domain/exception/member-id-not-found.error';
+import { CHECK_MEMBER_MADE_ANY_TRANSACTION, CheckMemberMadeAnyTransaction } from '../../../transaction/domain/services/check-member-made-transaction.service';
 
 describe('RemoveMemberHandler', () => {
   let command$: RemoveMemberHandler;
 
   const members: Partial<Members> = {};
+  const checkMemberMadeAnyTransaction: Partial<CheckMemberMadeAnyTransaction> = {};
 
   const memberId = MemberId.fromString(v4());
   const groupId = GroupId.fromString(v4());
@@ -29,12 +31,17 @@ describe('RemoveMemberHandler', () => {
           provide: MEMBERS,
           useValue: members,
         },
+        {
+          provide: CHECK_MEMBER_MADE_ANY_TRANSACTION,
+          useValue: checkMemberMadeAnyTransaction,
+        },
       ],
     }).compile();
 
     command$ = module.get<RemoveMemberHandler>(RemoveMemberHandler);
     members.find = jest.fn().mockResolvedValue(null);
     members.save = jest.fn();
+    checkMemberMadeAnyTransaction.with = jest.fn().mockResolvedValue(null);
   });
 
   it('should remove a member', async () => {

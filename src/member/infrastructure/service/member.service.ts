@@ -5,6 +5,7 @@ import { CreateMemberCommand } from '../../application/command/create-member.com
 import { RegisterMemberAsUserCommand } from '../../application/command/register-member-as-user.command';
 import { MemberView, MEMBER_MODEL } from '../read-model/schema/member.schema';
 import { Model } from 'mongoose';
+import { RemoveMemberCommand } from '../../application/command/remove-member.command';
 
 @Injectable()
 export class MemberService {
@@ -22,6 +23,10 @@ export class MemberService {
     return this.commandBus.execute(
       new CreateMemberCommand(memberId, groupId, name, userId),
     );
+  }
+
+  async removeMember(id: string) {
+    return this.commandBus.execute(new RemoveMemberCommand(id));
   }
 
   async registerMemberAsUser(id: string, idUser: string) {

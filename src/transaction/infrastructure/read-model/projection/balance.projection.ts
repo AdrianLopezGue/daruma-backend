@@ -9,6 +9,7 @@ import { MemberWasCreated } from '../../../../member/domain/event/member-was-cre
 import { DebtTransactionWasRemoved } from '../../../domain/event/debt-transaction-was-removed.event';
 import { DepositTransactionWasRemoved } from '../../../domain/event/deposit-transaction-was-removed.event';
 import { TransferTransactionWasRemoved } from '../../../domain/event/transfer-transaction-was-removed.event';
+import { MemberWasRemoved } from '../../../../member/domain/event/member-was-removed.event';
 
 @EventsHandler(
   DebtTransactionWasCreated,
@@ -18,6 +19,7 @@ import { TransferTransactionWasRemoved } from '../../../domain/event/transfer-tr
   DepositTransactionWasRemoved,
   TransferTransactionWasRemoved,
   MemberWasCreated,
+  MemberWasRemoved,
 )
 export class BalanceProjection
   implements
@@ -27,7 +29,8 @@ export class BalanceProjection
     IEventHandler<DebtTransactionWasRemoved>,
     IEventHandler<DepositTransactionWasRemoved>,
     IEventHandler<TransferTransactionWasRemoved>,
-    IEventHandler<MemberWasCreated> {
+    IEventHandler<MemberWasCreated>,
+    IEventHandler<MemberWasRemoved> {
   constructor(
     @Inject('BALANCE_MODEL')
     private readonly balanceModel: Model<BalanceView>,
@@ -36,6 +39,7 @@ export class BalanceProjection
   async handle(
     event:
       | MemberWasCreated
+      | MemberWasRemoved
       | DebtTransactionWasCreated
       | DepositTransactionWasCreated
       | TransferTransactionWasCreated
@@ -50,7 +54,11 @@ export class BalanceProjection
         money: 0,
       });
       return balanceView.save();
-    } else if (event instanceof DebtTransactionWasCreated) {
+    }else if (event instanceof MemberWasRemoved) {
+      const balanceView = await this.balanceModel
+        .findById(event.id).exec();
+      balanceView.remove();
+    }else if (event instanceof DebtTransactionWasCreated) {
       this.balanceModel
         .updateOne({ _id: event.idMember }, { $inc: { money: -event.money } })
         .exec();
