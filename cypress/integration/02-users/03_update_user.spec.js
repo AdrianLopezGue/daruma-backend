@@ -1,116 +1,71 @@
 import * as uuid from 'uuid';
 
+import { get, newUser, post, put } from '../../api';
+
 describe('PUT /users', () => {
-  let userid;
-
-  const put = (auth, name, paypal, id) =>
-    cy.request({
-      method: 'PUT',
-      url: `users/${id}`,
-      auth: { bearer: auth },
-      body: {
-        name: name,
-        paypal: paypal,
-      },
-    });
-
-  const get = (user) =>
-    cy.request({
-      method: 'GET',
-      url: `users/${user}`,
-      auth: { bearer: user },
-    }),;
-
-  const post = (auth, user) =>
-    cy.request({
-      method: 'POST',
-      url: 'users',
-      auth: { bearer: auth },
-      body: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-      },
-      failOnStatusCode: false,
-    });
+  let userId;
+  let ownerId;
 
   beforeEach(() => {
     cy.task('db:clean');
 
-    userid = uuid.v4();
+    ownerId = uuid.v4();
+    userId = ownerId;
 
     cy.fixture('users.json').then(users => {
-      users.johndoe.id = userid;
+      const user = newUser(...users.body, userId);
 
-      post(users.johndoe.id, users.johndoe)
-        .its('status')
-        .should('equal', 204);
+      post('users', user, ownerId);
+
+      cy.task('sync');
     });
   });
 
   it('Validate user name has changed', function() {
     cy.fixture('users.json').then(users => {
-      const userName = 'New User name';
-      users.johndoe.id = userid;
+      const name = 'New User name';
+      const response = { ...users.response, _id: userId, name };
 
-      const result = [
-        {
-          _id: users.johndoe.id,
-          name: userName,
-          email: users.johndoe.email,
-        },
-      ];
+      put('users', userId, { name }, ownerId).then(() => {
+        cy.task('sync');
 
-      put(users.johndoe.id, userName, '', users.johndoe.id);
-
-      get(users.johndoe.id)
-        .its('body')
-        .should('deep.equal', result[0]);
+        get('users', userId, ownerId)
+          .its('body')
+          .should('deep.equal', response);
+      });
     });
   });
 
   it('Validate paypal has changed', function() {
     cy.fixture('users.json').then(users => {
-      const userPaypal = 'New Paypal name';
-      users.johndoe.id = userid;
+      const paypal = 'New Paypal name';
+      const response = { ...users.response, _id: userId, paypal };
+      const user = newUser(...users.body, userId);
 
-      const result = [
-        {
-          _id: users.johndoe.id,
-          name: users.johndoe.name,
-          email: users.johndoe.email,
-          paypal: userPaypal,
-        },
-      ];
+      put('users', userId, { ...user, paypal }, ownerId).then(() => {
+        cy.task('sync');
 
-      put(users.johndoe.id, users.johndoe.name, userPaypal, userid);
-
-      get(users.johndoe.id)
-        .its('body')
-        .should('deep.equal', result[0]);
+        get('users', userId, ownerId)
+          .its('body')
+          .should('deep.equal', response);
+      });
     });
   });
 
   it('Validate name and paypal has changed', function() {
     cy.fixture('users.json').then(users => {
-      const newuserName = 'New User name';
-      const newuserPaypal = 'New User paypal';
-      users.johndoe.id = userid;
+      const name = 'New User name';
+      const paypal = 'New User paypal';
+      const response = { ...users.response, _id: userId, name, paypal };
+      const user = newUser(...users.body, userId);
 
-      const result = [
-        {
-          _id: users.johndoe.id,
-          name: newuserName,
-          email: users.johndoe.email,
-          paypal: newuserPaypal,
-        },
-      ];
+      put('users', userId, { ...user, name, paypal }, ownerId).then(() => {
+        cy.task('sync');
 
-      put(users.johndoe.id, newuserName, newuserPaypal, users.johndoe.id);
-
-      get(users.johndoe.id)
-        .its('body')
-        .should('deep.equal', result[0]);
+        get('users', userId, ownerId)
+          .its('body')
+          .should('deep.equal', response);
+      });
     });
   });
 });

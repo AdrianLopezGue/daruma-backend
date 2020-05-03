@@ -8,5 +8,15 @@
     "id": null,
     "name": "Tommy Toe",
     "email": "tommy@toe.com"
+  },
+  "body": {
+    "id": null,
+    "name": "John Doe",
+    "email": "john@doe.com"
+  },
+  "response": {
+    "_id": null,
+    "name": "John Doe",
+    "email": "john@doe.com"
   }
 }

@@ -3,5 +3,18 @@
     "id": null,
     "name": "Example Group",
     "currencyCode": "EUR"
+  },
+  "body": {
+    "groupId": null,
+    "name": "Example Group",
+    "currencyCode": "EUR",
+    "owner": { "id": null, "name": "John Doe" },
+    "members": []
+  },
+  "response": {
+    "_id": null,
+    "name": "Example Group",
+    "currencyCode": "EUR",
+    "ownerId": null
   }
 }

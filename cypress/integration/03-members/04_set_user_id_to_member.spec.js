@@ -1,85 +1,51 @@
 import * as uuid from 'uuid';
 
+import { post, patch, newGroup, newMember, newUserId } from '../../api';
+
 describe('PATCH /members', () => {
-  let userid;
-  let userid2;
-  let groupid;
-  let memberid;
-
-  const postGroup = (auth, group, ownerid) =>
-    cy.request({
-      method: 'POST',
-      url: 'groups',
-      auth: { bearer: auth },
-      body: {
-        groupId: group.id,
-        name: group.name,
-        currencyCode: group.currencyCode,
-        owner: { id: ownerid, name: 'John Doe' },
-        members: [],
-      },
-      failOnStatusCode: false,
-    });
-
-  const postMember = (auth, member) =>
-    cy.request({
-      method: 'POST',
-      url: 'members',
-      auth: { bearer: auth },
-      body: {
-        id: member.id,
-        groupId: member.groupId,
-        name: member.name,
-      },
-      failOnStatusCode: false,
-    });
-
-  const patchMember = (auth, id) =>
-    cy.request({
-      method: 'PATCH',
-      url: `members/${id}`,
-      body: {
-        idUser: auth,
-      },
-      auth: { bearer: auth },
-      failOnStatusCode: false,
-    });
+  let userId;
+  let groupId;
+  let memberId;
 
   beforeEach(() => {
     cy.task('db:clean');
 
-    userid = uuid.v4();
-    userid2 = uuid.v4();
-    memberid = uuid.v4();
-    groupid = uuid.v4();
+    userId = uuid.v4();
+    memberId = uuid.v4();
+    groupId = uuid.v4();
 
     cy.fixture('groups.json').then(groups => {
       cy.fixture('members.json').then(members => {
-        groups.example.id = groupid;
-        members.tommytoe.id = memberid;
-        members.tommytoe.groupId = groupid;
+        const group = newGroup(groups.body, groupId, userId);
+        post('groups', group, userId, true);
 
-        postGroup(userid, groups.example, userid)
-          .its('status')
-          .should('equal', 204);
+        cy.task('sync');
 
-        postMember(userid, members.tommytoe)
-          .its('status')
-          .should('equal', 204);
+        const member = newMember(...members.body, memberId, groupId);
+        post('members', member, userId)
+
+        cy.task('sync');
       });
     });
   });
 
   it('Patch member', function() {
-    patchMember(userid2, memberid)
-      .its('status')
-      .should('equal', 204);
+    cy.fixture('members.json').then(members => {
+      members.bodyNewUserId.idUser = userId;
+      patch('members', memberId, members.bodyNewUserId, userId)
+        .its('status')
+        .should('equal', 204);
+    });    
   });
 
   it('Cannot set userId to unknown member', function() {
-    const anotherMemberid = uuid.v4();
-    patchMember(userid2, anotherMemberid)
-      .its('status')
-      .should('equal', 404);
+    cy.fixture('members.json').then(members => {
+      const anotherMemberId = uuid.v4();
+
+      members.bodyNewUserId.idUser = userId;
+      patch('members', anotherMemberId, members.bodyNewUserId, userId)
+        .its('status')
+        .should('equal', 404);
+    }); 
   });
 });

@@ -1,39 +1,34 @@
 import * as uuid from 'uuid';
 
+import { newUser, post } from '../../api';
+
 describe('POST /user', () => {
+  let ownerId;
+  let userId;
+
   beforeEach(() => {
     cy.task('db:clean');
-  });
 
-  const post = (auth, user) =>
-    cy.request({
-      method: 'POST',
-      url: 'users',
-      auth: { bearer: auth },
-      body: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-      },
-      failOnStatusCode: false,
-    });
+    ownerId = uuid.v4();
+    userId = ownerId;
+  });
 
   it('creates an user', function() {
     cy.fixture('users.json').then(users => {
-      users.johndoe.id = uuid.v4();
+      const user = newUser(users.body, userId);
 
-      post(users.johndoe.id, users.johndoe)
+      post('users', user, ownerId)
         .its('status')
         .should('equal', 204);
     });
   });
 
-  it('check user is logged', function() {
+  it('checks user is logged', function() {
     cy.fixture('users.json').then(users => {
-      users.johndoe.id = uuid.v4();
-      const otherUser = uuid.v4();
+      const user = newUser(users.body, userId);
+      const otherUserId = uuid.v4();
 
-      post(otherUser, users.johndoe)
+      post('users', user, otherUserId)
         .its('status')
         .should('equal', 403);
     });

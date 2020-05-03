@@ -20,25 +20,8 @@ module.exports = (on, config) => {
 
       return null;
     },
-    'es:clean': async () => {
-      const axios = require('axios');
-
-      const response = await axios({
-        url: `${config.env.EVENT_STORE_URL}/streams/$ce-${config.env.EVENT_STORE_CATEGORY}`,
-        method: 'GET',
-      });
-
-      const streams = response.data.entries
-        .map(entry => entry.title.split('@')[1])
-        .filter(value => !value.startsWith('$$'))
-        .filter((value, index, self) => self.indexOf(value) === index);
-
-      streams.forEach(async stream => {
-        await axios({
-          url: `${config.env.EVENT_STORE_URL}/streams/${stream}`,
-          method: 'DELETE',
-        });
-      });
+    sync: async () => {
+      await new Promise(r => setTimeout(r, 50));
 
       return null;
     },
