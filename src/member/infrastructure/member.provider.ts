@@ -13,7 +13,6 @@ import { DepositTransactionSchema, DEPOSIT_TRANSACTION_MODEL } from '../../trans
 import { GroupEventStore } from '../../group/infrastructure/eventstore/groups.event-store';
 import { GROUPS } from '../../group/domain/repository/index';
 import { MEMBER_SERVICE, MemberService } from './service/member.service';
-import { GetMembersIdByGroupId } from '../../../dist/member/domain/services/get-members-by-group-id.service';
 import { GET_MEMBERS_BY_GROUP_ID } from '../domain/services/get-members-by-group-id.service';
 import { GetMembersIdByGroupIdFromReadModel } from './service/get-members-by-group-is.service';
 

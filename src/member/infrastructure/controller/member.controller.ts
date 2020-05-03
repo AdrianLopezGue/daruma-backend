@@ -15,6 +15,7 @@ import {
   ConflictException,
   Delete,
   NotAcceptableException,
+  Logger,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -42,6 +43,8 @@ export class MemberController {
   @UseGuards(FirebaseAuthGuard)
   @Get(':id')
   async getMembers(@Request() req, @Param() params): Promise<MemberView[]> {
+    const logger = new Logger('MembersController');
+    logger.log('Petición GET Members');
     try {
       return await this.memberService.getMembersByGroupId(params.id);
     } catch (e) {
@@ -61,7 +64,8 @@ export class MemberController {
   @HttpCode(204)
   @Post()
   async createMember(@Body() memberDto: MemberDto, @Request() req): Promise<MemberDto> {
-
+    const logger = new Logger('MembersController');
+    logger.log('Petición POST Members');
     try {
       return await this.memberService.createMember(
         memberDto.id,
@@ -90,6 +94,8 @@ export class MemberController {
   @HttpCode(204)
   @Delete(':id')
   async removeMember(@Param() params, @Request() req) {
+    const logger = new Logger('MembersController');
+    logger.log('Petición DELETE Members');
     const idRequester: UserId = req.user;
 
     if (idRequester.value === params.id) {
@@ -124,6 +130,8 @@ export class MemberController {
     @Body() memberDto: RegisterMemberAsUserDto,
     @Request() req,
   ) {
+    const logger = new Logger('MembersController');
+    logger.log('Petición PATCH Members');
     const idUser: UserId = req.user;
 
     if (idUser.value !== memberDto.idUser) {

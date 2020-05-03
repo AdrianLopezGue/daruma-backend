@@ -26,6 +26,7 @@ import { UserId } from '../../domain/model/user-id';
 import { FirebaseAuthGuard } from '../../../core/firebase/firebase.auth.guard';
 import { UserView } from '../read-model/schema/user.schema';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { Logger } from '@nestjs/common';
 
 @ApiTags('Users')
 @Controller('users')
@@ -38,6 +39,8 @@ export class UserController {
   @UseGuards(FirebaseAuthGuard)
   @Get(':id')
   async getUser(@Request() req, @Param() params): Promise<UserView> {
+    const logger = new Logger('UserController');
+    logger.log('Petición GET Users');
     try {
       return await this.userService.getUser(params.id);
     } catch (e) {
@@ -57,6 +60,8 @@ export class UserController {
   @HttpCode(204)
   @Post()
   async createUser(@Body() userDto: UserDto, @Request() req): Promise<UserDto> {
+    const logger = new Logger('UserController');
+    logger.log('Petición POST Users');
     const idUser: UserId = req.user;
 
     if (idUser.value !== userDto.id) {
@@ -93,6 +98,8 @@ export class UserController {
     @Body() updateUserDto: UpdateUserDto,
     @Request() req,
   ): Promise<void> {
+    const logger = new Logger('UserController');
+    logger.log('Petición UPDATE Users');
     try {
       return await this.userService.updateUser(
         params.id,
