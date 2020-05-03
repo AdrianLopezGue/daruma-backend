@@ -10,8 +10,14 @@ import { RemoveMemberHandler } from './remove-member.handler';
 import { Member } from '../../domain/model/member';
 import { RemoveMemberCommand } from '../command/remove-member.command';
 import { MemberIdNotFoundError } from '../../domain/exception/member-id-not-found.error';
-import { CHECK_MEMBER_MADE_ANY_TRANSACTION, CheckMemberMadeAnyTransaction } from '../../../transaction/domain/services/check-member-made-transaction.service';
-import { MEMBER_SERVICE, MemberService } from '../../infrastructure/service/member.service';
+import {
+  CHECK_MEMBER_MADE_ANY_TRANSACTION,
+  CheckMemberMadeAnyTransaction,
+} from '../../../transaction/domain/services/check-member-made-transaction.service';
+import {
+  MEMBER_SERVICE,
+  MemberService,
+} from '../../infrastructure/service/member.service';
 
 describe('RemoveMemberHandler', () => {
   let command$: RemoveMemberHandler;
@@ -48,7 +54,7 @@ describe('RemoveMemberHandler', () => {
     members.find = jest.fn().mockResolvedValue(null);
     members.save = jest.fn();
     checkMemberMadeAnyTransaction.with = jest.fn().mockResolvedValue(null);
-    memberService.getMembersIdByGroupId = jest.fn().mockResolvedValue(null);
+    memberService.getMembersIdByGroupId = jest.fn().mockResolvedValue(1);
   });
 
   it('should remove a member', async () => {

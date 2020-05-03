@@ -15,6 +15,7 @@ import {
   Request,
   Param,
   Delete,
+  Logger,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -52,6 +53,8 @@ export class GroupController {
   @Post()
   async createGroup(@Body() groupDto: GroupDto, @Request() req): Promise<void> {
     const idUser: UserId = req.user;
+    const logger = new Logger('GroupController');
+    logger.log('Petición POST');
 
     if (idUser.value !== groupDto.owner.id) {
       throw new ForbiddenException('Forbidden access to data');
@@ -84,6 +87,9 @@ export class GroupController {
   @UseGuards(FirebaseAuthGuard)
   @Get(':id')
   async getGroup(@Request() req, @Param() params): Promise<GroupView> {
+    const logger = new Logger('GroupController');
+    logger.log('Petición GET');
+
     try {
       return this.groupService.getGroup(params.id);
     } catch (e) {
@@ -108,6 +114,9 @@ export class GroupController {
     @Body() changenamegroupDto: ChangeNameGroupDto,
     @Request() req,
   ): Promise<void> {
+    const logger = new Logger('GroupController');
+    logger.log('Petición PUT');
+
     try {
       return await this.groupService.changeNameGroup(
         params.id,
