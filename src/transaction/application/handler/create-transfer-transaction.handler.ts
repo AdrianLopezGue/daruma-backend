@@ -11,12 +11,20 @@ import { BillAmount } from '../../../bill/domain/model/bill-amount';
 import { CreateTransferTransactionCommand } from '../command/create-transfer-transaction.command';
 import { TransferTransaction } from '../../domain/model/transfer-transaction';
 import { GroupId } from '../../../group/domain/model/group-id';
+import { GROUPS, Groups } from '../../../group/domain/repository/index';
+import { GroupIdNotFoundError } from '../../../group/domain/exception/group-id-not-found.error';
+import { MemberIdNotFoundError } from '../../../member/domain/exception/member-id-not-found.error';
+import { MEMBER_SERVICE, MemberService } from '../../../member/infrastructure/service/member.service';
+import { GET_MEMBERS_BY_GROUP_ID, GetMembersIdByGroupId } from '../../../member/domain/services/get-members-by-group-id.service';
 
 @CommandHandler(CreateTransferTransactionCommand)
 export class CreateTransferTransactionHandler
   implements ICommandHandler<CreateTransferTransactionCommand> {
   constructor(
     @Inject(TRANSACTIONS) private readonly transactions: Transactions,
+    @Inject(GROUPS) private readonly groups: Groups,
+    @Inject(GET_MEMBERS_BY_GROUP_ID)
+    private readonly getMembersByGroupId: GetMembersIdByGroupId,
   ) {}
 
   async execute(command: CreateTransferTransactionCommand) {
@@ -29,12 +37,23 @@ export class CreateTransferTransactionHandler
     );
     const groupId = GroupId.fromString(command.groupId);
 
+    if ((await this.groups.find(groupId)) === null) {
+      throw GroupIdNotFoundError.withString(command.groupId);
+    }
+
+    if (
+      (await this.getMembersByGroupId.with(GroupId.fromString(groupId.value))).find(value => value === senderId.value) === undefined ||
+      (await this.getMembersByGroupId.with(GroupId.fromString(groupId.value))).find(value => value === beneficiaryId.value) === undefined
+    ) {
+      throw MemberIdNotFoundError.withString('');
+    }
+
     const transaction = TransferTransaction.add(
       transactionId,
       senderId,
       beneficiaryId,
       amount,
-      groupId
+      groupId,
     );
 
     this.transactions.saveTransferTransaction(transaction);

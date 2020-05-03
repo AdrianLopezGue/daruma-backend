@@ -12,6 +12,8 @@ import {
 import { MemberMadeTransactionError } from '../../domain/exception/member-made-transaction.error';
 import { MemberService, MEMBER_SERVICE } from '../../infrastructure/service/member.service';
 import { LastMemberInGroupError } from '../../domain/exception/last-member-in-group.error';
+import { GET_MEMBERS_BY_GROUP_ID, GetMembersIdByGroupId } from '../../domain/services/get-members-by-group-id.service';
+import { GroupId } from '../../../group/domain/model/group-id';
 
 @CommandHandler(RemoveMemberCommand)
 export class RemoveMemberHandler
@@ -20,8 +22,8 @@ export class RemoveMemberHandler
     @Inject(MEMBERS) private readonly members: Members,
     @Inject(CHECK_MEMBER_MADE_ANY_TRANSACTION)
     private readonly checkMemberMadeAnyTransaction: CheckMemberMadeAnyTransaction,
-    @Inject(MEMBER_SERVICE)
-    private readonly memberService: MemberService
+    @Inject(GET_MEMBERS_BY_GROUP_ID)
+    private readonly getMembersByGroupId: GetMembersIdByGroupId,
   ) {}
 
   async execute(command: RemoveMemberCommand) {
@@ -32,7 +34,7 @@ export class RemoveMemberHandler
       throw MemberIdNotFoundError.withString(memberId.value);
     }
 
-    if ((await this.memberService.getMembersIdByGroupId(member.groupId.value)).length === 1){
+    if ((await this.getMembersByGroupId.with(GroupId.fromString(member.groupId.value))).length === 1){
       throw LastMemberInGroupError.withString(memberId.value);
     }
 

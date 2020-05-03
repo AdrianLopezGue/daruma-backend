@@ -2,7 +2,7 @@ import * as uuid from 'uuid';
 
 import { newGroup, post, remove } from '../../api';
 
-describe('DELETE /groups', () => {
+describe('DELETE /groups/:id', () => {
   let ownerId;
   let groupId;
 

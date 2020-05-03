@@ -45,11 +45,11 @@ export class MemberService {
   }
 
   async getMembersIdByUserId(userId: string): Promise<string[]> {
-    return this.memberModel.distinct('_id', { userId: userId }).exec();;
+    return this.memberModel.distinct('_id', { userId: userId }).exec();
   }
 
   async getMembersIdByGroupId(groupId: string): Promise<string[]> {
-    return this.memberModel.distinct('_id', { groupId: groupId }).exec();;
+    return this.memberModel.distinct('_id', { groupId: groupId }).exec();
   }
 
   async getGroups(userId: string): Promise<string[]> {

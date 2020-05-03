@@ -7,13 +7,14 @@ import { MemberId } from '../../domain/model/member-id';
 import { MemberIdNotFoundError } from '../../domain/exception/member-id-not-found.error';
 import { Member } from '../../domain/model/member';
 import { MEMBERS, Members } from '../../domain/repository/index';
-import { MemberService } from '../../infrastructure/service/member.service';
+import { MemberService, MEMBER_SERVICE } from '../../infrastructure/service/member.service';
 
 @CommandHandler(ChangeMembersNameCommand)
 export class ChangeMembersNameHandler
   implements ICommandHandler<ChangeMembersNameCommand> {
   constructor(
     @Inject(MEMBERS) private readonly members: Members,
+    @Inject(MEMBER_SERVICE)
     private readonly memberService: MemberService,
   ) {}
 

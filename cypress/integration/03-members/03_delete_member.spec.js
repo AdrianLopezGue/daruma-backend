@@ -2,7 +2,7 @@ import * as uuid from 'uuid';
 
 import { post, remove, newGroup, newMember } from '../../api';
 
-describe('DELETE /members', () => {
+describe('DELETE /members/:id', () => {
   let userId;
   let groupId;
   let memberId;

@@ -1,6 +1,12 @@
 import * as uuid from 'uuid';
 
+import { post, newBill, newUser, newGroup } from '../../api';
+
 describe('POST /bills', () => {
+  let groupId;
+  let userId;
+  let billId;
+
   const payers = [
     {
       id: '7150c2b3-239e-41c3-9264-37396057c756',
@@ -25,110 +31,78 @@ describe('POST /bills', () => {
 
   beforeEach(() => {
     cy.task('db:clean');
+
+    groupId = uuid.v4();
+    userId = uuid.v4();
+    billId = uuid.v4();
+
+    cy.fixture('groups.json').then(groups => {
+      const group = newGroup(groups.body, groupId, userId);
+
+      post('groups', group, userId, true);
+
+      cy.task('sync');
+    });
   });
 
-  const post = (auth, bill, owner, group, payers, debtors) =>
-    cy.request({
-      method: 'POST',
-      url: 'bills',
-      auth: { bearer: auth },
-      body: {
-        billId: bill.id,
-        groupId: group.id,
-        name: bill.name,
-        date: bill.date,
-        money: bill.money,
-        currencyCode: bill.currencyCode,
-        payers: payers,
-        debtors: debtors,
-        creatorId: owner.id,
-      },
-      failOnStatusCode: false,
-    });
-
   it('Validate the status code', function() {
-    cy.fixture('users.json').then(users => {
-      cy.fixture('groups.json').then(groups => {
-        cy.fixture('bills.json').then(bills => {
-          users.johndoe.id = uuid.v4();
-          groups.example.id = uuid.v4();
-          bills.example.id = uuid.v4();
+    cy.fixture('bills.json').then(bills => {
+      const bill = newBill(
+        bills.body,
+        billId,
+        groupId,
+        payers,
+        debtors,
+        userId,
+      );
 
-          post(
-            users.johndoe.id,
-            bills.example,
-            users.johndoe,
-            groups.example,
-            payers,
-            debtors,
-          )
-          .its('status')
-          .should('equal', 204);
-        });
-      });      
-    });    
+      post('bills', bill, userId)
+        .its('status')
+        .should('equal', 204);
+    });
   });
 
   it('Validate the creator is an authenticated user', function() {
-    cy.fixture('users.json').then(users => {
-      cy.fixture('groups.json').then(groups => {
-        cy.fixture('bills.json').then(bills => {
-          users.johndoe.id = uuid.v4();
-          groups.example.id = uuid.v4();
-          bills.example.id = uuid.v4();
+    cy.fixture('bills.json').then(bills => {
+      const otherUser = uuid.v4();
+      const bill = newBill(
+        bills.body,
+        billId,
+        groupId,
+        payers,
+        debtors,
+        otherUser,
+      );
 
-          const otherUser = uuid.v4();
-
-          post(
-            otherUser,
-            bills.example,
-            users.johndoe,
-            groups.example,
-            payers,
-            debtors,
-          )
-            .its('status')
-            .should('equal', 403);
-        });
-      });      
-    });    
+      post('bills', bill, userId)
+        .its('status')
+        .should('equal', 403);
+    });
   });
 
   it('Validate the creator is a member of the group', function() {
-    cy.fixture('users.json').then(users => {
-      cy.fixture('groups.json').then(groups => {
-        cy.fixture('bills.json').then(bills => {
-          users.johndoe.id = uuid.v4();
-          users.tommytoe.id = uuid.v4();
-          groups.example.id = uuid.v4();
-          bills.example.id = uuid.v4();
+    cy.fixture('bills.json').then(bills => {
+      cy.fixture('users.json').then(users => {
+        const otherUserId = uuid.v4();
+        const bill = newBill(
+          bills.body,
+          billId,
+          groupId,
+          payers,
+          debtors,
+          otherUserId,
+        );
+        
+        const user = newUser(users.body, otherUserId);
 
-          cy.request({
-            method: 'POST',
-            url: 'users',
-            auth: { bearer: users.tommytoe.id },
-            body: {
-              id: users.tommytoe.id,
-              name: users.tommytoe.name,
-              email: users.tommytoe.email,
-            },
-            failOnStatusCode: false,
-          })
-            .its('status')
-            .should('equal', 204);
+        post('users', user, otherUserId);
 
-            post(
-              users.tommytoe.id,
-              bills.example,
-              users.tommytoe,
-              groups.example,
-              payers,
-              debtors,
-            )
-              .its('status')
-              .should('equal', 409);
-        });
-      });      
+        cy.task('sync');
+
+        post('bills', bill, otherUserId)
+          .its('status')
+          .should('equal', 404);
+      });
     });
   });
 });

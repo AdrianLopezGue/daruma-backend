@@ -11,6 +11,7 @@ describe('POST /user', () => {
 
     ownerId = uuid.v4();
     userId = ownerId;
+    cy.task('sync');
   });
 
   it('creates an user', function() {

@@ -12,5 +12,27 @@
     "date": "2020-04-20T11:38:01.444",
     "money": 4000,
     "currencyCode": "EUR"
+  },
+  "body": {
+    "billId": null,
+    "groupId": null,
+    "name": "Example Bill",
+    "date": "2020-04-20T11:38:01.444",
+    "money": 3000,
+    "currencyCode": "EUR",
+    "payers": null,
+    "debtors": null,
+    "creatorId": null
+  },
+  "response": {
+    "_id": null,
+    "groupId": null,
+    "name": "Example Bill",
+    "money": 3000,
+    "currencyCode": "EUR",
+    "date": "2020-04-20T11:38:01.444",
+    "payers": null,
+    "debtors": null,
+    "creatorId": null
   }
 }

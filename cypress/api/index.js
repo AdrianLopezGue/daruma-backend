@@ -8,6 +8,21 @@ module.exports = {
     ...body,
     id,
   }),
+  newBill: (body, billId, groupId, payers, debtors, creatorId) => ({
+    ...body,
+    billId,
+    groupId,
+    payers,
+    debtors,
+    creatorId,
+  }),
+  newTransaction: (body, transactionId, senderId, beneficiaryId, groupId) => ({
+    ...body,
+    transactionId,
+    senderId,
+    beneficiaryId,
+    groupId,
+  }),
   newMember: (body, id, groupId) => ({
     ...body,
     id,

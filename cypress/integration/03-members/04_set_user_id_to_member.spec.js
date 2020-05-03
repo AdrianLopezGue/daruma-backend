@@ -2,7 +2,7 @@ import * as uuid from 'uuid';
 
 import { post, patch, newGroup, newMember, newUserId } from '../../api';
 
-describe('PATCH /members', () => {
+describe('PATCH /members/:id', () => {
   let userId;
   let groupId;
   let memberId;
