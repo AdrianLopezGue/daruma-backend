@@ -54,7 +54,7 @@ export class GroupController {
   async createGroup(@Body() groupDto: GroupDto, @Request() req): Promise<void> {
     const idUser: UserId = req.user;
     const logger = new Logger('GroupController');
-    logger.log('Petición POST');
+    logger.log('Petición POST Group');
 
     if (idUser.value !== groupDto.owner.id) {
       throw new ForbiddenException('Forbidden access to data');
@@ -88,7 +88,7 @@ export class GroupController {
   @Get(':id')
   async getGroup(@Request() req, @Param() params): Promise<GroupView> {
     const logger = new Logger('GroupController');
-    logger.log('Petición GET');
+    logger.log('Petición GET Group');
 
     try {
       return this.groupService.getGroup(params.id);
@@ -115,7 +115,7 @@ export class GroupController {
     @Request() req,
   ): Promise<void> {
     const logger = new Logger('GroupController');
-    logger.log('Petición PUT');
+    logger.log('Petición PUT Group');
 
     try {
       return await this.groupService.changeNameGroup(
@@ -139,6 +139,8 @@ export class GroupController {
   @HttpCode(204)
   @Delete(':id')
   async removeGroup(@Param() params) {
+    const logger = new Logger('GroupController');
+    logger.log('Petición DELETE Group');
     try {
       return await this.groupService.removeGroup(params.id);
     } catch (e) {

@@ -14,6 +14,7 @@ import {
   UseGuards,
   Param,
   Delete,
+  Logger,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -38,6 +39,8 @@ export class BillController {
   @UseGuards(FirebaseAuthGuard)
   @Get(':id')
   async getBills(@Request() req, @Param() params): Promise<BillView[]> {
+    const logger = new Logger('BillController');
+    logger.log('Petición GET Bill');
     try {
       return await this.billService.getBills(params.id);
     } catch (e) {
@@ -58,6 +61,8 @@ export class BillController {
   @HttpCode(204)
   @Post()
   async createBill(@Body() billDto: BillDto, @Request() req): Promise<void> {
+    const logger = new Logger('BillController');
+    logger.log('Petición POST Bill');
     const idUser: UserId = req.user;
 
     if (idUser.value !== billDto.creatorId) {
@@ -96,6 +101,8 @@ export class BillController {
   @HttpCode(204)
   @Delete(':id')
   async removeBill(@Param() params) {
+    const logger = new Logger('BillController');
+    logger.log('Petición DELETE Bill');
     try {
       return await this.billService.removeBill(params.id);
     } catch (e) {

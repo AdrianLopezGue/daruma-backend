@@ -6,6 +6,7 @@ import {
   Request,
   UseGuards,
   Param,
+  Logger,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -25,6 +26,8 @@ export class BalanceController {
   @UseGuards(FirebaseAuthGuard)
   @Get(':id')
   async getBalance(@Request() req, @Param() params): Promise<BalanceView[]> {
+    const logger = new Logger('BalanceController');
+    logger.log('Petición GET Balance');
     try {
       const result = await this.balanceService.getBalance(params.id);
 

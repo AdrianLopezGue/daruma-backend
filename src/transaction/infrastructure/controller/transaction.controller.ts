@@ -15,6 +15,7 @@ import { TransactionService } from '../service/transaction.service';
 import { TransferTransactionDto } from '../dto/transfer-transaction.dto';
 import { GroupIdNotFoundError } from '../../../group/domain/exception/group-id-not-found.error';
 import { MemberIdNotFoundError } from '../../../member/domain/exception/member-id-not-found.error';
+import { Logger } from '@nestjs/common';
 
 @ApiTags('Transactions')
 @Controller('transactions')
@@ -30,6 +31,8 @@ export class TransactionController {
     @Body() transferTransactionDto: TransferTransactionDto,
     @Request() req,
   ): Promise<void> {
+    const logger = new Logger('TransactionsController');
+    logger.log('Petición POST Transactions');
 
     if (transferTransactionDto.senderId === transferTransactionDto.beneficiaryId){
       throw new BadRequestException('Sender cannot be the beneficiary');
