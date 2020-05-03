@@ -1,35 +1,29 @@
 import * as uuid from 'uuid';
 
-describe('GET /groups', () => {
+import { getAll } from '../../api';
 
+describe('GET /groups', () => {
   beforeEach(() => {
     cy.task('db:clean');
   });
 
-  const get = auth =>
-    cy.request({
-      method: 'GET',
-      url: 'groups',
-      auth: { bearer: auth },
-    });
-
-  it('Validate the status code', function() {
+  it('Validate the status code', () => {
     cy.fixture('users.json').then(users => {
       users.johndoe.id = uuid.v4();
 
-      get(users.johndoe.id)
-        .its('status')
-        .should('equal', 200);
+      getAll('groups', null, users.johndoe.id)
+      .its('status')
+      .should('equal', 200);
     });
   });
 
-  it('Validate empty content', function() {
+  it('Validate empty content', () => {
     cy.fixture('users.json').then(users => {
       users.johndoe.id = uuid.v4();
 
-      get(users.johndoe.id)
+      getAll('groups', null, users.johndoe.id)
       .its('body')
-      .should('have.length', 0);
+      .should('have.length', 0);        
     });
   });
 });

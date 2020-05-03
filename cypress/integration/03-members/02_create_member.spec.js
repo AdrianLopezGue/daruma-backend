@@ -1,60 +1,33 @@
 import * as uuid from 'uuid';
 
+import { post, newGroup, newMember } from '../../api';
+
 describe('POST /members', () => {
-  let groupid;
-  let userid;
-  let memberid;
-
-  const post = (auth, member) =>
-    cy.request({
-      method: 'POST',
-      url: 'members',
-      auth: { bearer: auth },
-      body: {
-        id: member.id,
-        groupId: member.groupId,
-        name: member.name,
-      },
-      failOnStatusCode: false,
-    });
-
-  const postGroup = (auth, group, ownerid) =>
-    cy.request({
-      method: 'POST',
-      url: 'groups',
-      auth: { bearer: auth },
-      body: {
-        groupId: group.id,
-        name: group.name,
-        currencyCode: group.currencyCode,
-        owner: { id: ownerid, name: 'John Doe' },
-        members: [],
-      },
-      failOnStatusCode: false,
-    });
+  let groupId;
+  let userId;
+  let memberId;
 
   beforeEach(() => {
     cy.task('db:clean');
 
-    groupid = uuid.v4();
-    userid = uuid.v4();
-    memberid = uuid.v4();
+    groupId = uuid.v4();
+    userId = uuid.v4();
+    memberId = uuid.v4();
 
     cy.fixture('groups.json').then(groups => {
-      groups.example.id = groupid;
+      const group = newGroup(groups.body, groupId, userId);
 
-      postGroup(userid, groups.example, userid)
-        .its('status')
-        .should('equal', 204);
+      post('groups', group, userId, true);
+
+      cy.task('sync');
     });
   });
 
   it('Creates a member', function() {
     cy.fixture('members.json').then(members => {
-      members.tommytoe.id = memberid;
-      members.tommytoe.groupId = groupid;
+      const member = newMember(...members.body, memberId, groupId);
 
-      post(userid, members.tommytoe)
+      post('members', member, userId)
         .its('status')
         .should('equal', 204);
     });
@@ -62,10 +35,10 @@ describe('POST /members', () => {
 
   it('Cannot add new member to unknown group', function() {
     cy.fixture('members.json').then(members => {
-      members.tommytoe.id = memberid;
-      members.tommytoe.groupId = memberid;
+      const anotherGroupId = uuid.v4();
+      const member = newMember(...members.body, memberId, anotherGroupId);
 
-      post(userid, members.tommytoe)
+      post('members', member, userId)
         .its('status')
         .should('equal', 404);
     });
@@ -73,10 +46,10 @@ describe('POST /members', () => {
 
   it('Check if member with exact name is already in group', function() {
     cy.fixture('members.json').then(members => {
-      members.johndoe.id = memberid;
-      members.johndoe.groupId = groupid;
+      members.body.name = "John Doe";
+      const member = newMember(...members.body, memberId, groupId);
 
-      post(userid, members.johndoe)
+      post('members', member, userId)
         .its('status')
         .should('equal', 409);
     });

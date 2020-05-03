@@ -1,66 +1,46 @@
 import * as uuid from 'uuid';
 
+import { get, post, newGroup} from '../../api';
+
 describe('GET /members', () => {
-  let userid;
-  let groupid;
-
-  const post = (auth, group, ownerid) =>
-    cy.request({
-      method: 'POST',
-      url: 'groups',
-      auth: { bearer: auth },
-      body: {
-        groupId: group.id,
-        name: group.name,
-        currencyCode: group.currencyCode,
-        owner: { id: ownerid, name: 'John Doe' },
-        members: [],
-      },
-      failOnStatusCode: false,
-    });
-
-  const get = (auth, id) =>
-    cy.request({
-      method: 'GET',
-      url: `members/${id}`,
-      auth: { bearer: auth },
-      failOnStatusCode: false,
-    });
+  let userId;
+  let memberId;
+  let groupId;
 
   beforeEach(() => {
     cy.task('db:clean');
 
-    userid = uuid.v4();
-    groupid = uuid.v4();
+    userId = uuid.v4();
+    memberId = uuid.v4();
+    groupId = uuid.v4();
 
     cy.fixture('groups.json').then(groups => {
-      groups.example.id = groupid;
+      const group = newGroup(groups.body, groupId, userId);
 
-      post(userid, groups.example, userid)
-        .its('status')
-        .should('equal', 204);
+      post('groups', group, userId, true);
+
+      cy.task('sync');
     });
   });
 
   it('Validate the status code', function() {
     cy.fixture('users.json').then(users => {
-      users.johndoe.id = userid;
+      users.johndoe.id = userId;
 
-      get(users.johndoe.id, groupid)
-      .its('status')
-      .should('equal', 200);
-
-    });    
+      get('members', groupId, users.johndoe.id)
+        .its('status')
+        .should('equal', 200);      
+    });
   });
 
   it('Validate that cannot access to unknown group', function() {
     cy.fixture('users.json').then(users => {
       const otherGroup = uuid.v4();
-      users.johndoe.id = userid;
+      users.johndoe.id = userId;
 
-      get(users.johndoe.id, otherGroup)
-      .its('status')
-      .should('equal', 404);
-    });    
+      get('members', otherGroup, users.johndoe.id)
+        .its('status')
+        .should('equal', 404);
+    });
   });
 });

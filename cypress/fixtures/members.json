@@ -8,5 +8,19 @@
       "id": null,
       "groupId": null,
       "name": "Tommy Toe"
+    },
+    "body": {
+      "id": null,
+      "groupId": null,
+      "name": "Tommy Toe"
+    },
+    "bodyNewUserId": {
+      "idUser": null
+    },
+    "response": {
+      "_id": null,
+      "groupId": null,
+      "name": "Tommy Toe",
+      "userId": null
     }
   }

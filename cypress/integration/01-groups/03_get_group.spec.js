@@ -1,79 +1,49 @@
 import * as uuid from 'uuid';
 
+import { get, newGroup, post } from '../../api';
+
 describe('GET /groups/id', () => {
-  let userid;
-  let groupid;
-
-  const get = (auth, id) =>
-    cy.request({
-      method: 'GET',
-      url: `groups/${id}`,
-      auth: { bearer: auth },
-    });
-
-  const post = (auth, group, ownerid) =>
-    cy.request({
-      method: 'POST',
-      url: 'groups',
-      auth: { bearer: auth },
-      body: {
-        groupId: group.id,
-        name: group.name,
-        currencyCode: group.currencyCode,
-        owner: { id: ownerid, name: 'John Doe' },
-        members: [],
-      },
-      failOnStatusCode: false,
-    });
+  let ownerId;
+  let groupId;
 
   beforeEach(() => {
     cy.task('db:clean');
 
-    userid = uuid.v4();
-    groupid = uuid.v4();
+    ownerId = uuid.v4();
+    groupId = uuid.v4();
 
     cy.fixture('groups.json').then(groups => {
-      groups.example.id = groupid;
+      const group = newGroup(...groups.body, groupId, ownerId);
 
-      post(userid, groups.example, userid)
-        .its('status')
-        .should('equal', 204);
+      post('groups', group, ownerId, true);
+
+      cy.task('sync');
     });
   });
 
-  it('Validate the status code', function() {
+  it('User can access his groups', () => {
     cy.fixture('groups.json').then(groups => {
-      get(userid, groupid)
-        .its('status')
-        .should('equal', 200);
-    });
-  });
+      const response = { ...groups.response, _id: groupId, ownerId };
 
-  it('Validate group can be found after creation', function() {
-    cy.fixture('groups.json').then(groups => {
-      const result = [
-        {
-          _id: groupid,
-          name: groups.example.name,
-          currencyCode: groups.example.currencyCode,
-          ownerId: userid,
-        },
-      ];
-
-      get(userid, groupid)
+      get('groups', groupId, ownerId)
         .its('body')
-        .should('deep.equal', result[0]);
+        .should('deep.equal', response);
     });
   });
 
-  it('Validate cannot access to unknown group', function() {
-    cy.fixture('users.json').then(users => {
-      const otherGroupId = uuid.v4();
+  it('User cannot access to unknown group', () => {
+    const otherGroupId = uuid.v4();
 
-      users.johndoe.id = userid;
-      get(users.johndoe.id, otherGroupId)
-        .its('body')
-        .should('have.length', 0);
-    });
+    get('groups', otherGroupId, ownerId)
+      .its('body')
+      .should('have.length', 0);
+  });
+
+  xit('Use cannot access to groups he does not own', () => {
+    const otherUser = uuid.v4();
+
+    get('groups', groupId, otherUser)
+      .its('status')
+      .should('equals', 403);
   });
 });
