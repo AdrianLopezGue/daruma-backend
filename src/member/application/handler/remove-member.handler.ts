@@ -10,7 +10,7 @@ import {
   CheckMemberMadeAnyTransaction,
 } from '../../../transaction/domain/services/check-member-made-transaction.service';
 import { MemberMadeTransactionError } from '../../domain/exception/member-made-transaction.error';
-import { MemberService } from '../../infrastructure/service/member.service';
+import { MemberService, MEMBER_SERVICE } from '../../infrastructure/service/member.service';
 import { LastMemberInGroupError } from '../../domain/exception/last-member-in-group.error';
 
 @CommandHandler(RemoveMemberCommand)
@@ -20,6 +20,7 @@ export class RemoveMemberHandler
     @Inject(MEMBERS) private readonly members: Members,
     @Inject(CHECK_MEMBER_MADE_ANY_TRANSACTION)
     private readonly checkMemberMadeAnyTransaction: CheckMemberMadeAnyTransaction,
+    @Inject(MEMBER_SERVICE)
     private readonly memberService: MemberService
   ) {}
 
