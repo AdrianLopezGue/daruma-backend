@@ -21,8 +21,7 @@ import { CreateGroupCommand } from '../command/create-group.command';
 import { CreateGroupHandler } from './create-group.handler';
 import { UserId } from '../../../user/domain/model/user-id';
 import { OwnerDto } from '../../infrastructure/dto/owner.dto';
-import { MEMBERS } from '../../../member/domain/repository/index';
-import { Members } from '../../../../dist/member/domain/repository/members';
+import { MEMBERS, Members } from '../../../member/domain/repository/index';
 
 describe('CreateGroupHandler', () => {
   let command$: CreateGroupHandler;
