@@ -2,7 +2,7 @@ import * as uuid from 'uuid';
 
 import { get, newUser, post } from '../../api';
 
-describe('GET /users/id', () => {
+describe('GET /users/:id', () => {
   let ownerId;
   let userId;
 

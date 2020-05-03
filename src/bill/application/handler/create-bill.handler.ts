@@ -35,7 +35,7 @@ export class CreateBillHandler implements ICommandHandler<CreateBillCommand> {
 
   async execute(command: CreateBillCommand) {
     if (
-      (await this.checkUserInGroup.with(UserId.fromString(command.creatorId) , GroupId.fromString(command.groupId))) instanceof MemberId
+      (await this.checkUserInGroup.with(UserId.fromString(command.creatorId) , GroupId.fromString(command.groupId))) === null
     ) {
       throw new CreatorIdNotFoundInGroup(command.creatorId);
     }

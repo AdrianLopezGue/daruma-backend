@@ -11,12 +11,12 @@
   },
   "body": {
     "id": null,
-    "name": "John Doe",
-    "email": "john@doe.com"
+    "name": "Tommy Toe",
+    "email": "tommy@toe.com"
   },
   "response": {
     "_id": null,
-    "name": "John Doe",
-    "email": "john@doe.com"
+    "name": "Tommy Toe",
+    "email": "tommy@toe.com"
   }
 }

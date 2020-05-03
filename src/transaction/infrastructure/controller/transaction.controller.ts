@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  NotFoundException,
   Body,
   Controller,
   HttpCode,
@@ -12,6 +13,8 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FirebaseAuthGuard } from '../../../core/firebase/firebase.auth.guard';
 import { TransactionService } from '../service/transaction.service';
 import { TransferTransactionDto } from '../dto/transfer-transaction.dto';
+import { GroupIdNotFoundError } from '../../../group/domain/exception/group-id-not-found.error';
+import { MemberIdNotFoundError } from '../../../member/domain/exception/member-id-not-found.error';
 
 @ApiTags('Transactions')
 @Controller('transactions')
@@ -27,6 +30,10 @@ export class TransactionController {
     @Body() transferTransactionDto: TransferTransactionDto,
     @Request() req,
   ): Promise<void> {
+
+    if (transferTransactionDto.senderId === transferTransactionDto.beneficiaryId){
+      throw new BadRequestException('Sender cannot be the beneficiary');
+    }
     try {
       return await this.transactionService.createTransferTransaction(
         transferTransactionDto.transactionId,
@@ -37,7 +44,11 @@ export class TransactionController {
         transferTransactionDto.groupId,
       );
     } catch (e) {
-      if (e instanceof Error) {
+      if (e instanceof GroupIdNotFoundError) {
+        throw new NotFoundException(e.message);
+      } else if (e instanceof MemberIdNotFoundError) {
+        throw new NotFoundException(e.message);
+      } else if (e instanceof Error) {
         throw new BadRequestException(`Unexpected error: ${e.message}`);
       } else {
         throw new BadRequestException('Server error');

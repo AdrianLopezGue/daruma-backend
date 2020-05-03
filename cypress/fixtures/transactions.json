@@ -4,5 +4,13 @@
     "money": 100,
     "currencyCode": "EUR",
     "groupId": "73a8f4f2-13f7-4bcb-8d40-0a8daa0bd3ea"
+  },
+  "body": {
+    "transactionId": null,
+    "senderId": null,
+    "beneficiaryId": null,
+    "money": 100,
+    "currencyCode": "EUR",
+    "groupId": null
   }
 }
