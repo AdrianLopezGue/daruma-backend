@@ -24,11 +24,7 @@ describe('POST /bills', () => {
   ];
 
   beforeEach(() => {
-    cy.fixture('users.json').as('users');
-    cy.fixture('groups.json').as('groups');
-    cy.fixture('payers.json').as('payers');
-    cy.fixture('debtors.json').as('debtors');
-    cy.fixture('bills.json').as('bills');
+    cy.task('db:clean');
   });
 
   const post = (auth, bill, owner, group, payers, debtors) =>
@@ -51,56 +47,88 @@ describe('POST /bills', () => {
     });
 
   it('Validate the status code', function() {
-    post(
-      this.users.johndoe.id,
-      this.bills.example,
-      this.users.johndoe,
-      this.groups.example,
-      payers,
-      debtors,
-    )
-      .its('status')
-      .should('equal', 204);
+    cy.fixture('users.json').then(users => {
+      cy.fixture('groups.json').then(groups => {
+        cy.fixture('bills.json').then(bills => {
+          users.johndoe.id = uuid.v4();
+          groups.example.id = uuid.v4();
+          bills.example.id = uuid.v4();
+
+          post(
+            users.johndoe.id,
+            bills.example,
+            users.johndoe,
+            groups.example,
+            payers,
+            debtors,
+          )
+          .its('status')
+          .should('equal', 204);
+        });
+      });      
+    });    
   });
 
   it('Validate the creator is an authenticated user', function() {
-    const otherUser = uuid.v4();
-    post(
-      otherUser,
-      this.bills.example,
-      this.users.johndoe,
-      this.groups.example,
-      payers,
-      debtors,
-    )
-      .its('status')
-      .should('equal', 403);
+    cy.fixture('users.json').then(users => {
+      cy.fixture('groups.json').then(groups => {
+        cy.fixture('bills.json').then(bills => {
+          users.johndoe.id = uuid.v4();
+          groups.example.id = uuid.v4();
+          bills.example.id = uuid.v4();
+
+          const otherUser = uuid.v4();
+
+          post(
+            otherUser,
+            bills.example,
+            users.johndoe,
+            groups.example,
+            payers,
+            debtors,
+          )
+            .its('status')
+            .should('equal', 403);
+        });
+      });      
+    });    
   });
 
   it('Validate the creator is a member of the group', function() {
-    cy.request({
-      method: 'POST',
-      url: 'users',
-      auth: { bearer: this.users.tommytoe.id },
-      body: {
-        id: this.users.tommytoe.id,
-        name: this.users.tommytoe.name,
-        email: this.users.tommytoe.email,
-      },
-      failOnStatusCode: false,
-    })
-      .its('status')
-      .should('equal', 204);
+    cy.fixture('users.json').then(users => {
+      cy.fixture('groups.json').then(groups => {
+        cy.fixture('bills.json').then(bills => {
+          users.johndoe.id = uuid.v4();
+          users.tommytoe.id = uuid.v4();
+          groups.example.id = uuid.v4();
+          bills.example.id = uuid.v4();
 
-    post(
-      this.users.tommytoe.id,
-      this.bills.example,
-      this.users.tommytoe,
-      this.groups.example,
-      payers,
-      debtors,
-    )
-      .its('status')
-      .should('equal', 409);
+          cy.request({
+            method: 'POST',
+            url: 'users',
+            auth: { bearer: users.tommytoe.id },
+            body: {
+              id: users.tommytoe.id,
+              name: users.tommytoe.name,
+              email: users.tommytoe.email,
+            },
+            failOnStatusCode: false,
+          })
+            .its('status')
+            .should('equal', 204);
+
+            post(
+              users.tommytoe.id,
+              bills.example,
+              users.tommytoe,
+              groups.example,
+              payers,
+              debtors,
+            )
+              .its('status')
+              .should('equal', 409);
+        });
+      });      
+    });
   });
 });

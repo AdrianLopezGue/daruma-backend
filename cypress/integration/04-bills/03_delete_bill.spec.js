@@ -71,7 +71,7 @@ describe('DELETE /bills', () => {
       .should('equal', 204);
     
     deleteBill(this.users.tommytoe.id, this.bills.second.id)
-      .its('status')
-      .should('equal', 204);
+      .its('message')
+      .should('equal', 'User not found');
   });
 });
