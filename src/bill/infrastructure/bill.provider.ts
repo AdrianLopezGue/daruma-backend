@@ -10,6 +10,8 @@ import { TRANSACTIONS } from '../../transaction/domain/repository/index';
 import { TransactionEventStore } from '../../transaction/infrastructure/eventstore/transaction.event-store';
 import { CHECK_USER_IN_GROUP } from '../../member/domain/services/check-user-in-group.service';
 import { CheckUserInGroupFromReadModel } from '../../member/infrastructure/service/check-user-in-group.service';
+import { GROUPS } from '../../group/domain/repository/index';
+import { GroupEventStore } from '../../group/infrastructure/eventstore/groups.event-store';
 export const BillProviders = [
   {
     provide: BILL_MODEL,
@@ -30,6 +32,10 @@ export const BillProviders = [
   {
     provide: BILLS,
     useClass: BillEventStore,
+  },
+  {
+    provide: GROUPS,
+    useClass: GroupEventStore,
   },
   {
     provide: CHECK_USER_IN_GROUP,
