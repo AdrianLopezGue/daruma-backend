@@ -2,7 +2,7 @@ module.exports = {
   newGroup: (body, _id, ownerId) => ({
     ...body,
     _id,
-    owner: { ...body.owner, id: ownerId },
+    owner: { ...body.owner, _id: ownerId },
   }),
   newUser: (body, _id) => ({
     ...body,
