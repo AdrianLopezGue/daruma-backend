@@ -1,7 +1,7 @@
 const transformParticipants = participants => {
   if (Array.isArray(participants)) {
     return participants.map(participant => ({
-      id: participant.id,
+      _id: participant._id,
       money: participant.money,
     }));
   } else {
