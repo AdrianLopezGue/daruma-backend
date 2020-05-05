@@ -7,6 +7,7 @@ import {
   Post,
   UseGuards,
   Request,
+  Logger,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -15,7 +16,6 @@ import { TransactionService } from '../service/transaction.service';
 import { TransferTransactionDto } from '../dto/transfer-transaction.dto';
 import { GroupIdNotFoundError } from '../../../group/domain/exception/group-id-not-found.error';
 import { MemberIdNotFoundError } from '../../../member/domain/exception/member-id-not-found.error';
-import { Logger } from '@nestjs/common';
 
 @ApiTags('Transactions')
 @Controller('transactions')
@@ -39,7 +39,7 @@ export class TransactionController {
     }
     try {
       return await this.transactionService.createTransferTransaction(
-        transferTransactionDto.transactionId,
+        transferTransactionDto._id,
         transferTransactionDto.senderId,
         transferTransactionDto.beneficiaryId,
         transferTransactionDto.money,

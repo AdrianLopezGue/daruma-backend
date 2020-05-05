@@ -63,15 +63,15 @@ export class BillController {
   async createBill(@Body() billDto: BillDto, @Request() req): Promise<void> {
     const logger = new Logger('BillController');
     logger.log('Petición POST Bill');
-    const idUser: UserId = req.user;
+    const userId: UserId = req.user;
 
-    if (idUser.value !== billDto.creatorId) {
+    if (userId.value !== billDto.creatorId) {
       throw new ForbiddenException('Forbidden access to data');
     }
 
     try {
       await this.billService.createBill(
-        billDto.billId,
+        billDto._id,
         billDto.groupId,
         billDto.name,
         billDto.money,

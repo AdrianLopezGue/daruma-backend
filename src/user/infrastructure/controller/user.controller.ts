@@ -12,6 +12,7 @@ import {
   NotFoundException,
   Param,
   Put,
+  Logger,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -26,7 +27,6 @@ import { UserId } from '../../domain/model/user-id';
 import { FirebaseAuthGuard } from '../../../core/firebase/firebase.auth.guard';
 import { UserView } from '../read-model/schema/user.schema';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { Logger } from '@nestjs/common';
 
 @ApiTags('Users')
 @Controller('users')
@@ -64,13 +64,13 @@ export class UserController {
     logger.log('Petición POST Users');
     const idUser: UserId = req.user;
 
-    if (idUser.value !== userDto.id) {
+    if (idUser.value !== userDto._id) {
       throw new ForbiddenException('Forbidden access to data');
     }
 
     try {
       return await this.userService.createUser(
-        userDto.id,
+        userDto._id,
         userDto.name,
         userDto.email,
       );

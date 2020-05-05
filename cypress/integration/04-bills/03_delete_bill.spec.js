@@ -9,22 +9,22 @@ describe('DELETE /bills/:id', () => {
 
   const payers = [
     {
-      id: '5bfa9f62-697f-46ff-9a7e-a149bfe6be02',
+      _id: '5bfa9f62-697f-46ff-9a7e-a149bfe6be02',
       money: 100,
     },
     {
-      id: '2d811427-ff8e-4886-89b9-240ae6024549',
+      _id: '2d811427-ff8e-4886-89b9-240ae6024549',
       money: 200,
     },
   ];
 
   const debtors = [
     {
-      id: '5bfa9f62-697f-46ff-9a7e-a149bfe6be02',
+      _id: '5bfa9f62-697f-46ff-9a7e-a149bfe6be02',
       money: 10,
     },
     {
-      id: 'b6672012-4ca5-4aff-b346-b1e43ebdfa91',
+      _id: 'b6672012-4ca5-4aff-b346-b1e43ebdfa91',
       money: 20,
     },
   ];

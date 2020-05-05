@@ -16,7 +16,7 @@ import { Transform } from 'class-transformer';
 export class BillDto {
   @IsString()
   @ApiProperty()
-  readonly billId!: string;
+  readonly _id!: string;
 
   @IsString()
   @ApiProperty()
@@ -53,11 +53,11 @@ export class BillDto {
 
 // tslint:disable-next-line: max-classes-per-file
 export class ParticipantDto {
-  readonly id: string;
+  readonly _id: string;
   readonly money: number;
 
   constructor(id: string, money: number) {
-    this.id = id;
+    this._id = id;
     this.money = money;
   }
 }

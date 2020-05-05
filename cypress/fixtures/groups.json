@@ -1,14 +1,14 @@
 {
   "example": {
-    "id": null,
+    "_id": null,
     "name": "Example Group",
     "currencyCode": "EUR"
   },
   "body": {
-    "groupId": null,
+    "_id": null,
     "name": "Example Group",
     "currencyCode": "EUR",
-    "owner": { "id": null, "name": "John Doe" },
+    "owner": { "_id": null, "name": "John Doe" },
     "members": []
   },
   "response": {

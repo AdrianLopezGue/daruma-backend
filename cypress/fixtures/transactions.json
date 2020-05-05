@@ -1,12 +1,12 @@
 {
   "example": {
-    "id": "d602dc7b-b641-4bd2-a21f-3cc8ca263fc2",
+    "_id": "d602dc7b-b641-4bd2-a21f-3cc8ca263fc2",
     "money": 100,
     "currencyCode": "EUR",
     "groupId": "73a8f4f2-13f7-4bcb-8d40-0a8daa0bd3ea"
   },
   "body": {
-    "transactionId": null,
+    "_id": null,
     "senderId": null,
     "beneficiaryId": null,
     "money": 100,

@@ -1,26 +1,26 @@
 {
     "johndoe": {
-      "id": null,
+      "_id": null,
       "groupId": null,
       "name": "John Doe"
     },
     "tommytoe": {
-      "id": null,
+      "_id": null,
       "groupId": null,
       "name": "Tommy Toe"
     },
     "mikemoe": {
-      "id": null,
+      "_id": null,
       "groupId": null,
       "name": "Mike Moe"
     },
     "body": {
-      "id": null,
+      "_id": null,
       "groupId": null,
       "name": "Tommy Toe"
     },
     "bodyNewUserId": {
-      "idUser": null
+      "userId": null
     },
     "response": {
       "_id": null,

@@ -1,31 +1,31 @@
 module.exports = {
-  newGroup: (body, groupId, ownerId) => ({
+  newGroup: (body, _id, ownerId) => ({
     ...body,
-    groupId,
+    _id,
     owner: { ...body.owner, id: ownerId },
   }),
-  newUser: (body, id) => ({
+  newUser: (body, _id) => ({
     ...body,
-    id,
+    _id,
   }),
-  newBill: (body, billId, groupId, payers, debtors, creatorId) => ({
+  newBill: (body, _id, groupId, payers, debtors, creatorId) => ({
     ...body,
-    billId,
+    _id,
     groupId,
     payers,
     debtors,
     creatorId,
   }),
-  newTransaction: (body, transactionId, senderId, beneficiaryId, groupId) => ({
+  newTransaction: (body, _id, senderId, beneficiaryId, groupId) => ({
     ...body,
-    transactionId,
+    _id,
     senderId,
     beneficiaryId,
     groupId,
   }),
-  newMember: (body, id, groupId) => ({
+  newMember: (body, _id, groupId) => ({
     ...body,
-    id,
+    _id,
     groupId
   }),
 

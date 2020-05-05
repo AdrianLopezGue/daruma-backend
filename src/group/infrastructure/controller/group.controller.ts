@@ -56,13 +56,13 @@ export class GroupController {
     const logger = new Logger('GroupController');
     logger.log('Petición POST Group');
 
-    if (idUser.value !== groupDto.owner.id) {
+    if (idUser.value !== groupDto.owner._id) {
       throw new ForbiddenException('Forbidden access to data');
     }
 
     try {
       await this.groupService.createGroup(
-        groupDto.groupId,
+        groupDto._id,
         groupDto.name,
         groupDto.currencyCode,
         groupDto.owner,

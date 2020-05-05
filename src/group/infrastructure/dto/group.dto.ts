@@ -1,10 +1,10 @@
 const transformOwner = owner => {
-  return { id: owner.id, name: owner.name };
+  return { _id: owner._id, name: owner.name };
 };
 
 const transformMembers = members => {
   if (Array.isArray(members)) {
-    return members.map(member => ({ id: member.id, name: member.name }));
+    return members.map(member => ({ _id: member._id, name: member.name }));
   } else {
     return members;
   }
@@ -18,7 +18,7 @@ import { OwnerDto } from './owner.dto';
 export class GroupDto {
   @IsString()
   @ApiProperty()
-  readonly groupId!: string;
+  readonly _id!: string;
   @IsString()
   @ApiProperty()
   readonly name!: string;
@@ -35,6 +35,6 @@ export class GroupDto {
 
 // tslint:disable-next-line: max-classes-per-file
 export class MemberDto {
-  readonly id: string;
+  readonly _id: string;
   readonly name: string;
 }
