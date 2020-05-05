@@ -49,14 +49,14 @@ export class CreateBillHandler implements ICommandHandler<CreateBillCommand> {
     );
     const payers = command.payers.map(payer =>
       BillPayer.withMemberIdAndAmount(
-        MemberId.fromString(payer.id),
+        MemberId.fromString(payer._id),
         BillCurrencyUnit.fromNumber(payer.money),
       ),
     );
 
     const debtors = command.debtors.map(debtor =>
       BillDebtor.withMemberIdAndAmount(
-        MemberId.fromString(debtor.id),
+        MemberId.fromString(debtor._id),
         BillCurrencyUnit.fromNumber(debtor.money),
       ),
     );

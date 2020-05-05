@@ -68,7 +68,7 @@ export class MemberController {
     logger.log('Petición POST Members');
     try {
       return await this.memberService.createMember(
-        memberDto.id,
+        memberDto._id,
         memberDto.groupId,
         memberDto.name,
       );
@@ -96,9 +96,9 @@ export class MemberController {
   async removeMember(@Param() params, @Request() req) {
     const logger = new Logger('MembersController');
     logger.log('Petición DELETE Members');
-    const idRequester: UserId = req.user;
+    const requesterId: UserId = req.user;
 
-    if (idRequester.value === params.id) {
+    if (requesterId.value === params.id) {
       throw new ForbiddenException('Cannot delete requester');
     }
 
@@ -132,16 +132,16 @@ export class MemberController {
   ) {
     const logger = new Logger('MembersController');
     logger.log('Petición PATCH Members');
-    const idUser: UserId = req.user;
+    const userId: UserId = req.user;
 
-    if (idUser.value !== memberDto.idUser) {
+    if (userId.value !== memberDto.userId) {
       throw new ForbiddenException('Forbidden access to data');
     }
 
     try {
       return await this.memberService.registerMemberAsUser(
         params.id,
-        memberDto.idUser,
+        memberDto.userId,
       );
     } catch (e) {
       if (e instanceof MemberIdNotFoundError) {

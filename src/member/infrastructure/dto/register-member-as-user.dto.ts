@@ -4,5 +4,5 @@ import { IsString } from 'class-validator';
 export class RegisterMemberAsUserDto {
   @IsString()
   @ApiProperty()
-  readonly idUser!: string;
+  readonly userId!: string;
 }

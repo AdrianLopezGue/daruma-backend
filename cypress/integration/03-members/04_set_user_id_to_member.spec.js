@@ -31,7 +31,7 @@ describe('PATCH /members/:id', () => {
 
   it('Patch member', function() {
     cy.fixture('members.json').then(members => {
-      members.bodyNewUserId.idUser = userId;
+      members.bodyNewUserId.userId = userId;
       patch('members', memberId, members.bodyNewUserId, userId)
         .its('status')
         .should('equal', 204);
@@ -42,7 +42,7 @@ describe('PATCH /members/:id', () => {
     cy.fixture('members.json').then(members => {
       const anotherMemberId = uuid.v4();
 
-      members.bodyNewUserId.idUser = userId;
+      members.bodyNewUserId.userId = userId;
       patch('members', anotherMemberId, members.bodyNewUserId, userId)
         .its('status')
         .should('equal', 404);

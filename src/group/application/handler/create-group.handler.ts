@@ -38,7 +38,7 @@ export class CreateGroupHandler implements ICommandHandler<CreateGroupCommand> {
     const name = GroupName.fromString(command.name);
     const currencyCode = GroupCurrencyCode.fromString(command.currencyCode);
     const groupMembers = command.members;
-    const ownerId = UserId.fromString(command.owner.id);
+    const ownerId = UserId.fromString(command.owner._id);
 
     if ((await this.groups.find(groupId)) instanceof Group) {
       throw GroupIdAlreadyRegisteredError.withString(command.groupId);
@@ -54,7 +54,7 @@ export class CreateGroupHandler implements ICommandHandler<CreateGroupCommand> {
       groupId,
       name,
       currencyCode,
-      UserId.fromString(command.owner.id),
+      UserId.fromString(command.owner._id),
     );
 
     this.groups.save(group);
@@ -65,14 +65,14 @@ export class CreateGroupHandler implements ICommandHandler<CreateGroupCommand> {
       group.addMember(
         MemberId.fromString(v4()),
         MemberName.fromString(command.owner.name),
-        UserId.fromString(command.owner.id),
+        UserId.fromString(command.owner._id),
       ),
     );
 
     groupMembers.forEach(member => {
       membersAdded.push(
         group.addMember(
-          MemberId.fromString(member.id),
+          MemberId.fromString(member._id),
           MemberName.fromString(member.name),
         ),
       );

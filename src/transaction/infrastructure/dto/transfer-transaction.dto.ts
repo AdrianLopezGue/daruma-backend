@@ -4,7 +4,7 @@ import { IsString, IsNumber } from 'class-validator';
 export class TransferTransactionDto {
   @IsString()
   @ApiProperty()
-  readonly transactionId!: string;
+  readonly _id!: string;
 
   @IsString()
   @ApiProperty()

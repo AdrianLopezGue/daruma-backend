@@ -1,20 +1,20 @@
 {
   "example": {
-    "id": null,
+    "_id": null,
     "name": "Example Bill",
     "date": "2020-04-20T11:38:01.444",
     "money": 3000,
     "currencyCode": "EUR"
   },
   "second": {
-    "id": null,
+    "_id": null,
     "name": "Example Bill 2",
     "date": "2020-04-20T11:38:01.444",
     "money": 4000,
     "currencyCode": "EUR"
   },
   "body": {
-    "billId": null,
+    "_id": null,
     "groupId": null,
     "name": "Example Bill",
     "date": "2020-04-20T11:38:01.444",
