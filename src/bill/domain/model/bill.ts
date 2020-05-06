@@ -15,6 +15,7 @@ import { TransactionId } from '../../../transaction/domain/model/transaction-id'
 import { DepositTransaction } from '../../../transaction/domain/model/deposit-transaction';
 import { DebtTransaction } from '../../../transaction/domain/model/debt-transaction';
 import { BillWasRemoved } from '../event/bill-was-removed.event';
+import { BillCurrencyCodeWasChanged } from '../event/bill-currency-code-was-changed.event';
 
 export class Bill extends AggregateRoot {
   private _billId: BillId;
@@ -124,6 +125,14 @@ export class Bill extends AggregateRoot {
     this.apply(new BillWasRemoved(this._billId.value));
   }
 
+  changeCurrencyCode(currencyCode: GroupCurrencyCode) {
+    if (currencyCode.equals(this._amount.currencyCode)) {
+      return;
+    }
+
+    this.apply(new BillCurrencyCodeWasChanged(this._groupId.value, currencyCode.value));
+  }
+
   private onBillWasCreated(event: BillWasCreated) {
     this._billId = BillId.fromString(event.id);
     this._groupId = GroupId.fromString(event.groupId);
@@ -137,6 +146,10 @@ export class Bill extends AggregateRoot {
     this._debtors = event.debtors;
     this._creatorId = MemberId.fromString(event.creatorId);
     this._isRemoved = false;
+  }
+
+  private onBillCurrencyCodeWasChanged(event: BillCurrencyCodeWasChanged) {
+    this._amount = BillAmount.withMoneyAndCurrencyCode(this._amount.money, GroupCurrencyCode.fromString(event.currencyCode));
   }
 
   private onBillWasRemoved(event: BillWasRemoved) {

@@ -7,7 +7,6 @@ import {
   HttpCode,
   NotFoundException,
   Post,
-  Put,
   ForbiddenException,
   ValidationPipe,
   UsePipes,
@@ -16,6 +15,8 @@ import {
   Param,
   Delete,
   Logger,
+  Patch,
+  Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -30,6 +31,8 @@ import { GroupService } from '../service/group.service';
 import { UserId } from '../../../user/domain/model/user-id';
 import { GroupView } from '../read-model/schema/group.schema';
 import { FirebaseAuthGuard } from '../../../core/firebase/firebase.auth.guard';
+import { ChangeCurrencyCodeGroupDto } from '../dto/change-currency-code-group.dto';
+import { UpdateGroupDto } from '../dto/update-group.dto';
 
 @ApiTags('Groups')
 @Controller('groups')
@@ -103,24 +106,25 @@ export class GroupController {
     }
   }
 
-  @ApiOperation({ summary: 'Change Name Group' })
-  @ApiResponse({ status: 204, description: 'Group Name Changed' })
+  @ApiOperation({ summary: 'Update Group' })
+  @ApiResponse({ status: 204, description: 'Update Group' })
   @ApiResponse({ status: 404, description: 'Not found' })
   @UseGuards(FirebaseAuthGuard)
   @HttpCode(204)
-  @Put(':id')
-  async changeNameGroup(
+  @Patch(':id')
+  async updateGroup(
     @Param() params,
-    @Body() changenamegroupDto: ChangeNameGroupDto,
+    @Body() updateGroupDto: UpdateGroupDto,
     @Request() req,
   ): Promise<void> {
-    const logger = new Logger('GroupController');
-    logger.log('Petición PUT Group');
+    const logger = new Logger('GroupsController');
+    logger.log('Petición UPDATE Groups');
 
     try {
-      return await this.groupService.changeNameGroup(
+      return await this.groupService.updateGroup(
         params.id,
-        changenamegroupDto.name,
+        updateGroupDto.name,
+        updateGroupDto.currencyCode,
       );
     } catch (e) {
       if (e instanceof GroupIdNotFoundError) {
@@ -132,6 +136,7 @@ export class GroupController {
       }
     }
   }
+
   @ApiOperation({ summary: 'Delete Group' })
   @ApiResponse({ status: 204, description: 'Delete Group' })
   @ApiResponse({ status: 404, description: 'Not found' })

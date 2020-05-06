@@ -11,6 +11,10 @@
     "owner": { "_id": null, "name": "John Doe" },
     "members": []
   },
+  "bodyGroupUpdated": {
+    "name": null,
+    "currencyCode": null
+  },
   "response": {
     "_id": null,
     "name": "Example Group",
