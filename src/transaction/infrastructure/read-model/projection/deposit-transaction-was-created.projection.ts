@@ -3,6 +3,7 @@ import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { Model } from 'mongoose';
 import { DepositTransactionWasCreated } from '../../../domain/event/deposit-transaction-was-created.event';
 import { DepositTransactionView } from '../schema/deposit-transaction.schema';
+import { BalanceView } from '../schema/balance.transaction.schema';
 
 @EventsHandler(DepositTransactionWasCreated)
 export class DepositTransactionWasCreatedProjection
@@ -10,6 +11,8 @@ export class DepositTransactionWasCreatedProjection
   constructor(
     @Inject('DEPOSIT_TRANSACTION_MODEL')
     private readonly depositTransactionModel: Model<DepositTransactionView>,
+    @Inject('BALANCE_MODEL')
+    private readonly balanceModel: Model<BalanceView>,
   ) {}
 
   async handle(event: DepositTransactionWasCreated) {
@@ -20,6 +23,10 @@ export class DepositTransactionWasCreatedProjection
       money: event.money,
       currencyCode: event.currencyCode,
     });
+
+    this.balanceModel
+        .updateOne({ _id: event.idMember }, { $inc: { money: event.money } })
+        .exec();
 
     return depositTransactionView.save();
   }
