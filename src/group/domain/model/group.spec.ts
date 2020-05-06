@@ -9,6 +9,7 @@ import { GroupName } from './group-name';
 import { GroupCurrencyCode } from './group-currency-code';
 import { UserId } from '../../../user/domain/model';
 import { GroupWasRemoved } from '../event/group-was-removed.event';
+import { GroupCurrencyCodeWasChanged } from '../event/group-currency-code-was-changed.event';
 
 describe('Group', () => {
   let group: Group;
@@ -75,6 +76,20 @@ describe('Group', () => {
     );
 
     expect(group.name.equals(newName)).toBeTruthy();
+  });
+
+  it('currency code can be changed', () => {
+    const newCurrencyCode = GroupCurrencyCode.fromString('NEW');
+    group = eventPublisher$.mergeObjectContext(group);
+    group.changeCurrencyCode(newCurrencyCode);
+    group.commit();
+
+    expect(eventBus$.publish).toHaveBeenCalledTimes(1);
+    expect(eventBus$.publish).toHaveBeenCalledWith(
+      new GroupCurrencyCodeWasChanged(groupId.value, newCurrencyCode.value),
+    );
+
+    expect(group.currencyCode.equals(newCurrencyCode)).toBeTruthy();
   });
 
   it('can be removed', () => {

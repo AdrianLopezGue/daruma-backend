@@ -8,6 +8,7 @@ import { MemberId } from '../../../member/domain/model/member-id';
 import { MemberName } from '../../../member/domain/model/member-name';
 import { Member } from '../../../member/domain/model/member';
 import { GroupWasRemoved } from '../event/group-was-removed.event';
+import { GroupCurrencyCodeWasChanged } from '../event/group-currency-code-was-changed.event';
 
 export class Group extends AggregateRoot {
   private _groupId: GroupId;
@@ -80,6 +81,14 @@ export class Group extends AggregateRoot {
     this.apply(new GroupNameWasChanged(this._groupId.value, name.value));
   }
 
+  changeCurrencyCode(currencyCode: GroupCurrencyCode) {
+    if (currencyCode.equals(this._currencyCode)) {
+      return;
+    }
+
+    this.apply(new GroupCurrencyCodeWasChanged(this._groupId.value, currencyCode.value));
+  }
+
   remove() {
     if (this._isRemoved) {
       return;
@@ -98,6 +107,10 @@ export class Group extends AggregateRoot {
 
   private onGroupNameWasChanged(event: GroupNameWasChanged) {
     this._name = GroupName.fromString(event.name);
+  }
+
+  private onGroupCurrencyCodeWasChanged(event: GroupCurrencyCodeWasChanged) {
+    this._currencyCode = GroupCurrencyCode.fromString(event.currencyCode);
   }
 
   private onGroupWasRemoved(event: GroupWasRemoved) {

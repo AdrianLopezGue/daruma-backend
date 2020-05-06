@@ -12,6 +12,7 @@ import { MemberDto } from '../dto/group.dto';
 import { OwnerDto } from '../dto/owner.dto';
 import { RemoveGroupCommand } from '../../application/command/remove-group.command';
 import { BalanceService } from '../../../transaction/infrastructure/service/balance.service';
+import { ChangeGroupCurrencyCodeCommand } from '../../application/command/change-group-currency-code.command';
 
 @Injectable()
 export class GroupService {
@@ -34,8 +35,9 @@ export class GroupService {
     );
   }
 
-  async changeNameGroup(id: string, name: string) {
-    return this.commandBus.execute(new ChangeGroupNameCommand(id, name));
+  async updateGroup(id: string, name: string, currencyCode: string) {
+    await this.commandBus.execute(new ChangeGroupNameCommand(id, name));
+    await this.commandBus.execute(new ChangeGroupCurrencyCodeCommand(id, currencyCode));
   }
 
   async removeGroup(id: string) {
