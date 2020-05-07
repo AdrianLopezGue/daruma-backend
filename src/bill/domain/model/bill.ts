@@ -130,7 +130,7 @@ export class Bill extends AggregateRoot {
       return;
     }
 
-    this.apply(new BillCurrencyCodeWasChanged(this._groupId.value, currencyCode.value));
+    this.apply(new BillCurrencyCodeWasChanged(this._billId.value, currencyCode.value));
   }
 
   private onBillWasCreated(event: BillWasCreated) {
