@@ -16,7 +16,6 @@ import {
   Delete,
   Logger,
   Patch,
-  Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -26,12 +25,10 @@ import {
   GroupIdNotFoundError,
 } from '../../domain/exception';
 import { GroupDto } from '../dto/group.dto';
-import { ChangeNameGroupDto } from '../dto/change-name-group.dto';
 import { GroupService } from '../service/group.service';
 import { UserId } from '../../../user/domain/model/user-id';
 import { GroupView } from '../read-model/schema/group.schema';
 import { FirebaseAuthGuard } from '../../../core/firebase/firebase.auth.guard';
-import { ChangeCurrencyCodeGroupDto } from '../dto/change-currency-code-group.dto';
 import { UpdateGroupDto } from '../dto/update-group.dto';
 
 @ApiTags('Groups')

@@ -2,7 +2,6 @@ import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { Bills, BILLS } from '../../domain/repository/index';
-import { RemoveBillsCommand } from '../command/remove-bills.command';
 import { BillService } from '../../infrastructure/service/bill.service';
 import { BillId } from '../../domain/model/bill-id';
 import { Bill } from '../../domain/model/bill';
