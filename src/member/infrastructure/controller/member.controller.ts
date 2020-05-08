@@ -98,7 +98,9 @@ export class MemberController {
     logger.log('Petición DELETE Members');
     const requesterId: UserId = req.user;
 
-    if (requesterId.value === params.id) {
+    const result = await this.memberService.getUserIdByMemberId(params.id);
+
+    if (result[0] === requesterId.value) {
       throw new ForbiddenException('Cannot delete requester');
     }
 

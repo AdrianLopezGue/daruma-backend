@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, ForbiddenException } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 
 import { CreateMemberCommand } from '../../application/command/create-member.command';
@@ -50,6 +50,11 @@ export class MemberService {
 
   async getMembersIdByGroupId(groupId: string): Promise<string[]> {
     return this.memberModel.distinct('_id', { groupId: groupId }).exec();
+  }
+
+  async getUserIdByMemberId(memberId: string): Promise<string[]> {
+    console.debug("memberId: " + memberId)
+    return this.memberModel.distinct('userId', { _id: memberId }).exec();
   }
 
   async getGroups(userId: string): Promise<string[]> {

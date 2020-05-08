@@ -10,6 +10,11 @@ import { GroupIdNotFoundError } from '../../../group/domain/exception/group-id-n
 import { GROUPS, Groups } from '../../../group/domain/repository/index';
 import { GroupId } from '../../../group/domain/model/group-id';
 import { Group } from '../../../group/domain/model/group';
+import { ChangeBillMoneyCommand } from '../../application/command/change-bill-money.command';
+import { ChangeBillNameCommand } from '../../application/command/change-bill-name.command';
+import { ChangeBillDateCommand } from '../../application/command/change-bill-date.command';
+import { ChangeBillPayersCommand } from '../../application/command/change-bill-payers.command';
+import { ChangeBillDebtorsCommand } from '@app/bill/application/command/change-bill-debtors.command';
 @Injectable()
 export class BillService {
   constructor(
@@ -57,6 +62,21 @@ export class BillService {
     }
 
     return result;
+  }
+
+  async updateBill(
+    billId: string,
+    name: string,
+    money: number,
+    payers: ParticipantDto[],
+    debtors: ParticipantDto[],
+    date: Date,
+  ) {
+    await this.commandBus.execute(new ChangeBillMoneyCommand(billId, money));
+    await this.commandBus.execute(new ChangeBillNameCommand(billId, name));
+    await this.commandBus.execute(new ChangeBillDateCommand(billId, date));
+    await this.commandBus.execute(new ChangeBillPayersCommand(billId, payers));
+    await this.commandBus.execute(new ChangeBillDebtorsCommand(billId, debtors));
   }
 
   async getBillsIdByGroupId(groupId: string): Promise<string[]> {

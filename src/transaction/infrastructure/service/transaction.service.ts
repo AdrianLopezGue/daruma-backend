@@ -100,18 +100,18 @@ export class TransactionService {
   }
 
   async getTransferTransactionsBySender(
-    idSender: string,
+    senderId: string,
   ): Promise<TransferTransactionView[]> {
     return this.transferTransactionModel
-      .find({ idSender: '' + idSender + '' })
+      .find({ idSender: '' + senderId + '' })
       .exec();
   }
 
   async getTransferTransactionsByBeneficiary(
-    idBeneficiary: string,
+    beneficiaryId: string,
   ): Promise<TransferTransactionView[]> {
     return this.transferTransactionModel
-      .find({ idBeneficiary: '' + idBeneficiary + '' })
+      .find({ idBeneficiary: '' + beneficiaryId + '' })
       .exec();
   }
 
@@ -123,7 +123,15 @@ export class TransactionService {
     return this.depositTransactionModel.distinct('_id', { idBill: billId }).exec();
   }
 
-  async getTransferTransactionIdsByGroupId(idGroup: string): Promise<string[]> {
-    return this.transferTransactionModel.distinct('_id', { idGroup: idGroup }).exec();
+  async getTransferTransactionIdsByGroupId(groupId: string): Promise<string[]> {
+    return this.transferTransactionModel.distinct('_id', { idGroup: groupId }).exec();
+  }
+
+  async getDebtTransactionByBillIdAndMemberId(billId: string, memberId: string): Promise<DebtTransactionView> {
+    return this.debtTransactionModel.findOne({ idBill: billId , idMember: memberId }, { _id: 1 }).exec();
+  }
+
+  async getDepositTransactionByBillIdAndMemberId(billId: string, memberId: string): Promise<DepositTransactionView> {
+    return this.depositTransactionModel.findOne({ idBill: billId , idMember: memberId }, { _id: 1 }).exec();
   }
 }
