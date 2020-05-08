@@ -15,6 +15,7 @@ import {
   Param,
   Delete,
   Logger,
+  Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -108,6 +109,44 @@ export class BillController {
     } catch (e) {
       if (e instanceof BillIdNotFoundError) {
         throw new NotFoundException('Bill not found');
+      } else if (e instanceof Error) {
+        throw new BadRequestException(`Unexpected error: ${e.message}`);
+      } else {
+        throw new BadRequestException('Server error');
+      }
+    }
+  }
+
+  @ApiOperation({ summary: 'Update Bill' })
+  @ApiResponse({ status: 204, description: 'Update Bill' })
+  @ApiResponse({ status: 404, description: 'Not found' })
+  @UseGuards(FirebaseAuthGuard)
+  @HttpCode(204)
+  @Put(':id')
+  async updateBill(
+    @Param() params,
+    @Body() billDto: BillDto,
+    @Request() req,
+  ): Promise<void> {
+    const logger = new Logger('BillsController');
+    logger.log('Petición UPDATE Bills');
+
+    if (params.id !== billDto._id) {
+      throw new ForbiddenException('Ids of bills dont match');
+    }
+
+    try {
+      return await this.billService.updateBill(
+        billDto._id,
+        billDto.name,
+        billDto.money,
+        billDto.payers,
+        billDto.debtors,
+        billDto.date,
+      );
+    } catch (e) {
+      if (e instanceof GroupIdNotFoundError) {
+        throw new NotFoundException('Group not found');
       } else if (e instanceof Error) {
         throw new BadRequestException(`Unexpected error: ${e.message}`);
       } else {
