@@ -5,12 +5,16 @@ import { BillId } from '../../../bill/domain/model/bill-id';
 import { RecurringBillId } from './recurring-bill-id';
 import { RecurringBillWasCreated } from '../event/recurring-bill-was-created.event';
 import { RecurringBillPeriod } from './recurring-bill-period';
+import { RecurringBillWasRemoved } from '../event/recurring-bill-was-removed.event';
+import { GroupId } from '../../../group/domain/model/group-id';
 
 export class RecurringBill extends AggregateRoot {
   private _recurringBillId: RecurringBillId;
   private _billId: BillId;
+  private _groupId: GroupId;
   private _recurringBillDate: BillDate;
   private _recurringBillPeriod: RecurringBillPeriod;
+  private _isRemoved: boolean;
 
   private constructor() {
     super();
@@ -19,6 +23,7 @@ export class RecurringBill extends AggregateRoot {
   public static add(
     recurringBillId: RecurringBillId,
     billId: BillId,
+    groupId: GroupId,
     date: BillDate,
     period: RecurringBillPeriod,
   ): RecurringBill {
@@ -28,6 +33,7 @@ export class RecurringBill extends AggregateRoot {
       new RecurringBillWasCreated(
         recurringBillId.value,
         billId.value,
+        groupId.value,
         date.value,
         period.value,
       ),
@@ -48,6 +54,10 @@ export class RecurringBill extends AggregateRoot {
     return this._billId;
   }
 
+  get groupId(): GroupId {
+    return this._groupId;
+  }
+
   get date(): BillDate {
     return this._recurringBillDate;
   }
@@ -56,10 +66,28 @@ export class RecurringBill extends AggregateRoot {
     return this._recurringBillPeriod;
   }
 
+  get isRemoved(): boolean {
+    return this._isRemoved;
+  }
+
+  remove() {
+    if (this._isRemoved) {
+      return;
+    }
+
+    this.apply(new RecurringBillWasRemoved(this._recurringBillId.value));
+  }
+
   private onRecurringBillWasCreated(event: RecurringBillWasCreated) {
     this._recurringBillId = RecurringBillId.fromString(event.id);
     this._billId = BillId.fromString(event.billId);
+    this._groupId = GroupId.fromString(event.groupId);
     this._recurringBillDate = BillDate.fromDate(event.date);
     this._recurringBillPeriod = RecurringBillPeriod.fromNumber(event.period);
+    this._isRemoved = false;
+  }
+
+  private onRecurringBillWasRemoved(event: RecurringBillWasRemoved) {
+    this._isRemoved = true;
   }
 }
