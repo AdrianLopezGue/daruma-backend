@@ -28,6 +28,12 @@ module.exports = {
     _id,
     groupId
   }),
+  newRecurringBill: (body, _id, billId, groupId) => ({
+    ...body,
+    _id,
+    billId,
+    groupId
+  }),
 
   getAll: (resource, body, bearer, failOnStatusCode = false) =>
     cy.request({
