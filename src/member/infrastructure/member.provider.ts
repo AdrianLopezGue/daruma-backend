@@ -14,7 +14,9 @@ import { GroupEventStore } from '../../group/infrastructure/eventstore/groups.ev
 import { GROUPS } from '../../group/domain/repository/index';
 import { MEMBER_SERVICE, MemberService } from './service/member.service';
 import { GET_MEMBERS_BY_GROUP_ID } from '../domain/services/get-members-by-group-id.service';
-import { GetMembersIdByGroupIdFromReadModel } from './service/get-members-by-group-is.service';
+import { GetMembersIdByGroupIdFromReadModel } from './service/get-members-by-group-id.service';
+import { GetMembersIdByUserIdFromReadModel } from './service/get-members-by-user-id.service';
+import { GET_MEMBERS_BY_USER_ID } from '../domain/services/get-members-by-user-id.service';
 
 export const MemberProviders = [
   {
@@ -62,5 +64,9 @@ export const MemberProviders = [
   {
     provide: GET_MEMBERS_BY_GROUP_ID,
     useClass: GetMembersIdByGroupIdFromReadModel,
+  },
+  {
+    provide: GET_MEMBERS_BY_USER_ID,
+    useClass: GetMembersIdByUserIdFromReadModel,
   },
 ];
