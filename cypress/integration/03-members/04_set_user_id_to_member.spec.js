@@ -29,7 +29,7 @@ describe('PATCH /members/:id', () => {
     });
   });
 
-  it('Patch member', function() {
+  it('Set userId to member', function() {
     cy.fixture('members.json').then(members => {
       members.bodyNewUserId.userId = userId;
       patch('members', memberId, members.bodyNewUserId, userId)

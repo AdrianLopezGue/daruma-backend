@@ -38,7 +38,7 @@ describe('POST /transactions', () => {
     });
   });
 
-  it('Validate the status code', function() {
+  it('Creates a transfer transaction', function() {
     cy.fixture('transactions.json').then(transactions => {
       const transaction = newTransaction(...transactions.body, transactionId, senderId, beneficiaryId, groupId);
 

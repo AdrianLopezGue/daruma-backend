@@ -45,7 +45,7 @@ describe('POST /bills', () => {
     });
   });
 
-  it('Validate the status code', function() {
+  it('Creates a bill', function() {
     cy.fixture('bills.json').then(bills => {
       const bill = newBill(
         bills.body,
