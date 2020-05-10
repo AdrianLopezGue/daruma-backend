@@ -37,12 +37,6 @@ describe('DELETE /members/:id', () => {
       .should('equal', 204);
   });
 
-  it('Check that requester cannot be deleted', function() {
-    remove('members', userId, userId)
-      .its('status')
-      .should('equal', 403);
-  });
-
   it('Check that cannot delete unknown member', function() {
     const anotherUserId = uuid.v4();
 

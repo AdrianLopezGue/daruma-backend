@@ -60,7 +60,7 @@ describe('DELETE /bills/:id', () => {
     });
   });
 
-  it('Validate the status code', function() {
+  it('Deletes a bill', function() {
     remove('bills', billId, userId)
       .its('status')
       .should('equal', 204);
