@@ -7,6 +7,8 @@ import { BillId } from '../../../bill/domain/model/bill-id';
 import { BillDate } from '../../../bill/domain/model/bill-date';
 import { RecurringBillPeriod } from './recurring-bill-period';
 import { RecurringBillWasCreated } from '../event/recurring-bill-was-created.event';
+import { RecurringBillWasRemoved } from '../event/recurring-bill-was-removed.event';
+import { GroupId } from '../../../group/domain/model/group-id';
 
 
 describe('RecurringBill', () => {
@@ -16,6 +18,7 @@ describe('RecurringBill', () => {
 
   const recurringBillId = RecurringBillId.fromString(v4());
   const billId = BillId.fromString(v4());
+  const groupId = GroupId.fromString(v4());
   const date = BillDate.fromDate(new Date('2019-11-15T17:43:50'));
   const period = RecurringBillPeriod.daily();
 
@@ -31,7 +34,7 @@ describe('RecurringBill', () => {
 
   it('can be created', () => {
     recurringBill = eventPublisher$.mergeObjectContext(
-        RecurringBill.add(recurringBillId, billId, date, period),
+        RecurringBill.add(recurringBillId, billId, groupId, date, period),
     );
     recurringBill.commit();
 
@@ -40,6 +43,7 @@ describe('RecurringBill', () => {
       new RecurringBillWasCreated(
         recurringBillId.value,
         billId.value,
+        groupId.value,
         date.value,
         period.value,
       )
@@ -54,11 +58,28 @@ describe('RecurringBill', () => {
     expect(recurringBill.billId.equals(billId)).toBeTruthy();
   });
 
+  it('has an groupId', () => {
+    expect(recurringBill.groupId.equals(groupId)).toBeTruthy();
+  });
+
   it('has a date', () => {
     expect(recurringBill.date.equals(date)).toBeTruthy();
   });
 
   it('has a period', () => {
     expect(recurringBill.period.equals(period)).toBeTruthy();
+  });
+
+  it('can be removed', () => {
+    recurringBill = eventPublisher$.mergeObjectContext(recurringBill);
+    recurringBill.remove();
+    recurringBill.commit();
+
+    expect(eventBus$.publish).toHaveBeenCalledTimes(1);
+    expect(eventBus$.publish).toHaveBeenCalledWith(
+      new RecurringBillWasRemoved(recurringBillId.value),
+    );
+
+    expect(recurringBill.isRemoved).toBeTruthy();
   });
 });
