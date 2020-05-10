@@ -8,6 +8,8 @@ import { MemberIdNotFoundError } from '../../domain/exception/member-id-not-foun
 import { Member } from '../../domain/model/member';
 import { MEMBERS, Members } from '../../domain/repository/index';
 import { MemberService, MEMBER_SERVICE } from '../../infrastructure/service/member.service';
+import { GET_MEMBERS_BY_USER_ID, GetMembersIdByUserId } from '../../domain/services/get-members-by-user-id.service';
+import { UserId } from '../../../user/domain/model/user-id';
 
 @CommandHandler(ChangeMembersNameCommand)
 export class ChangeMembersNameHandler
@@ -16,10 +18,13 @@ export class ChangeMembersNameHandler
     @Inject(MEMBERS) private readonly members: Members,
     @Inject(MEMBER_SERVICE)
     private readonly memberService: MemberService,
+    @Inject(GET_MEMBERS_BY_USER_ID)
+    private readonly getMembersIdByUserId: GetMembersIdByUserId,
   ) {}
 
   async execute(command: ChangeMembersNameCommand) {
-    const membersId = await this.memberService.getMembersIdByUserId(command.userId);
+    const userId = UserId.fromString(command.userId);
+    const membersId = await this.getMembersIdByUserId.with(userId);
     const arr = Object.keys(membersId).map(function(id) {
       return membersId[id];
     });

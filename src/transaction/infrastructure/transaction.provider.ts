@@ -26,7 +26,7 @@ import { MEMBER_MODEL, MemberSchema } from '../../member/infrastructure/read-mod
 import { MEMBERS } from '../../member/domain/repository/index';
 import { MemberEventStore } from '../../member/infrastructure/eventstore/members.event-store';
 import { GET_MEMBERS_BY_GROUP_ID } from '../../member/domain/services/get-members-by-group-id.service';
-import { GetMembersIdByGroupIdFromReadModel } from '../../member/infrastructure/service/get-members-by-group-is.service';
+import { GetMembersIdByGroupIdFromReadModel } from '../../member/infrastructure/service/get-members-by-group-id.service';
 
 export const TransactionProviders = [
   {

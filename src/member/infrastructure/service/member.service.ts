@@ -53,7 +53,6 @@ export class MemberService {
   }
 
   async getUserIdByMemberId(memberId: string): Promise<string[]> {
-    console.debug("memberId: " + memberId)
     return this.memberModel.distinct('userId', { _id: memberId }).exec();
   }
 
