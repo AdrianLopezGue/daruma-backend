@@ -13,7 +13,7 @@ export class DebtTransactionWasCreatedProjection
     private readonly debtTransactionModel: Model<DebtTransactionView>,
     @Inject('BALANCE_MODEL')
     private readonly balanceModel: Model<BalanceView>,
-    ) {}
+  ) {}
 
   async handle(event: DebtTransactionWasCreated) {
     const debtTransactionView = new this.debtTransactionModel({
@@ -25,8 +25,8 @@ export class DebtTransactionWasCreatedProjection
     });
 
     this.balanceModel
-        .updateOne({ _id: event.idMember }, { $inc: { money: -event.money } })
-        .exec();
+      .updateOne({ _id: event.idMember }, { $inc: { money: -event.money } })
+      .exec();
 
     return debtTransactionView.save();
   }

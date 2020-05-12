@@ -86,7 +86,9 @@ export class Group extends AggregateRoot {
       return;
     }
 
-    this.apply(new GroupCurrencyCodeWasChanged(this._groupId.value, currencyCode.value));
+    this.apply(
+      new GroupCurrencyCodeWasChanged(this._groupId.value, currencyCode.value),
+    );
   }
 
   remove() {

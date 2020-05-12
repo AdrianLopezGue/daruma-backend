@@ -13,6 +13,8 @@ export class GroupCurrencyCodeWasChangedProjection
   ) {}
 
   async handle(event: GroupCurrencyCodeWasChanged) {
-    this.groupModel.updateOne({ _id: event.id }, { currencyCode: event.currencyCode }).exec();
+    this.groupModel
+      .updateOne({ _id: event.id }, { currencyCode: event.currencyCode })
+      .exec();
   }
 }

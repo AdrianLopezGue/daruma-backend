@@ -7,7 +7,10 @@ import { UserEmail } from '../../domain/model/user-email';
 import { USERS, Users } from '../../domain/repository/users';
 import { CreateUserCommand } from '../command';
 import { User } from '../../domain/model/user';
-import { CHECK_UNIQUE_USER_EMAIL, CheckUniqueUserEmail } from '../../domain/services/check-unique-user-email.service';
+import {
+  CHECK_UNIQUE_USER_EMAIL,
+  CheckUniqueUserEmail,
+} from '../../domain/services/check-unique-user-email.service';
 import { UserPaypal } from '../../domain/model/user-paypal';
 
 describe('CreateUserHandler', () => {

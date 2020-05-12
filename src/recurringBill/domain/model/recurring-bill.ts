@@ -84,7 +84,13 @@ export class RecurringBill extends AggregateRoot {
       return;
     }
 
-    this.apply(new RecurringBillPeriodWasChanged(this._recurringBillId.value, this._recurringBillDate.value, period.value));
+    this.apply(
+      new RecurringBillPeriodWasChanged(
+        this._recurringBillId.value,
+        this._recurringBillDate.value,
+        period.value,
+      ),
+    );
   }
 
   private onRecurringBillWasCreated(event: RecurringBillWasCreated) {
@@ -96,7 +102,9 @@ export class RecurringBill extends AggregateRoot {
     this._isRemoved = false;
   }
 
-  private onRecurringBillPeriodWasChanged(event: RecurringBillPeriodWasChanged) {
+  private onRecurringBillPeriodWasChanged(
+    event: RecurringBillPeriodWasChanged,
+  ) {
     this._recurringBillPeriod = RecurringBillPeriod.fromNumber(event.period);
   }
 

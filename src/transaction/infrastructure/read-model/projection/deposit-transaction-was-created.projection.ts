@@ -25,8 +25,8 @@ export class DepositTransactionWasCreatedProjection
     });
 
     this.balanceModel
-        .updateOne({ _id: event.idMember }, { $inc: { money: event.money } })
-        .exec();
+      .updateOne({ _id: event.idMember }, { $inc: { money: event.money } })
+      .exec();
 
     return depositTransactionView.save();
   }

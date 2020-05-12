@@ -35,9 +35,11 @@ export class MemberService {
   }
 
   async getMembersByGroupId(groupId: string): Promise<MemberView[]> {
-    const members = await this.memberModel.find({ groupId: '' + groupId + '' }).exec();
+    const members = await this.memberModel
+      .find({ groupId: '' + groupId + '' })
+      .exec();
 
-    if (members.length === 0){
+    if (members.length === 0) {
       throw GroupIdNotFoundError.withString(groupId);
     }
 

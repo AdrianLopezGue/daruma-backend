@@ -9,7 +9,6 @@ import { RemoveMembersCommand } from '../../application/command/remove-members.c
 
 @Injectable()
 export class MemberSagas {
-
   @Saga()
   userNameWasChangedPublished = (
     events$: Observable<any>,
@@ -18,12 +17,10 @@ export class MemberSagas {
       ofType(UserNameWasChanged),
       map(event => new ChangeMembersNameCommand(event.id, event.username)),
     );
-  }
+  };
 
   @Saga()
-  groupWasRemoved = (
-    events$: Observable<any>,
-  ): Observable<ICommand> => {
+  groupWasRemoved = (events$: Observable<any>): Observable<ICommand> => {
     return events$.pipe(
       ofType(GroupWasRemoved),
       map(event => new RemoveMembersCommand(event.id)),

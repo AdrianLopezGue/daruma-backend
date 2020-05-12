@@ -8,7 +8,8 @@ import { GroupId } from '../../../group/domain/model/group-id';
 import { MemberId } from '../../domain/model/member-id';
 
 @Injectable()
-export class CheckUniqueMemberNameFromReadModel implements CheckUniqueMemberName {
+export class CheckUniqueMemberNameFromReadModel
+  implements CheckUniqueMemberName {
   constructor(
     @Inject(MEMBER_MODEL) private readonly memberModel: Model<MemberView>,
   ) {}

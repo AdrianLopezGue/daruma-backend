@@ -17,7 +17,7 @@ export class BalanceService {
     return this.balanceModel.find({ idGroup: '' + idGroup + '' }).exec();
   }
 
-  async deleteBalances(idGroup: string){
+  async deleteBalances(idGroup: string) {
     this.balanceModel.deleteMany({ idGroup: '' + idGroup + '' }).exec();
   }
 }

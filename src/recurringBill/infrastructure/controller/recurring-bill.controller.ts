@@ -35,7 +35,10 @@ export class RecurringBillController {
   @ApiResponse({ status: 404, description: 'Not found' })
   @UseGuards(FirebaseAuthGuard)
   @Get(':id')
-  async getRecurringBill(@Request() req, @Param() params): Promise<RecurringBillView[]> {
+  async getRecurringBill(
+    @Request() req,
+    @Param() params,
+  ): Promise<RecurringBillView[]> {
     const logger = new Logger('RecurringBillController');
     logger.log('Petición GET RecurringBills');
     try {
@@ -56,7 +59,10 @@ export class RecurringBillController {
   @UseGuards(FirebaseAuthGuard)
   @HttpCode(204)
   @Post()
-  async createRecurringBill(@Body() recurringBillDto: RecurringBillDto, @Request() req): Promise<void> {
+  async createRecurringBill(
+    @Body() recurringBillDto: RecurringBillDto,
+    @Request() req,
+  ): Promise<void> {
     const logger = new Logger('RecurringBillController');
     logger.log('Petición POST Recurring Bill');
 

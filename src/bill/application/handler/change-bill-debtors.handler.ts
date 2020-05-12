@@ -18,36 +18,36 @@ import { DebtTransaction } from '../../../transaction/domain/model/debt-transact
 import { BillDebtor } from '../../domain/model/bill-debtor';
 
 @CommandHandler(ChangeBillDebtorsCommand)
-export class ChangeBillDebtorsHandler implements ICommandHandler<ChangeBillDebtorsCommand> {
+export class ChangeBillDebtorsHandler
+  implements ICommandHandler<ChangeBillDebtorsCommand> {
   constructor(
     @Inject(BILLS) private readonly bills: Bills,
     @Inject(TRANSACTIONS) private readonly transactions: Transactions,
   ) {}
 
   async execute(command: ChangeBillDebtorsCommand) {
-
     const billId = BillId.fromString(command.billId);
     const bill = await this.bills.find(billId);
 
     if (!(bill instanceof Bill)) {
-        throw BillIdNotFoundError.withString(command.billId);
+      throw BillIdNotFoundError.withString(command.billId);
     }
 
     const currentDebtors = bill.debtors;
 
-    currentDebtors.map((debtor) => {
+    currentDebtors.map(debtor => {
       bill.removeDebtor(MemberId.fromString(debtor.props.memberId.props.value));
       this.bills.save(bill);
     });
 
     const newDebtors = command.debtors.map(debtor =>
-        BillDebtor.withMemberIdAndAmount(
-            MemberId.fromString(debtor._id),
-            BillCurrencyUnit.fromNumber(debtor.money),
-        ),
+      BillDebtor.withMemberIdAndAmount(
+        MemberId.fromString(debtor._id),
+        BillCurrencyUnit.fromNumber(debtor.money),
+      ),
     );
 
-    newDebtors.map((newDebtor) => {
+    newDebtors.map(newDebtor => {
       bill.addDebtor(newDebtor);
       this.bills.save(bill);
     });

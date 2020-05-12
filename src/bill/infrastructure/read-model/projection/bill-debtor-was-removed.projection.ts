@@ -17,7 +17,7 @@ export class BillDebtorWasRemovedProjection
         { _id: event.id },
         {
           $pull: {
-            'debtors': {
+            debtors: {
               'props.memberId.props.value': event.debtorId,
             },
           },

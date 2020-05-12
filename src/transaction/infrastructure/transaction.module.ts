@@ -25,7 +25,7 @@ import { TransactionSagas } from './sagas/transaction.saga';
     TransactionService,
     BalanceService,
     TransactionEventStore,
-    TransactionSagas
+    TransactionSagas,
   ],
 })
 export class TransactionModule implements OnModuleInit {

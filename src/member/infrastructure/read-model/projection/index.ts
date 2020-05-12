@@ -7,5 +7,5 @@ export const ProjectionHandlers = [
   MemberWasCreatedProjection,
   RegisterMemberAsUserProjection,
   MemberWasRenamedProjection,
-  MemberWasRemovedProjection
+  MemberWasRemovedProjection,
 ];

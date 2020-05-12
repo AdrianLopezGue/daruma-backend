@@ -1,6 +1,6 @@
 import * as uuid from 'uuid';
 
-import { get, post, newGroup} from '../../api';
+import { get, post, newGroup } from '../../api';
 
 describe('GET /members', () => {
   let userId;
@@ -29,7 +29,7 @@ describe('GET /members', () => {
 
       get('members', groupId, users.johndoe.id)
         .its('status')
-        .should('equal', 200);      
+        .should('equal', 200);
     });
   });
 

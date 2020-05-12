@@ -4,7 +4,6 @@ import { Model } from 'mongoose';
 import { BillCurrencyCodeWasChanged } from '../../../domain/event/bill-currency-code-was-changed.event';
 import { BillView } from '../schema/bill.schema';
 
-
 @EventsHandler(BillCurrencyCodeWasChanged)
 export class BillCurrencyCodeWasChangedProjection
   implements IEventHandler<BillCurrencyCodeWasChanged> {
@@ -13,6 +12,8 @@ export class BillCurrencyCodeWasChangedProjection
   ) {}
 
   async handle(event: BillCurrencyCodeWasChanged) {
-    this.billModel.updateOne({ _id: event.id }, { currencyCode: event.currencyCode }).exec();
+    this.billModel
+      .updateOne({ _id: event.id }, { currencyCode: event.currencyCode })
+      .exec();
   }
 }

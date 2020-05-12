@@ -7,7 +7,6 @@ import { RemoveRecurringBillByBillIdCommand } from '../../application/command/re
 
 @Injectable()
 export class RecurringBillSagas {
-
   @Saga()
   billWasRemovedPublished = (
     events$: Observable<any>,
@@ -16,5 +15,5 @@ export class RecurringBillSagas {
       ofType(BillWasRemoved),
       map(event => new RemoveRecurringBillByBillIdCommand(event.id)),
     );
-  }
+  };
 }

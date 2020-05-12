@@ -10,7 +10,10 @@ import { RemoveMemberHandler } from './remove-member.handler';
 import { Member } from '../../domain/model/member';
 import { RemoveMemberCommand } from '../command/remove-member.command';
 import { MemberIdNotFoundError } from '../../domain/exception/member-id-not-found.error';
-import { GET_MEMBERS_BY_GROUP_ID, GetMembersIdByGroupId } from '../../domain/services/get-members-by-group-id.service';
+import {
+  GET_MEMBERS_BY_GROUP_ID,
+  GetMembersIdByGroupId,
+} from '../../domain/services/get-members-by-group-id.service';
 import {
   CHECK_MEMBER_MADE_ANY_TRANSACTION,
   CheckMemberMadeAnyTransaction,

@@ -13,5 +13,5 @@ export const CommandHandlers = [
   RemoveDebtAndDepositTransactionsHandler,
   RemoveTransferTransactionsHandler,
   RemoveDebtTransactionHandler,
-  RemoveDepositTransactionHandler
+  RemoveDepositTransactionHandler,
 ];

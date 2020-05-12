@@ -38,24 +38,24 @@ describe('DELETE /bills/:id', () => {
 
     cy.fixture('groups.json').then(groups => {
       cy.fixture('bills.json').then(bills => {
-      const group = newGroup(groups.body, groupId, userId);
+        const group = newGroup(groups.body, groupId, userId);
 
-      post('groups', group, userId, true);
+        post('groups', group, userId, true);
 
-      cy.task('sync');
+        cy.task('sync');
 
-      const bill = newBill(
-        bills.body,
-        billId,
-        groupId,
-        payers,
-        debtors,
-        userId,
-      );
+        const bill = newBill(
+          bills.body,
+          billId,
+          groupId,
+          payers,
+          debtors,
+          userId,
+        );
 
-      post('bills', bill, userId);
+        post('bills', bill, userId);
 
-      cy.task('sync');
+        cy.task('sync');
       });
     });
   });

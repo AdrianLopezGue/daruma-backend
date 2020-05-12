@@ -8,8 +8,14 @@ import { CHECK_USER_IN_GROUP } from '../domain/services/check-user-in-group.serv
 import { CheckUserInGroupFromReadModel } from './service/check-user-in-group.service';
 import { CheckMemberMadeAnyTransactionFromReadModel } from '../../transaction/infrastructure/service/check-member-made-transaction.service';
 import { CHECK_MEMBER_MADE_ANY_TRANSACTION } from '../../transaction/domain/services/check-member-made-transaction.service';
-import { DEBT_TRANSACTION_MODEL, DebtTransactionSchema } from '../../transaction/infrastructure/read-model/schema/debt-transaction.schema';
-import { DepositTransactionSchema, DEPOSIT_TRANSACTION_MODEL } from '../../transaction/infrastructure/read-model/schema/deposit-transaction.schema';
+import {
+  DEBT_TRANSACTION_MODEL,
+  DebtTransactionSchema,
+} from '../../transaction/infrastructure/read-model/schema/debt-transaction.schema';
+import {
+  DepositTransactionSchema,
+  DEPOSIT_TRANSACTION_MODEL,
+} from '../../transaction/infrastructure/read-model/schema/deposit-transaction.schema';
 import { GroupEventStore } from '../../group/infrastructure/eventstore/groups.event-store';
 import { GROUPS } from '../../group/domain/repository/index';
 import { MEMBER_SERVICE, MemberService } from './service/member.service';

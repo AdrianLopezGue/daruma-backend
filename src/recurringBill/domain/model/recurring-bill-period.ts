@@ -2,10 +2,10 @@ import { ValueObject } from '../../../core/domain';
 import { RecurringBillPeriodNotValidError } from '../exception/recurring-bill-period-not-valid.error';
 
 export enum PeriodTypes {
-    Daily = 1,
-    Weekly = 7,
-    Monthly = 30,
-    Anually = 360
+  Daily = 1,
+  Weekly = 7,
+  Monthly = 30,
+  Anually = 360,
 }
 
 interface Props {

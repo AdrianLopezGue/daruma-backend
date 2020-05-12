@@ -20,7 +20,7 @@ export class BillService {
   constructor(
     private readonly commandBus: CommandBus,
     @Inject(BILL_MODEL) private readonly billModel: Model<BillView>,
-    @Inject(GROUPS) private readonly groups: Groups
+    @Inject(GROUPS) private readonly groups: Groups,
   ) {}
 
   async createBill(
@@ -76,7 +76,9 @@ export class BillService {
     await this.commandBus.execute(new ChangeBillNameCommand(billId, name));
     await this.commandBus.execute(new ChangeBillDateCommand(billId, date));
     await this.commandBus.execute(new ChangeBillPayersCommand(billId, payers));
-    await this.commandBus.execute(new ChangeBillDebtorsCommand(billId, debtors));
+    await this.commandBus.execute(
+      new ChangeBillDebtorsCommand(billId, debtors),
+    );
   }
 
   async getBillsIdByGroupId(groupId: string): Promise<string[]> {

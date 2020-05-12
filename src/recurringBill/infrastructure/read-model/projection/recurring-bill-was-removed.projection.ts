@@ -9,11 +9,14 @@ import { RecurringBillView } from '../schema/recurring-bill.schema';
 export class RecurringBillWasRemovedProjection
   implements IEventHandler<RecurringBillWasRemoved> {
   constructor(
-    @Inject('RECURRING_BILL_MODEL') private readonly recurringBillModel: Model<RecurringBillView>,
+    @Inject('RECURRING_BILL_MODEL')
+    private readonly recurringBillModel: Model<RecurringBillView>,
   ) {}
 
   async handle(event: RecurringBillWasRemoved) {
-    const recurringBillView = await this.recurringBillModel.findById(event.id).exec();
+    const recurringBillView = await this.recurringBillModel
+      .findById(event.id)
+      .exec();
 
     recurringBillView.remove();
   }

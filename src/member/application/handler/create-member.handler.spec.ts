@@ -8,12 +8,8 @@ import { GroupName } from '../../../group/domain/model/group-name';
 import { GROUPS, Groups } from '../../../group/domain/repository';
 import { OwnerDto } from '../../../group/infrastructure/dto/owner.dto';
 import { UserId } from '../../../user/domain/model/user-id';
-import {
-  MemberIdAlreadyRegisteredError,
-} from '../../domain/exception/member-id-already-registered.error';
-import {
-  MemberNameAlreadyRegisteredError,
-} from '../../domain/exception/member-name-in-group.error';
+import { MemberIdAlreadyRegisteredError } from '../../domain/exception/member-id-already-registered.error';
+import { MemberNameAlreadyRegisteredError } from '../../domain/exception/member-name-in-group.error';
 import { Member } from '../../domain/model/member';
 import { MemberId } from '../../domain/model/member-id';
 import { MemberName } from '../../domain/model/member-name';

@@ -17,13 +17,23 @@ export class RemoveDebtTransactionHandler
   ) {}
 
   async execute(command: RemoveDebtTransactionCommand) {
-    const debtTransactionId = await (await this.transactionService.getDebtTransactionByBillIdAndMemberId(command.billId, command.memberId)).id;
+    const debtTransactionId = await (
+      await this.transactionService.getDebtTransactionByBillIdAndMemberId(
+        command.billId,
+        command.memberId,
+      )
+    ).id;
 
     const transactionId = TransactionId.fromString(debtTransactionId);
-    const debtTransaction = await this.transactions.findDebtTransaction(transactionId);
+    const debtTransaction = await this.transactions.findDebtTransaction(
+      transactionId,
+    );
 
-    if (!(debtTransaction instanceof DebtTransaction) || debtTransaction.isRemoved) {
-        throw TransactionIdNotFoundError.withString(transactionId.value);
+    if (
+      !(debtTransaction instanceof DebtTransaction) ||
+      debtTransaction.isRemoved
+    ) {
+      throw TransactionIdNotFoundError.withString(transactionId.value);
     }
 
     debtTransaction.remove();

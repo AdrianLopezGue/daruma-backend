@@ -6,7 +6,6 @@ import { Bill } from '../../domain/model/bill';
 import { BillId } from '../../domain/model/bill-id';
 import { BillIdNotFoundError } from '../../domain/exception/bill-id-not-found.error';
 
-
 @CommandHandler(RemoveBillCommand)
 export class RemoveBillHandler implements ICommandHandler<RemoveBillCommand> {
   constructor(@Inject(BILLS) private readonly bills: Bills) {}

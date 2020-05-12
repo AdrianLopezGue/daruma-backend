@@ -17,7 +17,7 @@ export class BillDebtorWasAddedProjection
         { _id: event.id },
         {
           $push: {
-            'debtors': event.debtor,
+            debtors: event.debtor,
           },
         },
       )

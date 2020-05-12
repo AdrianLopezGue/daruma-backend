@@ -17,13 +17,23 @@ export class RemoveDepositTransactionHandler
   ) {}
 
   async execute(command: RemoveDepositTransactionCommand) {
-    const depositTransactionId = await (await this.transactionService.getDepositTransactionByBillIdAndMemberId(command.billId, command.memberId)).id;
+    const depositTransactionId = await (
+      await this.transactionService.getDepositTransactionByBillIdAndMemberId(
+        command.billId,
+        command.memberId,
+      )
+    ).id;
 
     const transactionId = TransactionId.fromString(depositTransactionId);
-    const depositTransaction = await this.transactions.findDepositTransaction(transactionId);
+    const depositTransaction = await this.transactions.findDepositTransaction(
+      transactionId,
+    );
 
-    if (!(depositTransaction instanceof DepositTransaction) || depositTransaction.isRemoved) {
-        throw TransactionIdNotFoundError.withString(transactionId.value);
+    if (
+      !(depositTransaction instanceof DepositTransaction) ||
+      depositTransaction.isRemoved
+    ) {
+      throw TransactionIdNotFoundError.withString(transactionId.value);
     }
 
     depositTransaction.remove();

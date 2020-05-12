@@ -14,7 +14,10 @@ import { GroupId } from '../../../group/domain/model/group-id';
 import { GROUPS, Groups } from '../../../group/domain/repository/index';
 import { GroupIdNotFoundError } from '../../../group/domain/exception/group-id-not-found.error';
 import { MemberIdNotFoundError } from '../../../member/domain/exception/member-id-not-found.error';
-import { GET_MEMBERS_BY_GROUP_ID, GetMembersIdByGroupId } from '../../../member/domain/services/get-members-by-group-id.service';
+import {
+  GET_MEMBERS_BY_GROUP_ID,
+  GetMembersIdByGroupId,
+} from '../../../member/domain/services/get-members-by-group-id.service';
 
 @CommandHandler(CreateTransferTransactionCommand)
 export class CreateTransferTransactionHandler
@@ -41,8 +44,12 @@ export class CreateTransferTransactionHandler
     }
 
     if (
-      (await this.getMembersByGroupId.with(GroupId.fromString(groupId.value))).find(value => value === senderId.value) === undefined ||
-      (await this.getMembersByGroupId.with(GroupId.fromString(groupId.value))).find(value => value === beneficiaryId.value) === undefined
+      (
+        await this.getMembersByGroupId.with(GroupId.fromString(groupId.value))
+      ).find(value => value === senderId.value) === undefined ||
+      (
+        await this.getMembersByGroupId.with(GroupId.fromString(groupId.value))
+      ).find(value => value === beneficiaryId.value) === undefined
     ) {
       throw MemberIdNotFoundError.withString('');
     }

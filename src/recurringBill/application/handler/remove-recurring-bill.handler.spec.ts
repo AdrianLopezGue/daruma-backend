@@ -2,7 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { v4 as uuid } from 'uuid';
 
 import { RemoveRecurringBillHandler } from './remove-recurring-bill.handler';
-import { RecurringBills, RECURRING_BILLS } from '../../domain/repository/recurring-bills';
+import {
+  RecurringBills,
+  RECURRING_BILLS,
+} from '../../domain/repository/recurring-bills';
 import { RecurringBillId } from '../../domain/model/recurring-bill-id';
 import { BillId } from '../../../bill/domain/model/bill-id';
 import { BillDate } from '../../../bill/domain/model/bill-date';
@@ -34,16 +37,26 @@ describe('RemoveRecurringBillHandler', () => {
       ],
     }).compile();
 
-    command$ = module.get<RemoveRecurringBillHandler>(RemoveRecurringBillHandler);
+    command$ = module.get<RemoveRecurringBillHandler>(
+      RemoveRecurringBillHandler,
+    );
     recurringBills.find = jest.fn().mockResolvedValue(null);
     recurringBills.save = jest.fn();
   });
 
   it('should remove a recurring bill', async () => {
-    const recurringBill = RecurringBill.add(recurringBillId, billId, groupId, date, period);
+    const recurringBill = RecurringBill.add(
+      recurringBillId,
+      billId,
+      groupId,
+      date,
+      period,
+    );
     recurringBills.find = jest.fn().mockResolvedValue(recurringBill);
 
-    await command$.execute(new RemoveRecurringBillCommand(recurringBillId.value));
+    await command$.execute(
+      new RemoveRecurringBillCommand(recurringBillId.value),
+    );
 
     expect(recurringBills.save).toHaveBeenCalledTimes(1);
     expect(recurringBills.save).toHaveBeenCalledWith(recurringBill);
@@ -60,7 +73,13 @@ describe('RemoveRecurringBillHandler', () => {
   });
 
   it('should throw an error if member was removed', async () => {
-    const recurringBill = RecurringBill.add(recurringBillId, billId, groupId, date, period);
+    const recurringBill = RecurringBill.add(
+      recurringBillId,
+      billId,
+      groupId,
+      date,
+      period,
+    );
     recurringBill.remove();
     recurringBills.find = jest.fn().mockResolvedValue(recurringBill);
 

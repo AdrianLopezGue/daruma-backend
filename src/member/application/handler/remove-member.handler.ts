@@ -10,9 +10,15 @@ import {
   CheckMemberMadeAnyTransaction,
 } from '../../../transaction/domain/services/check-member-made-transaction.service';
 import { MemberMadeTransactionError } from '../../domain/exception/member-made-transaction.error';
-import { MemberService, MEMBER_SERVICE } from '../../infrastructure/service/member.service';
+import {
+  MemberService,
+  MEMBER_SERVICE,
+} from '../../infrastructure/service/member.service';
 import { LastMemberInGroupError } from '../../domain/exception/last-member-in-group.error';
-import { GET_MEMBERS_BY_GROUP_ID, GetMembersIdByGroupId } from '../../domain/services/get-members-by-group-id.service';
+import {
+  GET_MEMBERS_BY_GROUP_ID,
+  GetMembersIdByGroupId,
+} from '../../domain/services/get-members-by-group-id.service';
 import { GroupId } from '../../../group/domain/model/group-id';
 
 @CommandHandler(RemoveMemberCommand)
@@ -34,11 +40,20 @@ export class RemoveMemberHandler
       throw MemberIdNotFoundError.withString(memberId.value);
     }
 
-    if ((await this.getMembersByGroupId.with(GroupId.fromString(member.groupId.value))).length === 1){
+    if (
+      (
+        await this.getMembersByGroupId.with(
+          GroupId.fromString(member.groupId.value),
+        )
+      ).length === 1
+    ) {
       throw LastMemberInGroupError.withString(memberId.value);
     }
 
-    if ((await this.checkMemberMadeAnyTransaction.with(memberId)) instanceof MemberId) {
+    if (
+      (await this.checkMemberMadeAnyTransaction.with(memberId)) instanceof
+      MemberId
+    ) {
       throw MemberMadeTransactionError.withString(command.memberId);
     }
 

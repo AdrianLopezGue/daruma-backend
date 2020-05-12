@@ -26,13 +26,13 @@ module.exports = {
   newMember: (body, _id, groupId) => ({
     ...body,
     _id,
-    groupId
+    groupId,
   }),
   newRecurringBill: (body, _id, billId, groupId) => ({
     ...body,
     _id,
     billId,
-    groupId
+    groupId,
   }),
 
   getAll: (resource, body, bearer, failOnStatusCode = false) =>

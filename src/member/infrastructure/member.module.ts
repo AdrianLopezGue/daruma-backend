@@ -22,7 +22,7 @@ import { MemberSagas } from './sagas/member.saga';
     ...MemberProviders,
     MemberService,
     MemberEventStore,
-    MemberSagas
+    MemberSagas,
   ],
 })
 export class MemberModule implements OnModuleInit {

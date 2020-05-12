@@ -22,7 +22,7 @@ describe('PATCH /members/:id', () => {
         cy.task('sync');
 
         const member = newMember(...members.body, memberId, groupId);
-        post('members', member, userId)
+        post('members', member, userId);
 
         cy.task('sync');
       });
@@ -35,7 +35,7 @@ describe('PATCH /members/:id', () => {
       patch('members', memberId, members.bodyNewUserId, userId)
         .its('status')
         .should('equal', 204);
-    });    
+    });
   });
 
   it('Cannot set userId to unknown member', function() {
@@ -46,6 +46,6 @@ describe('PATCH /members/:id', () => {
       patch('members', anotherMemberId, members.bodyNewUserId, userId)
         .its('status')
         .should('equal', 404);
-    }); 
+    });
   });
 });

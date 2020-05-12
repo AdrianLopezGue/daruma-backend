@@ -9,7 +9,6 @@ import { ChangeCurrencyCodeBillsCommand } from '../../application/command/change
 
 @Injectable()
 export class BillSagas {
-
   @Saga()
   groupWasRemovedPublished = (
     events$: Observable<any>,
@@ -18,7 +17,7 @@ export class BillSagas {
       ofType(GroupWasRemoved),
       map(event => new RemoveBillsCommand(event.id)),
     );
-  }
+  };
 
   @Saga()
   groupCurrencyCodeWasChangedPublished = (
@@ -26,7 +25,10 @@ export class BillSagas {
   ): Observable<ICommand> => {
     return events$.pipe(
       ofType(GroupCurrencyCodeWasChanged),
-      map(event => new ChangeCurrencyCodeBillsCommand(event.id, event.currencyCode)),
+      map(
+        event =>
+          new ChangeCurrencyCodeBillsCommand(event.id, event.currencyCode),
+      ),
     );
-  }
+  };
 }

@@ -40,7 +40,13 @@ describe('POST /transactions', () => {
 
   it('Creates a transfer transaction', function() {
     cy.fixture('transactions.json').then(transactions => {
-      const transaction = newTransaction(...transactions.body, transactionId, senderId, beneficiaryId, groupId);
+      const transaction = newTransaction(
+        ...transactions.body,
+        transactionId,
+        senderId,
+        beneficiaryId,
+        groupId,
+      );
 
       post('transactions', transaction, userId)
         .its('status')
@@ -49,10 +55,15 @@ describe('POST /transactions', () => {
   });
 
   it('Validate sender must be a group member', function() {
-
     cy.fixture('transactions.json').then(transactions => {
       const otherSenderId = uuid.v4();
-      const transaction = newTransaction(...transactions.body, transactionId, otherSenderId, beneficiaryId, groupId);
+      const transaction = newTransaction(
+        ...transactions.body,
+        transactionId,
+        otherSenderId,
+        beneficiaryId,
+        groupId,
+      );
 
       post('transactions', transaction, userId)
         .its('status')
@@ -63,7 +74,13 @@ describe('POST /transactions', () => {
   it('Validate beneficiary must be a group member', function() {
     cy.fixture('transactions.json').then(transactions => {
       const otherBeneficaryId = uuid.v4();
-      const transaction = newTransaction(...transactions.body, transactionId, senderId, otherBeneficaryId, groupId);
+      const transaction = newTransaction(
+        ...transactions.body,
+        transactionId,
+        senderId,
+        otherBeneficaryId,
+        groupId,
+      );
 
       post('transactions', transaction, userId)
         .its('status')
@@ -75,7 +92,13 @@ describe('POST /transactions', () => {
     cy.fixture('transactions.json').then(transactions => {
       const otherGroupId = uuid.v4();
 
-      const transaction = newTransaction(...transactions.body, transactionId, senderId, beneficiaryId, otherGroupId);
+      const transaction = newTransaction(
+        ...transactions.body,
+        transactionId,
+        senderId,
+        beneficiaryId,
+        otherGroupId,
+      );
 
       post('transactions', transaction, userId)
         .its('status')

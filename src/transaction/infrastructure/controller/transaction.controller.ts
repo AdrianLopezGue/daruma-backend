@@ -34,7 +34,9 @@ export class TransactionController {
     const logger = new Logger('TransactionsController');
     logger.log('Petición POST Transactions');
 
-    if (transferTransactionDto.senderId === transferTransactionDto.beneficiaryId){
+    if (
+      transferTransactionDto.senderId === transferTransactionDto.beneficiaryId
+    ) {
       throw new BadRequestException('Sender cannot be the beneficiary');
     }
     try {

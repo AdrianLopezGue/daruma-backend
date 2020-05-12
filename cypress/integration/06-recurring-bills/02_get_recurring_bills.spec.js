@@ -21,7 +21,7 @@ describe('GET /recurringbills', () => {
         const group = newGroup(groups.body, groupId, userId);
 
         post('groups', group, userId, true);
-  
+
         cy.task('sync');
 
         const recurringBill = newRecurringBill(

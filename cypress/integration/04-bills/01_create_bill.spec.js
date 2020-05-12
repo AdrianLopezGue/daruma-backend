@@ -92,7 +92,7 @@ describe('POST /bills', () => {
           debtors,
           otherUserId,
         );
-        
+
         const user = newUser(users.body, otherUserId);
 
         post('users', user, otherUserId);

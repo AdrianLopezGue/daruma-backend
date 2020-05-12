@@ -25,7 +25,7 @@ import { RecurringBillModule } from './recurringBill/infrastructure/recurring-bi
     MemberModule,
     BillModule,
     TransactionModule,
-    RecurringBillModule
+    RecurringBillModule,
   ],
 })
 export class AppModule {}

@@ -18,6 +18,5 @@ export const memberEventHandlers = {
     new MemberWasRegisteredAsUser(id, idUser),
   MemberNameWasChanged: (id: string, name: string) =>
     new MemberNameWasChanged(id, name),
-  MemberWasRemoved: (id: string) =>
-    new MemberWasRemoved(id),
+  MemberWasRemoved: (id: string) => new MemberWasRemoved(id),
 };

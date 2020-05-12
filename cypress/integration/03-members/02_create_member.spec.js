@@ -46,7 +46,7 @@ describe('POST /members', () => {
 
   it('Check if member with exact name is already in group', function() {
     cy.fixture('members.json').then(members => {
-      members.body.name = "John Doe";
+      members.body.name = 'John Doe';
       const member = newMember(...members.body, memberId, groupId);
 
       post('members', member, userId)

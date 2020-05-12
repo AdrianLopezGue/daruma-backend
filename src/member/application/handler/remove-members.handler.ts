@@ -17,22 +17,22 @@ export class RemoveMembersHandler
   ) {}
 
   async execute(command: RemoveMembersCommand) {
-    const membersId = await this.memberService.getMembersIdByGroupId(command.groupId);
+    const membersId = await this.memberService.getMembersIdByGroupId(
+      command.groupId,
+    );
     const arr = Object.keys(membersId).map(function(id) {
       return membersId[id];
     });
-    arr.map(
-      async memberId => {
-        const newMemberId = MemberId.fromString(memberId);
-        const member = await this.members.find(newMemberId);
+    arr.map(async memberId => {
+      const newMemberId = MemberId.fromString(memberId);
+      const member = await this.members.find(newMemberId);
 
-        if (!(member instanceof Member) || member.isRemoved) {
-          throw MemberIdNotFoundError.withString(memberId);
-        }
-
-        member.remove();
-        this.members.save(member);
+      if (!(member instanceof Member) || member.isRemoved) {
+        throw MemberIdNotFoundError.withString(memberId);
       }
-    );
+
+      member.remove();
+      this.members.save(member);
+    });
   }
 }

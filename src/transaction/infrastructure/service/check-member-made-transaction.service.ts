@@ -33,14 +33,12 @@ export class CheckMemberMadeAnyTransactionFromReadModel
 
     if (debtTransactionView === null && depositTransactionView === null) {
       return null;
-    }
-    else{
-        if (debtTransactionView != null){
-            return MemberId.fromString(debtTransactionView.id);
-        }
-        else{
-            return MemberId.fromString(depositTransactionView.id);
-        }
+    } else {
+      if (debtTransactionView != null) {
+        return MemberId.fromString(debtTransactionView.id);
+      } else {
+        return MemberId.fromString(depositTransactionView.id);
+      }
     }
   }
 }

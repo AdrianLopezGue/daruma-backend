@@ -35,7 +35,9 @@ describe('ChangeGroupCurrencyCodeHandler', () => {
       ],
     }).compile();
 
-    command$ = module.get<ChangeGroupCurrencyCodeHandler>(ChangeGroupCurrencyCodeHandler);
+    command$ = module.get<ChangeGroupCurrencyCodeHandler>(
+      ChangeGroupCurrencyCodeHandler,
+    );
     groups.find = jest.fn().mockResolvedValue(null);
     groups.save = jest.fn();
   });
@@ -57,7 +59,9 @@ describe('ChangeGroupCurrencyCodeHandler', () => {
 
   it('should throw an error if group does not exists', async () => {
     expect(
-      command$.execute(new ChangeGroupCurrencyCodeCommand(groupId.value, 'USD')),
+      command$.execute(
+        new ChangeGroupCurrencyCodeCommand(groupId.value, 'USD'),
+      ),
     ).rejects.toThrow(GroupIdNotFoundError);
 
     expect(groups.save).toHaveBeenCalledTimes(0);

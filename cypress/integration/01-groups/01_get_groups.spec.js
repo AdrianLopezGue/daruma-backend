@@ -12,8 +12,8 @@ describe('GET /groups', () => {
       users.johndoe.id = uuid.v4();
 
       getAll('groups', null, users.johndoe.id)
-      .its('status')
-      .should('equal', 200);
+        .its('status')
+        .should('equal', 200);
     });
   });
 
@@ -22,8 +22,8 @@ describe('GET /groups', () => {
       users.johndoe.id = uuid.v4();
 
       getAll('groups', null, users.johndoe.id)
-      .its('body')
-      .should('have.length', 0);        
+        .its('body')
+        .should('have.length', 0);
     });
   });
 });

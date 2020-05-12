@@ -5,8 +5,7 @@ import { BillWasRemoved } from '../../../domain/event/bill-was-removed.event';
 import { BillView } from '../schema/bill.schema';
 
 @EventsHandler(BillWasRemoved)
-export class BillWasRemovedProjection
-  implements IEventHandler<BillWasRemoved> {
+export class BillWasRemovedProjection implements IEventHandler<BillWasRemoved> {
   constructor(
     @Inject('BILL_MODEL') private readonly billmodel: Model<BillView>,
   ) {}

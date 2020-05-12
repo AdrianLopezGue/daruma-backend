@@ -27,7 +27,12 @@ describe('PATCH NAME /groups/:id', () => {
       groups.bodyGroupUpdated.name = newName;
       groups.bodyGroupUpdated.currencyCode = groups.example.currencyCode;
 
-      const response = { ...groups.response, _id: groupId, ownerId: ownerId, name: newName };
+      const response = {
+        ...groups.response,
+        _id: groupId,
+        ownerId: ownerId,
+        name: newName,
+      };
 
       patch('groups', groupId, groups.bodyGroupUpdated, ownerId).then(() => {
         cy.task('sync');
@@ -60,7 +65,12 @@ describe('PATCH NAME /groups/:id', () => {
       groups.bodyGroupUpdated.currencyCode = newCurrencyCode;
       groups.bodyGroupUpdated.name = groups.example.name;
 
-      const response = { ...groups.response, _id: groupId, ownerId: ownerId, currencyCode: newCurrencyCode };
+      const response = {
+        ...groups.response,
+        _id: groupId,
+        ownerId: ownerId,
+        currencyCode: newCurrencyCode,
+      };
 
       patch('groups', groupId, groups.bodyGroupUpdated, ownerId).then(() => {
         cy.task('sync');
@@ -68,9 +78,9 @@ describe('PATCH NAME /groups/:id', () => {
         get('groups', groupId, ownerId)
           .its('body')
           .should('deep.equal', response);
-        });
       });
     });
+  });
 
   xit('Change group currency code by other user', () => {
     cy.fixture('groups.json').then(groups => {

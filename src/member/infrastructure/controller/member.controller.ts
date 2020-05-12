@@ -63,7 +63,10 @@ export class MemberController {
   @UseGuards(FirebaseAuthGuard)
   @HttpCode(204)
   @Post()
-  async createMember(@Body() memberDto: MemberDto, @Request() req): Promise<MemberDto> {
+  async createMember(
+    @Body() memberDto: MemberDto,
+    @Request() req,
+  ): Promise<MemberDto> {
     const logger = new Logger('MembersController');
     logger.log('Petición POST Members');
     try {
@@ -109,7 +112,7 @@ export class MemberController {
     } catch (e) {
       if (e instanceof MemberIdNotFoundError) {
         throw new NotFoundException('Member not found');
-      }else if (e instanceof LastMemberInGroupError) {
+      } else if (e instanceof LastMemberInGroupError) {
         throw new NotAcceptableException(e.message);
       } else if (e instanceof MemberMadeTransactionError) {
         throw new BadRequestException(e.message);

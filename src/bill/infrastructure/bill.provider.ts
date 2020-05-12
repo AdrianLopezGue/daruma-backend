@@ -40,5 +40,5 @@ export const BillProviders = [
   {
     provide: CHECK_USER_IN_GROUP,
     useClass: CheckUserInGroupFromReadModel,
-  }
+  },
 ];

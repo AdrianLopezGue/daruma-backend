@@ -9,14 +9,18 @@ import { GroupIdNotFoundError } from '../../../group/domain/exception/group-id-n
 import { Group } from '../../../group/domain/model/group';
 import { GROUPS, Groups } from '../../../group/domain/repository/index';
 import { GroupId } from '../../../group/domain/model/group-id';
-import { RECURRING_BILL_MODEL, RecurringBillView } from '../read-model/schema/recurring-bill.schema';
+import {
+  RECURRING_BILL_MODEL,
+  RecurringBillView,
+} from '../read-model/schema/recurring-bill.schema';
 
 @Injectable()
 export class RecurringBillService {
   constructor(
     private readonly commandBus: CommandBus,
-    @Inject(RECURRING_BILL_MODEL) private readonly recurringBillModel: Model<RecurringBillView>,
-    @Inject(GROUPS) private readonly groups: Groups
+    @Inject(RECURRING_BILL_MODEL)
+    private readonly recurringBillModel: Model<RecurringBillView>,
+    @Inject(GROUPS) private readonly groups: Groups,
   ) {}
 
   async createRecurringBill(
@@ -27,7 +31,13 @@ export class RecurringBillService {
     period: number,
   ) {
     return this.commandBus.execute(
-      new CreateRecurringBillCommand(recurringBillId, billId, groupId, date, period),
+      new CreateRecurringBillCommand(
+        recurringBillId,
+        billId,
+        groupId,
+        date,
+        period,
+      ),
     );
   }
 
@@ -36,11 +46,15 @@ export class RecurringBillService {
   }
 
   async updateRecurringBillPeriod(id: string, period: number) {
-    return this.commandBus.execute(new ChangeRecurringBillPeriodCommand(id, period));
+    return this.commandBus.execute(
+      new ChangeRecurringBillPeriodCommand(id, period),
+    );
   }
 
   async getRecurringBills(groupId: string): Promise<RecurringBillView[]> {
-    const result = await this.recurringBillModel.find({ groupId: groupId }).exec();
+    const result = await this.recurringBillModel
+      .find({ groupId: groupId })
+      .exec();
     const group = await this.groups.find(GroupId.fromString(groupId));
 
     if (!(group instanceof Group) || group.isRemoved) {

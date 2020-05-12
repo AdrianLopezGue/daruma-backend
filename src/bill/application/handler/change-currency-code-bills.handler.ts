@@ -23,18 +23,16 @@ export class ChangeCurrencyCodeBillsHandler
     const arr = Object.keys(billsId).map(function(id) {
       return billsId[id];
     });
-    arr.map(
-      async billId => {
-        const newBillId = BillId.fromString(billId);
-        const bill = await this.bills.find(newBillId);
+    arr.map(async billId => {
+      const newBillId = BillId.fromString(billId);
+      const bill = await this.bills.find(newBillId);
 
-        if (!(bill instanceof Bill) || bill.isRemoved) {
-          throw BillIdNotFoundError.withString(billId);
-        }
-
-        bill.changeCurrencyCode(currencyCode);
-        this.bills.save(bill);
+      if (!(bill instanceof Bill) || bill.isRemoved) {
+        throw BillIdNotFoundError.withString(billId);
       }
-    );
+
+      bill.changeCurrencyCode(currencyCode);
+      this.bills.save(bill);
+    });
   }
 }
