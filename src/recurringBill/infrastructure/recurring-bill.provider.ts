@@ -4,6 +4,8 @@ import { GROUPS } from '../../group/domain/repository/index';
 import { GroupEventStore } from '../../group/infrastructure/eventstore/groups.event-store';
 import { RECURRING_BILLS } from '../domain/repository/recurring-bills';
 import { RecurringBillEventStore } from './eventstore/recurring-bills.event-store';
+import { GET_RECURRING_BILL_ID_BY_BILL_ID } from '../domain/service/get-recurring-bill-by-bill-id.service';
+import { GetRecurringBillIdByBillIdFromReadModel } from './service/get-recurring-bill-by-bill-id.service';
 
 
 export const RecurringBillProviders = [
@@ -20,5 +22,9 @@ export const RecurringBillProviders = [
   {
     provide: GROUPS,
     useClass: GroupEventStore,
+  },
+  {
+    provide: GET_RECURRING_BILL_ID_BY_BILL_ID,
+    useClass: GetRecurringBillIdByBillIdFromReadModel,
   },
 ];

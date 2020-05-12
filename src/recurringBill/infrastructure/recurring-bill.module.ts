@@ -13,6 +13,7 @@ import { RecurringBillProviders } from './recurring-bill.provider';
 import { RecurringBillService } from './service/recurring-bill.service';
 import { RecurringBillEventStore } from './eventstore/recurring-bills.event-store';
 import { RecurringBillController } from './controller/recurring-bill.controller';
+import { RecurringBillSagas } from './sagas/recurring-bill.saga';
 
 @Module({
   controllers: [RecurringBillController],
@@ -29,6 +30,7 @@ import { RecurringBillController } from './controller/recurring-bill.controller'
     RecurringBillService,
     RecurringBillEventStore,
     FirebaseDatabase,
+    RecurringBillSagas
   ],
 })
 export class RecurringBillModule implements OnModuleInit {
