@@ -9,6 +9,7 @@ import { RecurringBillPeriod } from './recurring-bill-period';
 import { RecurringBillWasCreated } from '../event/recurring-bill-was-created.event';
 import { RecurringBillWasRemoved } from '../event/recurring-bill-was-removed.event';
 import { GroupId } from '../../../group/domain/model/group-id';
+import { RecurringBillPeriodWasChanged } from '../event/recurring-bill-period-was-changed.event';
 
 
 describe('RecurringBill', () => {
@@ -68,6 +69,20 @@ describe('RecurringBill', () => {
 
   it('has a period', () => {
     expect(recurringBill.period.equals(period)).toBeTruthy();
+  });
+
+  it('period can be changed', () => {
+    const newPeriod = RecurringBillPeriod.fromNumber(7);
+    recurringBill = eventPublisher$.mergeObjectContext(recurringBill);
+    recurringBill.changePeriod(newPeriod);
+    recurringBill.commit();
+
+    expect(eventBus$.publish).toHaveBeenCalledTimes(1);
+    expect(eventBus$.publish).toHaveBeenCalledWith(
+      new RecurringBillPeriodWasChanged(recurringBillId.value, date.value, newPeriod.value),
+    );
+
+    expect(recurringBill.period.equals(newPeriod)).toBeTruthy();
   });
 
   it('can be removed', () => {

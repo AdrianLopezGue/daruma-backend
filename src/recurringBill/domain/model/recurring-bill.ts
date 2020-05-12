@@ -7,6 +7,7 @@ import { RecurringBillWasCreated } from '../event/recurring-bill-was-created.eve
 import { RecurringBillPeriod } from './recurring-bill-period';
 import { RecurringBillWasRemoved } from '../event/recurring-bill-was-removed.event';
 import { GroupId } from '../../../group/domain/model/group-id';
+import { RecurringBillPeriodWasChanged } from '../event/recurring-bill-period-was-changed.event';
 
 export class RecurringBill extends AggregateRoot {
   private _recurringBillId: RecurringBillId;
@@ -78,6 +79,14 @@ export class RecurringBill extends AggregateRoot {
     this.apply(new RecurringBillWasRemoved(this._recurringBillId.value));
   }
 
+  changePeriod(period: RecurringBillPeriod) {
+    if (period.equals(this._recurringBillPeriod)) {
+      return;
+    }
+
+    this.apply(new RecurringBillPeriodWasChanged(this._recurringBillId.value, this._recurringBillDate.value, period.value));
+  }
+
   private onRecurringBillWasCreated(event: RecurringBillWasCreated) {
     this._recurringBillId = RecurringBillId.fromString(event.id);
     this._billId = BillId.fromString(event.billId);
@@ -85,6 +94,10 @@ export class RecurringBill extends AggregateRoot {
     this._recurringBillDate = BillDate.fromDate(event.date);
     this._recurringBillPeriod = RecurringBillPeriod.fromNumber(event.period);
     this._isRemoved = false;
+  }
+
+  private onRecurringBillPeriodWasChanged(event: RecurringBillPeriodWasChanged) {
+    this._recurringBillPeriod = RecurringBillPeriod.fromNumber(event.period);
   }
 
   private onRecurringBillWasRemoved(event: RecurringBillWasRemoved) {

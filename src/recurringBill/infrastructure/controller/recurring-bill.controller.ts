@@ -12,6 +12,7 @@ import {
   Param,
   Logger,
   Delete,
+  Patch,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -22,6 +23,7 @@ import { GroupIdNotFoundError } from '../../../group/domain/exception/group-id-n
 import { RecurringBillDto } from '../dto/recurring-bill.dto';
 import { RecurringBillIdAlreadyRegisteredError } from '../../domain/exception/recurring-bill-id-already-registered.error';
 import { RecurringBillIdNotFoundError } from '../../domain/exception/recurring-bill-id-not-found.error';
+import { UpdatePeriodRecurringBillDto } from '../dto/update-period-recurring-bill.dto';
 
 @ApiTags('RecurringBills')
 @Controller('recurringbills')
@@ -92,6 +94,35 @@ export class RecurringBillController {
     } catch (e) {
       if (e instanceof RecurringBillIdNotFoundError) {
         throw new NotFoundException('Recurring Bill not found');
+      } else if (e instanceof Error) {
+        throw new BadRequestException(`Unexpected error: ${e.message}`);
+      } else {
+        throw new BadRequestException('Server error');
+      }
+    }
+  }
+
+  @ApiOperation({ summary: 'Update Recurring Bill Period' })
+  @ApiResponse({ status: 204, description: 'Update Recurring Bill Period' })
+  @ApiResponse({ status: 404, description: 'Not found' })
+  @UseGuards(FirebaseAuthGuard)
+  @HttpCode(204)
+  @Patch(':id')
+  async updateRecurringBillPeriod(
+    @Param() params,
+    @Body() updatePeriodRecurringBillDto: UpdatePeriodRecurringBillDto,
+    @Request() req,
+  ): Promise<void> {
+    const logger = new Logger('RecurringBillController');
+    logger.log('Petición UPDATE Recurring Bill');
+    try {
+      return await this.recurringBillService.updateRecurringBillPeriod(
+        params.id,
+        updatePeriodRecurringBillDto.period,
+      );
+    } catch (e) {
+      if (e instanceof RecurringBillIdNotFoundError) {
+        throw new NotFoundException(`${e.message}`);
       } else if (e instanceof Error) {
         throw new BadRequestException(`Unexpected error: ${e.message}`);
       } else {

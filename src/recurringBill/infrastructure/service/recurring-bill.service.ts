@@ -4,6 +4,7 @@ import { CommandBus } from '@nestjs/cqrs';
 import { Model } from 'mongoose';
 import { CreateRecurringBillCommand } from '../../application/command/create-recurring-bill.command';
 import { RemoveRecurringBillCommand } from '../../application/command/remove-recurring-bill.command';
+import { ChangeRecurringBillPeriodCommand } from '../../application/command/change-recurring-bill-period.command';
 import { GroupIdNotFoundError } from '../../../group/domain/exception/group-id-not-found.error';
 import { Group } from '../../../group/domain/model/group';
 import { GROUPS, Groups } from '../../../group/domain/repository/index';
@@ -32,6 +33,10 @@ export class RecurringBillService {
 
   async removeRecurringBill(id: string) {
     return this.commandBus.execute(new RemoveRecurringBillCommand(id));
+  }
+
+  async updateRecurringBillPeriod(id: string, period: number) {
+    return this.commandBus.execute(new ChangeRecurringBillPeriodCommand(id, period));
   }
 
   async getRecurringBills(groupId: string): Promise<RecurringBillView[]> {

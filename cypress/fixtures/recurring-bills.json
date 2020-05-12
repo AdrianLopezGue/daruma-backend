@@ -6,6 +6,9 @@
       "date": "2020-04-20T11:38:01.444",
       "period": 7
     },
+    "bodyPeriodUpdated": {
+      "period": null
+    },
     "response": {
       "_id": null,
       "billId": null,
