@@ -22,7 +22,7 @@ import { MemberService } from '../../member/infrastructure/service/member.servic
     ...UserProviders,
     UserService,
     UserEventStore,
-    MemberService
+    MemberService,
   ],
 })
 export class UserModule implements OnModuleInit {

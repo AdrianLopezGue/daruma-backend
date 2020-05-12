@@ -9,8 +9,7 @@ import { Bill } from '../../domain/model/bill';
 import { BillIdNotFoundError } from '../../domain/exception/bill-id-not-found.error';
 
 @CommandHandler(RemoveBillsCommand)
-export class RemoveBillsHandler
-  implements ICommandHandler<RemoveBillsCommand> {
+export class RemoveBillsHandler implements ICommandHandler<RemoveBillsCommand> {
   constructor(
     @Inject(BILLS) private readonly bills: Bills,
     private readonly billService: BillService,
@@ -21,18 +20,16 @@ export class RemoveBillsHandler
     const arr = Object.keys(billsId).map(function(id) {
       return billsId[id];
     });
-    arr.map(
-      async billId => {
-        const newBillId = BillId.fromString(billId);
-        const bill = await this.bills.find(newBillId);
+    arr.map(async billId => {
+      const newBillId = BillId.fromString(billId);
+      const bill = await this.bills.find(newBillId);
 
-        if (!(bill instanceof Bill) || bill.isRemoved) {
-          throw BillIdNotFoundError.withString(billId);
-        }
-
-        bill.remove();
-        this.bills.save(bill);
+      if (!(bill instanceof Bill) || bill.isRemoved) {
+        throw BillIdNotFoundError.withString(billId);
       }
-    );
+
+      bill.remove();
+      this.bills.save(bill);
+    });
   }
 }

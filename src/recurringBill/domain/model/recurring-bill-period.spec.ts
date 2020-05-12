@@ -28,7 +28,7 @@ describe('RecurringBillPeriod', () => {
 
   it('can not create an invalid type', () => {
     expect(() => RecurringBillPeriod.fromNumber(6)).toThrow(
-        RecurringBillPeriodNotValidError,
+      RecurringBillPeriodNotValidError,
     );
   });
 });

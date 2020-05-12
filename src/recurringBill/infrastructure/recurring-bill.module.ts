@@ -30,7 +30,7 @@ import { RecurringBillSagas } from './sagas/recurring-bill.saga';
     RecurringBillService,
     RecurringBillEventStore,
     FirebaseDatabase,
-    RecurringBillSagas
+    RecurringBillSagas,
   ],
 })
 export class RecurringBillModule implements OnModuleInit {

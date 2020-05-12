@@ -8,7 +8,8 @@ import { RecurringBillView } from '../schema/recurring-bill.schema';
 export class RecurringBillWasCreatedProjection
   implements IEventHandler<RecurringBillWasCreated> {
   constructor(
-    @Inject('RECURRING_BILL_MODEL') private readonly recurringBillModel: Model<RecurringBillView>,
+    @Inject('RECURRING_BILL_MODEL')
+    private readonly recurringBillModel: Model<RecurringBillView>,
   ) {}
 
   async handle(event: RecurringBillWasCreated) {
@@ -25,8 +26,8 @@ export class RecurringBillWasCreatedProjection
   }
 
   addDays(date: Date, days: number) {
-    const copy = new Date(Number(date))
-    copy.setDate(date.getDate() + days)
-    return copy
+    const copy = new Date(Number(date));
+    copy.setDate(date.getDate() + days);
+    return copy;
   }
 }

@@ -6,7 +6,8 @@ import { GroupId } from '../../../group/domain/model/group-id';
 import { GetMembersIdByGroupId } from '../../domain/services/get-members-by-group-id.service';
 
 @Injectable()
-export class GetMembersIdByGroupIdFromReadModel implements GetMembersIdByGroupId {
+export class GetMembersIdByGroupIdFromReadModel
+  implements GetMembersIdByGroupId {
   constructor(
     @Inject(MEMBER_MODEL) private readonly memberModel: Model<MemberView>,
   ) {}

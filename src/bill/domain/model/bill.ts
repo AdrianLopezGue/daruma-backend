@@ -140,11 +140,11 @@ export class Bill extends AggregateRoot {
     this.apply(new BillWasRemoved(this._billId.value));
   }
 
-  addPayer(newPayer: BillPayer){
+  addPayer(newPayer: BillPayer) {
     this.apply(new BillPayerWasAdded(this._billId.value, newPayer));
   }
 
-  addDebtor(newDebtor: BillDebtor){
+  addDebtor(newDebtor: BillDebtor) {
     this.apply(new BillDebtorWasAdded(this._billId.value, newDebtor));
   }
 
@@ -169,7 +169,9 @@ export class Bill extends AggregateRoot {
       return;
     }
 
-    this.apply(new BillCurrencyCodeWasChanged(this._billId.value, currencyCode.value));
+    this.apply(
+      new BillCurrencyCodeWasChanged(this._billId.value, currencyCode.value),
+    );
   }
 
   changeDate(date: BillDate) {
@@ -196,11 +198,17 @@ export class Bill extends AggregateRoot {
   }
 
   private onBillMoneyWasChanged(event: BillMoneyWasChanged) {
-    this._amount = BillAmount.withMoneyAndCurrencyCode(BillCurrencyUnit.fromNumber(event.money), this._amount.currencyCode);
+    this._amount = BillAmount.withMoneyAndCurrencyCode(
+      BillCurrencyUnit.fromNumber(event.money),
+      this._amount.currencyCode,
+    );
   }
 
   private onBillCurrencyCodeWasChanged(event: BillCurrencyCodeWasChanged) {
-    this._amount = BillAmount.withMoneyAndCurrencyCode(this._amount.money, GroupCurrencyCode.fromString(event.currencyCode));
+    this._amount = BillAmount.withMoneyAndCurrencyCode(
+      this._amount.money,
+      GroupCurrencyCode.fromString(event.currencyCode),
+    );
   }
 
   private onBillNameWasChanged(event: BillNameWasChanged) {
@@ -220,11 +228,15 @@ export class Bill extends AggregateRoot {
   }
 
   private onBillPayerWasRemoved(event: BillPayerWasRemoved) {
-    this._payers = this._payers.filter((payer) => payer.props.memberId.props.value !== event.payerId);
+    this._payers = this._payers.filter(
+      payer => payer.props.memberId.props.value !== event.payerId,
+    );
   }
 
   private onBillDebtorWasRemoved(event: BillDebtorWasRemoved) {
-    this._debtors = this._debtors.filter((debtor) => debtor.props.memberId.props.value !== event.debtorId);
+    this._debtors = this._debtors.filter(
+      debtor => debtor.props.memberId.props.value !== event.debtorId,
+    );
   }
 
   private onBillWasRemoved(event: BillWasRemoved) {

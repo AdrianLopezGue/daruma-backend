@@ -7,7 +7,6 @@ import { TransactionId } from '../../domain/model/transaction-id';
 import { TransactionIdNotFoundError } from '../../domain/exception/transaction-id-not-found.error';
 import { TransferTransaction } from '../../domain/model/transfer-transaction';
 
-
 @CommandHandler(RemoveTransferTransactionsCommand)
 export class RemoveTransferTransactionsHandler
   implements ICommandHandler<RemoveTransferTransactionsCommand> {
@@ -17,22 +16,27 @@ export class RemoveTransferTransactionsHandler
   ) {}
 
   async execute(command: RemoveTransferTransactionsCommand) {
-    const transferTransactionsId = await this.transactionService.getTransferTransactionIdsByGroupId(command.groupId);
+    const transferTransactionsId = await this.transactionService.getTransferTransactionIdsByGroupId(
+      command.groupId,
+    );
     const arr = Object.keys(transferTransactionsId).map(function(id) {
       return transferTransactionsId[id];
     });
-    arr.map(
-      async transferTransactionId => {
-        const transactionId = TransactionId.fromString(transferTransactionId);
-        const transferTransaction = await this.transactions.findTransferTransaction(transactionId);
+    arr.map(async transferTransactionId => {
+      const transactionId = TransactionId.fromString(transferTransactionId);
+      const transferTransaction = await this.transactions.findTransferTransaction(
+        transactionId,
+      );
 
-        if (!(transferTransaction instanceof TransferTransaction) || transferTransaction.isRemoved) {
-          throw TransactionIdNotFoundError.withString(transactionId.value);
-        }
-
-        transferTransaction.remove();
-        this.transactions.saveTransferTransaction(transferTransaction);
+      if (
+        !(transferTransaction instanceof TransferTransaction) ||
+        transferTransaction.isRemoved
+      ) {
+        throw TransactionIdNotFoundError.withString(transactionId.value);
       }
-    );
+
+      transferTransaction.remove();
+      this.transactions.saveTransferTransaction(transferTransaction);
+    });
   }
 }

@@ -24,7 +24,7 @@ describe('DELETE /members/:id', () => {
 
         const member = newMember(...members.body, memberId, groupId);
 
-        post('members', member, userId)
+        post('members', member, userId);
 
         cy.task('sync');
       });

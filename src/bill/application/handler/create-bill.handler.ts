@@ -20,7 +20,10 @@ import { v4 } from 'uuid';
 import { TRANSACTIONS } from '../../../transaction/domain/repository/index';
 import { Transactions } from '../../../transaction/domain/repository/transactions';
 import { DebtTransaction } from '../../../transaction/domain/model/debt-transaction';
-import { CHECK_USER_IN_GROUP, CheckUserInGroup } from '../../../member/domain/services/check-user-in-group.service';
+import {
+  CHECK_USER_IN_GROUP,
+  CheckUserInGroup,
+} from '../../../member/domain/services/check-user-in-group.service';
 import { GroupId } from '../../../group/domain/model/group-id';
 import { UserId } from '../../../user/domain/model/user-id';
 
@@ -35,7 +38,10 @@ export class CreateBillHandler implements ICommandHandler<CreateBillCommand> {
 
   async execute(command: CreateBillCommand) {
     if (
-      (await this.checkUserInGroup.with(UserId.fromString(command.creatorId) , GroupId.fromString(command.groupId))) === null
+      (await this.checkUserInGroup.with(
+        UserId.fromString(command.creatorId),
+        GroupId.fromString(command.groupId),
+      )) === null
     ) {
       throw new CreatorIdNotFoundInGroup(command.creatorId);
     }

@@ -9,5 +9,5 @@ export const CommandHandlers = [
   RegisterMemberAsUserHandler,
   ChangeMembersNameHandler,
   RemoveMembersHandler,
-  RemoveMemberHandler
+  RemoveMemberHandler,
 ];

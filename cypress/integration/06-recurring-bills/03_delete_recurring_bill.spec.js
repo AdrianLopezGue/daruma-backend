@@ -3,10 +3,10 @@ import * as uuid from 'uuid';
 import { post, remove, remove, newGroup, newRecurringBill } from '../../api';
 
 describe('DELETE /recurringbill/:id', () => {
-    let recurringBillId;
-    let billId;
-    let groupId;
-    let userId;
+  let recurringBillId;
+  let billId;
+  let groupId;
+  let userId;
 
   beforeEach(() => {
     cy.task('db:clean');
@@ -17,25 +17,25 @@ describe('DELETE /recurringbill/:id', () => {
     userId = uuid.v4();
 
     cy.fixture('groups.json').then(groups => {
-        cy.fixture('recurring-bills.json').then(recurringBills => {
-          const group = newGroup(groups.body, groupId, userId);
-  
-          post('groups', group, userId, true);
-    
-          cy.task('sync');
-  
-          const recurringBill = newRecurringBill(
-            recurringBills.body,
-            recurringBillId,
-            billId,
-            groupId,
-          );
-  
-          post('recurringbills', recurringBill, userId);
-  
-          cy.task('sync');
-        });
+      cy.fixture('recurring-bills.json').then(recurringBills => {
+        const group = newGroup(groups.body, groupId, userId);
+
+        post('groups', group, userId, true);
+
+        cy.task('sync');
+
+        const recurringBill = newRecurringBill(
+          recurringBills.body,
+          recurringBillId,
+          billId,
+          groupId,
+        );
+
+        post('recurringbills', recurringBill, userId);
+
+        cy.task('sync');
       });
+    });
   });
 
   it('Delete recurring bill', function() {

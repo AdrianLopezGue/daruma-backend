@@ -10,7 +10,6 @@ import { Group } from '../../domain/model/group';
 import { RemoveGroupCommand } from '../command/remove-group.command';
 import { GroupIdNotFoundError } from '../../domain/exception/group-id-not-found.error';
 
-
 describe('RemoveGroupHandler', () => {
   let command$: RemoveGroupHandler;
 

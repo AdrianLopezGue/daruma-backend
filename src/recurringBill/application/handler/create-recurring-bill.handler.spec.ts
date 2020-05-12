@@ -2,7 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { v4 as uuid } from 'uuid';
 
 import { CreateRecurringBillCommand } from '../command/create-recurring-bill.command';
-import { RecurringBills, RECURRING_BILLS } from '../../domain/repository/recurring-bills';
+import {
+  RecurringBills,
+  RECURRING_BILLS,
+} from '../../domain/repository/recurring-bills';
 import { RecurringBillId } from '../../domain/model/recurring-bill-id';
 import { BillId } from '../../../bill/domain/model/bill-id';
 import { BillDate } from '../../../bill/domain/model/bill-date';
@@ -10,7 +13,6 @@ import { RecurringBillPeriod } from '../../domain/model/recurring-bill-period';
 import { CreateRecurringBillHandler } from './create-recurring-bill.handler';
 import { RecurringBill } from '../../domain/model/recurring-bill';
 import { GroupId } from '../../../group/domain/model/group-id';
-
 
 describe('CreateRecurringBillCommand', () => {
   let command$: CreateRecurringBillHandler;
@@ -34,7 +36,9 @@ describe('CreateRecurringBillCommand', () => {
       ],
     }).compile();
 
-    command$ = module.get<CreateRecurringBillHandler>(CreateRecurringBillHandler);
+    command$ = module.get<CreateRecurringBillHandler>(
+      CreateRecurringBillHandler,
+    );
     recurringBills.find = jest.fn().mockResolvedValue(null);
     recurringBills.save = jest.fn();
   });

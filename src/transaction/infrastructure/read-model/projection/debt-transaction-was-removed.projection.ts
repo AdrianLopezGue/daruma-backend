@@ -5,22 +5,24 @@ import { DebtTransactionWasRemoved } from '../../../domain/event/debt-transactio
 import { DebtTransactionView } from '../schema/debt-transaction.schema';
 import { BalanceView } from '../schema/balance.transaction.schema';
 
-
 @EventsHandler(DebtTransactionWasRemoved)
 export class DebtTransactionWasRemovedProjection
   implements IEventHandler<DebtTransactionWasRemoved> {
   constructor(
-    @Inject('DEBT_TRANSACTION_MODEL') private readonly debtTransactionModel: Model<DebtTransactionView>,
+    @Inject('DEBT_TRANSACTION_MODEL')
+    private readonly debtTransactionModel: Model<DebtTransactionView>,
     @Inject('BALANCE_MODEL')
     private readonly balanceModel: Model<BalanceView>,
   ) {}
 
   async handle(event: DebtTransactionWasRemoved) {
-    const debtTransactionView = await this.debtTransactionModel.findById(event.id).exec();
+    const debtTransactionView = await this.debtTransactionModel
+      .findById(event.id)
+      .exec();
 
     this.balanceModel
-    .updateOne({ _id: event.idMember }, { $inc: { money: event.money } })
-    .exec();
+      .updateOne({ _id: event.idMember }, { $inc: { money: event.money } })
+      .exec();
 
     debtTransactionView.remove();
   }

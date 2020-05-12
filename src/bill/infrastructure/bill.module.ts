@@ -34,7 +34,7 @@ import { BillSagas } from './sagas/bill.saga';
     BillEventStore,
     FirebaseDatabase,
     MemberService,
-    BillSagas
+    BillSagas,
   ],
 })
 export class BillModule implements OnModuleInit {

@@ -16,6 +16,5 @@ export const groupEventHandlers = {
     new GroupNameWasChanged(id, name),
   GroupCurrencyCodeWasChanged: (id: string, currencyCode: string) =>
     new GroupCurrencyCodeWasChanged(id, currencyCode),
-  GroupWasRemoved: (id: string) =>
-    new GroupWasRemoved(id),
+  GroupWasRemoved: (id: string) => new GroupWasRemoved(id),
 };

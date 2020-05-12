@@ -13,7 +13,6 @@ import { BillDebtorWasRemoved } from '../../../bill/domain/event/bill-debtor-was
 
 @Injectable()
 export class TransactionSagas {
-
   @Saga()
   billWasRemovedPublished = (
     events$: Observable<any>,
@@ -22,7 +21,7 @@ export class TransactionSagas {
       ofType(BillWasRemoved),
       map(event => new RemoveDebtAndDepositTransactionsCommand(event.id)),
     );
-  }
+  };
 
   @Saga()
   groupWasRemovedPublished = (
@@ -40,7 +39,9 @@ export class TransactionSagas {
   ): Observable<ICommand> => {
     return events$.pipe(
       ofType(BillPayerWasRemoved),
-      map(event => new RemoveDepositTransactionCommand(event.id, event.payerId)),
+      map(
+        event => new RemoveDepositTransactionCommand(event.id, event.payerId),
+      ),
     );
   };
 

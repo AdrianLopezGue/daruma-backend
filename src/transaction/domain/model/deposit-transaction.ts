@@ -69,7 +69,13 @@ export class DepositTransaction extends AggregateRoot {
       return;
     }
 
-    this.apply(new DepositTransactionWasRemoved(this._transactionId.value, this.memberId.value, this._amount.money.value));
+    this.apply(
+      new DepositTransactionWasRemoved(
+        this._transactionId.value,
+        this.memberId.value,
+        this._amount.money.value,
+      ),
+    );
   }
 
   private onDepositTransactionWasCreated(event: DepositTransactionWasCreated) {

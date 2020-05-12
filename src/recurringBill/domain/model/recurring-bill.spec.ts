@@ -11,7 +11,6 @@ import { RecurringBillWasRemoved } from '../event/recurring-bill-was-removed.eve
 import { GroupId } from '../../../group/domain/model/group-id';
 import { RecurringBillPeriodWasChanged } from '../event/recurring-bill-period-was-changed.event';
 
-
 describe('RecurringBill', () => {
   let recurringBill: RecurringBill;
   let eventBus$: EventBus;
@@ -35,7 +34,7 @@ describe('RecurringBill', () => {
 
   it('can be created', () => {
     recurringBill = eventPublisher$.mergeObjectContext(
-        RecurringBill.add(recurringBillId, billId, groupId, date, period),
+      RecurringBill.add(recurringBillId, billId, groupId, date, period),
     );
     recurringBill.commit();
 
@@ -47,7 +46,7 @@ describe('RecurringBill', () => {
         groupId.value,
         date.value,
         period.value,
-      )
+      ),
     );
   });
 
@@ -79,7 +78,11 @@ describe('RecurringBill', () => {
 
     expect(eventBus$.publish).toHaveBeenCalledTimes(1);
     expect(eventBus$.publish).toHaveBeenCalledWith(
-      new RecurringBillPeriodWasChanged(recurringBillId.value, date.value, newPeriod.value),
+      new RecurringBillPeriodWasChanged(
+        recurringBillId.value,
+        date.value,
+        newPeriod.value,
+      ),
     );
 
     expect(recurringBill.period.equals(newPeriod)).toBeTruthy();

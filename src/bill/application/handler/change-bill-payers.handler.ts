@@ -18,36 +18,36 @@ import { BillIdNotFoundError } from '../../domain/exception/bill-id-not-found.er
 import { Bill } from '../../domain/model/bill';
 
 @CommandHandler(ChangeBillPayersCommand)
-export class ChangeBillPayersHandler implements ICommandHandler<ChangeBillPayersCommand> {
+export class ChangeBillPayersHandler
+  implements ICommandHandler<ChangeBillPayersCommand> {
   constructor(
     @Inject(BILLS) private readonly bills: Bills,
     @Inject(TRANSACTIONS) private readonly transactions: Transactions,
   ) {}
 
   async execute(command: ChangeBillPayersCommand) {
-
     const billId = BillId.fromString(command.billId);
     const bill = await this.bills.find(billId);
 
     if (!(bill instanceof Bill)) {
-        throw BillIdNotFoundError.withString(command.billId);
+      throw BillIdNotFoundError.withString(command.billId);
     }
 
     const currentPayers = bill.payers;
 
-    currentPayers.map((payer) => {
+    currentPayers.map(payer => {
       bill.removePayer(MemberId.fromString(payer.props.memberId.props.value));
       this.bills.save(bill);
     });
 
     const newPayers = command.payers.map(payer =>
-        BillPayer.withMemberIdAndAmount(
-            MemberId.fromString(payer._id),
-            BillCurrencyUnit.fromNumber(payer.money),
-        ),
+      BillPayer.withMemberIdAndAmount(
+        MemberId.fromString(payer._id),
+        BillCurrencyUnit.fromNumber(payer.money),
+      ),
     );
 
-    newPayers.map((newPayer) => {
+    newPayers.map(newPayer => {
       bill.addPayer(newPayer);
       this.bills.save(bill);
     });

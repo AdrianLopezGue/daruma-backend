@@ -1,31 +1,31 @@
 {
-    "johndoe": {
-      "_id": null,
-      "groupId": null,
-      "name": "John Doe"
-    },
-    "tommytoe": {
-      "_id": null,
-      "groupId": null,
-      "name": "Tommy Toe"
-    },
-    "mikemoe": {
-      "_id": null,
-      "groupId": null,
-      "name": "Mike Moe"
-    },
-    "body": {
-      "_id": null,
-      "groupId": null,
-      "name": "Tommy Toe"
-    },
-    "bodyNewUserId": {
-      "userId": null
-    },
-    "response": {
-      "_id": null,
-      "groupId": null,
-      "name": "Tommy Toe",
-      "userId": null
-    }
+  "johndoe": {
+    "_id": null,
+    "groupId": null,
+    "name": "John Doe"
+  },
+  "tommytoe": {
+    "_id": null,
+    "groupId": null,
+    "name": "Tommy Toe"
+  },
+  "mikemoe": {
+    "_id": null,
+    "groupId": null,
+    "name": "Mike Moe"
+  },
+  "body": {
+    "_id": null,
+    "groupId": null,
+    "name": "Tommy Toe"
+  },
+  "bodyNewUserId": {
+    "userId": null
+  },
+  "response": {
+    "_id": null,
+    "groupId": null,
+    "name": "Tommy Toe",
+    "userId": null
   }
+}

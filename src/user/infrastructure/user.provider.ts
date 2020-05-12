@@ -6,7 +6,10 @@ import { CHECK_UNIQUE_USER_EMAIL } from '../domain/services/check-unique-user-em
 import { CheckUniqueUserEmailFromReadModel } from './service/check-unique-user-email.service';
 import { MemberEventStore } from '../../member/infrastructure/eventstore/members.event-store';
 import { MEMBERS } from '../../member/domain/repository/index';
-import { MEMBER_MODEL, MemberSchema } from '../../member/infrastructure/read-model/schema/member.schema';
+import {
+  MEMBER_MODEL,
+  MemberSchema,
+} from '../../member/infrastructure/read-model/schema/member.schema';
 
 export const UserProviders = [
   {

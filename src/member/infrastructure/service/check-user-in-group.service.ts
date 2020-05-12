@@ -14,7 +14,6 @@ export class CheckUserInGroupFromReadModel implements CheckUserInGroup {
   ) {}
 
   async with(userId: UserId, groupId: GroupId): Promise<MemberId> {
-
     const memberView = await this.memberModel
       .findOne({ $and: [{ groupId: groupId.value }, { userId: userId.value }] })
       .exec();

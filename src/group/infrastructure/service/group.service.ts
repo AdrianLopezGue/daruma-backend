@@ -37,7 +37,9 @@ export class GroupService {
 
   async updateGroup(id: string, name: string, currencyCode: string) {
     await this.commandBus.execute(new ChangeGroupNameCommand(id, name));
-    await this.commandBus.execute(new ChangeGroupCurrencyCodeCommand(id, currencyCode));
+    await this.commandBus.execute(
+      new ChangeGroupCurrencyCodeCommand(id, currencyCode),
+    );
   }
 
   async removeGroup(id: string) {
