@@ -5,7 +5,7 @@ export enum PeriodTypes {
   Daily = 1,
   Weekly = 7,
   Monthly = 30,
-  Anually = 360,
+  Anually = 365,
 }
 
 interface Props {
