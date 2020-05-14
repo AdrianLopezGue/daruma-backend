@@ -12,12 +12,19 @@ import { GetRecurringBillIdByBillIdFromReadModel } from './service/get-recurring
 import { BILLS } from '../../bill/domain/repository/index';
 import { BillEventStore } from '../../bill/infrastructure/eventstore/bill.event-store';
 import { BILL_SERVICE, BillService } from '../../bill/infrastructure/service/bill.service';
+import { BILL_MODEL, BillSchema } from '../../bill/infrastructure/read-model/schema/bill.schema';
 
 export const RecurringBillProviders = [
   {
     provide: RECURRING_BILL_MODEL,
     useFactory: (connection: Connection) =>
       connection.model('RecurringBill', RecurringBillSchema),
+    inject: ['DATABASE_CONNECTION'],
+  },
+  {
+    provide: BILL_MODEL,
+    useFactory: (connection: Connection) =>
+      connection.model('Bills', BillSchema),
     inject: ['DATABASE_CONNECTION'],
   },
   {
