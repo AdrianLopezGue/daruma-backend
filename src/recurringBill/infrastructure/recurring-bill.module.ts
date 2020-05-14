@@ -15,6 +15,7 @@ import { RecurringBillEventStore } from './eventstore/recurring-bills.event-stor
 import { RecurringBillController } from './controller/recurring-bill.controller';
 import { RecurringBillSagas } from './sagas/recurring-bill.saga';
 import { TasksService } from './service/renovation-task.service';
+import { BillService } from '../../bill/infrastructure/service/bill.service';
 
 @Module({
   controllers: [RecurringBillController],
@@ -29,6 +30,7 @@ import { TasksService } from './service/renovation-task.service';
     ...ProjectionHandlers,
     ...RecurringBillProviders,
     RecurringBillService,
+    BillService,
     TasksService,
     RecurringBillEventStore,
     FirebaseDatabase,
