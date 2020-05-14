@@ -63,4 +63,18 @@ export class RecurringBillService {
 
     return result;
   }
+
+  async getRecurringBillsExpireToday(): Promise<RecurringBillView[]> {
+
+    const queryDateStart: Date = new Date(Date.now());
+
+    const queryDateEnd: Date = new Date(Date.now());
+    queryDateEnd.setHours(23,59,59,999);
+
+    const result = await this.recurringBillModel
+      .find({ "nextCreationDate": { "$gte": queryDateStart, $lt: queryDateEnd } })
+      .exec();
+
+    return result;
+  }
 }

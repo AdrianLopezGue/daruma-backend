@@ -5,6 +5,7 @@ export const RecurringBillSchema = new Schema({
   billId: String,
   groupId: String,
   nextCreationDate: Date,
+  period: Number,
   __v: { type: Number, select: false },
 });
 
@@ -13,6 +14,7 @@ export interface RecurringBillView extends Document {
   readonly billId: string;
   readonly groupId: string;
   readonly nextCreationDate: Date;
+  readonly period: number;
 }
 
 export const RECURRING_BILL_MODEL = 'RECURRING_BILL_MODEL';

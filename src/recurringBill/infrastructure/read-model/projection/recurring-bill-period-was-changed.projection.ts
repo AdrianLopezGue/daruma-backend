@@ -17,7 +17,7 @@ export class RecurringBillPeriodWasChangedProjection
     const nextDate = this.addDays(new Date(event.date), event.period);
 
     this.recurringBillModel
-      .updateOne({ _id: event.id }, { nextCreationDate: nextDate })
+      .updateOne({ _id: event.id }, { nextCreationDate: nextDate, period: event.period })
       .exec();
   }
 
