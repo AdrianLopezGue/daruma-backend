@@ -85,3 +85,5 @@ export class BillService {
     return this.billModel.distinct('_id', { groupId: groupId }).exec();
   }
 }
+
+export const BILL_SERVICE = 'BILL_SERVICE';

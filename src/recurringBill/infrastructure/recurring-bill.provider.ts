@@ -9,6 +9,9 @@ import { RECURRING_BILLS } from '../domain/repository/recurring-bills';
 import { RecurringBillEventStore } from './eventstore/recurring-bills.event-store';
 import { GET_RECURRING_BILL_ID_BY_BILL_ID } from '../domain/service/get-recurring-bill-by-bill-id.service';
 import { GetRecurringBillIdByBillIdFromReadModel } from './service/get-recurring-bill-by-bill-id.service';
+import { BILLS } from '../../bill/domain/repository/index';
+import { BillEventStore } from '../../bill/infrastructure/eventstore/bill.event-store';
+import { BILL_SERVICE, BillService } from '../../bill/infrastructure/service/bill.service';
 
 export const RecurringBillProviders = [
   {
@@ -20,6 +23,14 @@ export const RecurringBillProviders = [
   {
     provide: RECURRING_BILLS,
     useClass: RecurringBillEventStore,
+  },
+  {
+    provide: BILLS,
+    useClass: BillEventStore,
+  },
+  {
+    provide: BILL_SERVICE,
+    useValue: BillService,
   },
   {
     provide: GROUPS,

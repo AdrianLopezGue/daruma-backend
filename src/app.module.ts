@@ -1,5 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import { BillModule } from './bill/infrastructure/bill.module';
 import { BootstrapModule } from './bootstrap.module';
@@ -26,6 +27,7 @@ import { RecurringBillModule } from './recurringBill/infrastructure/recurring-bi
     BillModule,
     TransactionModule,
     RecurringBillModule,
+    ScheduleModule.forRoot(),
   ],
 })
 export class AppModule {}
