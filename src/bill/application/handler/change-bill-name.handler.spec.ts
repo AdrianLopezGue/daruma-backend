@@ -18,7 +18,6 @@ import { ChangeBillMoneyHandler } from './change-bill-money.handler';
 import { ChangeBillNameHandler } from './change-bill-name.handler';
 import { ChangeBillNameCommand } from '../command/change-bill-name.command';
 
-
 describe('ChangeBillNameHandler', () => {
   let command$: ChangeBillNameHandler;
 
@@ -73,7 +72,16 @@ describe('ChangeBillNameHandler', () => {
   });
 
   it('should change bill name', async () => {
-    const bill =  Bill.add(billId, groupId, name, amount, date, newPayers, newDebtors, creatorId);
+    const bill = Bill.add(
+      billId,
+      groupId,
+      name,
+      amount,
+      date,
+      newPayers,
+      newDebtors,
+      creatorId,
+    );
     const newName = BillName.fromString('New name');
 
     bills.find = jest.fn().mockResolvedValue(bill);

@@ -13,7 +13,6 @@ import { CreateDepositTransactionCommand } from '../command/create-deposit-trans
 import { DepositTransaction } from '../../domain/model/deposit-transaction';
 import { CreateDepositTransactionHandler } from './create-deposit-transaction.handler';
 
-
 describe('CreateDepositTransactionHandler', () => {
   let command$: CreateDepositTransactionHandler;
 
@@ -38,10 +37,12 @@ describe('CreateDepositTransactionHandler', () => {
       ],
     }).compile();
 
-    command$ = module.get<CreateDepositTransactionHandler>(CreateDepositTransactionHandler);
+    command$ = module.get<CreateDepositTransactionHandler>(
+      CreateDepositTransactionHandler,
+    );
     transactions.findDepositTransaction = jest.fn().mockResolvedValue(null);
     transactions.saveDepositTransaction = jest.fn();
- });
+  });
 
   it('should creates a new deposit transaction', async () => {
     await command$.execute(

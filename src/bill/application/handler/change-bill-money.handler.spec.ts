@@ -17,7 +17,6 @@ import { BillIdNotFoundError } from '../../domain/exception/bill-id-not-found.er
 import { ChangeBillMoneyHandler } from './change-bill-money.handler';
 import { ChangeBillMoneyCommand } from '../command/change-bill-money.command';
 
-
 describe('ChangeBillMoneyHandler', () => {
   let command$: ChangeBillMoneyHandler;
 
@@ -32,24 +31,12 @@ describe('ChangeBillMoneyHandler', () => {
   );
 
   const newPayers = [
-    BillPayer.withMemberIdAndAmount(
-      MemberId.fromString(uuid()),
-      amount.money,
-    ),
-    BillPayer.withMemberIdAndAmount(
-      MemberId.fromString(uuid()),
-      amount.money,
-    ),
+    BillPayer.withMemberIdAndAmount(MemberId.fromString(uuid()), amount.money),
+    BillPayer.withMemberIdAndAmount(MemberId.fromString(uuid()), amount.money),
   ];
   const newDebtors = [
-    BillDebtor.withMemberIdAndAmount(
-      MemberId.fromString(uuid()),
-      amount.money,
-    ),
-    BillDebtor.withMemberIdAndAmount(
-      MemberId.fromString(uuid()),
-      amount.money,
-    ),
+    BillDebtor.withMemberIdAndAmount(MemberId.fromString(uuid()), amount.money),
+    BillDebtor.withMemberIdAndAmount(MemberId.fromString(uuid()), amount.money),
   ];
 
   const date = BillDate.fromDate(new Date('2019-11-15T17:43:50'));
@@ -72,9 +59,17 @@ describe('ChangeBillMoneyHandler', () => {
   });
 
   it('should change bill money', async () => {
-    const bill =  Bill.add(billId, groupId, name, amount, date, newPayers, newDebtors, creatorId);
+    const bill = Bill.add(
+      billId,
+      groupId,
+      name,
+      amount,
+      date,
+      newPayers,
+      newDebtors,
+      creatorId,
+    );
     const newMoney = BillCurrencyUnit.fromNumber(200);
-
 
     bills.find = jest.fn().mockResolvedValue(bill);
     bill.changeMoney(newMoney);

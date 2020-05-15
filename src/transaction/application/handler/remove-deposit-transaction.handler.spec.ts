@@ -37,37 +37,62 @@ describe('RemoveDepositTransactionHandler', () => {
           useValue: transactions,
         },
         {
-            provide: TransactionService,
-            useValue: transactionService,
+          provide: TransactionService,
+          useValue: transactionService,
         },
       ],
     }).compile();
 
-    command$ = module.get<RemoveDepositTransactionHandler>(RemoveDepositTransactionHandler);
+    command$ = module.get<RemoveDepositTransactionHandler>(
+      RemoveDepositTransactionHandler,
+    );
     transactions.findDepositTransaction = jest.fn().mockResolvedValue(null);
     transactions.saveDepositTransaction = jest.fn();
-    transactionService.getDepositTransactionByBillIdAndMemberId = jest.fn().mockResolvedValue(null);
+    transactionService.getDepositTransactionByBillIdAndMemberId = jest
+      .fn()
+      .mockResolvedValue(null);
   });
 
   it('should remove a deposit transaction', async () => {
-    const depositTransaction = DepositTransaction.add(transactionId, memberId, billId, amount);
-    transactionService.getDepositTransactionByBillIdAndMemberId = jest.fn().mockResolvedValue(depositTransaction);
-    transactions.findDepositTransaction = jest.fn().mockResolvedValue(depositTransaction);
+    const depositTransaction = DepositTransaction.add(
+      transactionId,
+      memberId,
+      billId,
+      amount,
+    );
+    transactionService.getDepositTransactionByBillIdAndMemberId = jest
+      .fn()
+      .mockResolvedValue(depositTransaction);
+    transactions.findDepositTransaction = jest
+      .fn()
+      .mockResolvedValue(depositTransaction);
 
-    await command$.execute(new RemoveDepositTransactionCommand(billId.value, memberId.value));
+    await command$.execute(
+      new RemoveDepositTransactionCommand(billId.value, memberId.value),
+    );
 
     expect(transactions.saveDepositTransaction).toHaveBeenCalledTimes(1);
-    expect(transactions.saveDepositTransaction).toHaveBeenCalledWith(depositTransaction);
+    expect(transactions.saveDepositTransaction).toHaveBeenCalledWith(
+      depositTransaction,
+    );
   });
 
   it('should throw an error if transaction does not exists', async () => {
-    const depositTransaction = DepositTransaction.add(transactionId, memberId, billId, amount);
-    transactionService.getDepositTransactionByBillIdAndMemberId = jest.fn().mockResolvedValue(depositTransaction);
+    const depositTransaction = DepositTransaction.add(
+      transactionId,
+      memberId,
+      billId,
+      amount,
+    );
+    transactionService.getDepositTransactionByBillIdAndMemberId = jest
+      .fn()
+      .mockResolvedValue(depositTransaction);
     transactions.findDepositTransaction = jest.fn().mockResolvedValue(null);
 
-
     expect(
-      command$.execute(new RemoveDepositTransactionCommand(billId.value, memberId.value)),
+      command$.execute(
+        new RemoveDepositTransactionCommand(billId.value, memberId.value),
+      ),
     ).rejects.toThrow(TransactionIdNotFoundError);
 
     expect(transactions.saveDepositTransaction).toHaveBeenCalledTimes(0);

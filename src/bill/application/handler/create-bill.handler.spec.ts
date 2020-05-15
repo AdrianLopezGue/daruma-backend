@@ -117,7 +117,16 @@ describe('CreateBillHandler', () => {
     ];
 
     expect(bills.save).toHaveBeenCalledWith(
-      Bill.add(billId, groupId, name, amount, date, newPayers, newDebtors, creatorId),
+      Bill.add(
+        billId,
+        groupId,
+        name,
+        amount,
+        date,
+        newPayers,
+        newDebtors,
+        creatorId,
+      ),
     );
   });
 
@@ -125,19 +134,19 @@ describe('CreateBillHandler', () => {
     checkUserInGroup.with = jest.fn().mockResolvedValue(null);
 
     expect(
-        command$.execute(
-            new CreateBillCommand(
-              billId.value,
-              groupId.value,
-              name.value,
-              date.value,
-              amount.money.value,
-              amount.currencyCode.value,
-              payers,
-              debtors,
-              creatorId.value,
-            ),
-          )
+      command$.execute(
+        new CreateBillCommand(
+          billId.value,
+          groupId.value,
+          name.value,
+          date.value,
+          amount.money.value,
+          amount.currencyCode.value,
+          payers,
+          debtors,
+          creatorId.value,
+        ),
+      ),
     ).rejects.toThrow(CreatorIdNotFoundInGroup);
 
     expect(bills.save).toHaveBeenCalledTimes(0);

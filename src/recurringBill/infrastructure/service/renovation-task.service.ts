@@ -23,36 +23,50 @@ export class TasksService {
 
     const recurringBillToRenovate = await this.recurringBillService.getRecurringBillsExpireToday();
 
-    recurringBillToRenovate.map(async (recurringBill) => {
-        const billToCopy = await this.bills.find(BillId.fromString(recurringBill.billId));
-        const newBillId = uuid();
-        const newRecurringBillId = uuid();
+    recurringBillToRenovate.map(async recurringBill => {
+      const billToCopy = await this.bills.find(
+        BillId.fromString(recurringBill.billId),
+      );
+      const newBillId = uuid();
+      const newRecurringBillId = uuid();
 
-        try{
-          await this.billService.createBill(
-            newBillId,
-            billToCopy.groupId.value,
-            billToCopy.name.value,
-            billToCopy.amount.money.props.value,
-            billToCopy.amount.currencyCode.props.value,
-            billToCopy.payers.map((payer) => new ParticipantDto(payer.props.memberId.props.value, payer.props.amount.props.value)),
-            billToCopy.debtors.map((debtor) => new ParticipantDto(debtor.props.memberId.props.value, debtor.props.amount.props.value)),
-            new Date(Date.now()),
-            billToCopy.creator.value
-        )
-        } catch (e){
-          console.debug(e);
-        }
+      try {
+        await this.billService.createBill(
+          newBillId,
+          billToCopy.groupId.value,
+          billToCopy.name.value,
+          billToCopy.amount.money.props.value,
+          billToCopy.amount.currencyCode.props.value,
+          billToCopy.payers.map(
+            payer =>
+              new ParticipantDto(
+                payer.props.memberId.props.value,
+                payer.props.amount.props.value,
+              ),
+          ),
+          billToCopy.debtors.map(
+            debtor =>
+              new ParticipantDto(
+                debtor.props.memberId.props.value,
+                debtor.props.amount.props.value,
+              ),
+          ),
+          new Date(Date.now()),
+          billToCopy.creator.value,
+        );
+      } catch (e) {
+        console.debug(e);
+      }
 
-        this.recurringBillService.removeRecurringBill(recurringBill.id);
+      this.recurringBillService.removeRecurringBill(recurringBill.id);
 
-        this.recurringBillService.createRecurringBill(
-            newRecurringBillId,
-            newBillId,
-            recurringBill.groupId,
-            new Date(Date.now()),
-            recurringBill.period,
-        )
+      this.recurringBillService.createRecurringBill(
+        newRecurringBillId,
+        newBillId,
+        recurringBill.groupId,
+        new Date(Date.now()),
+        recurringBill.period,
+      );
     });
 
     this.logger.debug('Renovation Recurring Bills ends');

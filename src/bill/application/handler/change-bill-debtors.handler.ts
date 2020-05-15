@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { v4 as uuid} from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 import { BILLS } from '../../domain/repository/index';
 import { BillId } from '../../domain/model/bill-id';

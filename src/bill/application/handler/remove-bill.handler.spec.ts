@@ -31,24 +31,12 @@ describe('RemoveBillHandler', () => {
   );
 
   const newPayers = [
-    BillPayer.withMemberIdAndAmount(
-      MemberId.fromString(uuid()),
-      amount.money,
-    ),
-    BillPayer.withMemberIdAndAmount(
-      MemberId.fromString(uuid()),
-      amount.money,
-    ),
+    BillPayer.withMemberIdAndAmount(MemberId.fromString(uuid()), amount.money),
+    BillPayer.withMemberIdAndAmount(MemberId.fromString(uuid()), amount.money),
   ];
   const newDebtors = [
-    BillDebtor.withMemberIdAndAmount(
-      MemberId.fromString(uuid()),
-      amount.money,
-    ),
-    BillDebtor.withMemberIdAndAmount(
-      MemberId.fromString(uuid()),
-      amount.money,
-    ),
+    BillDebtor.withMemberIdAndAmount(MemberId.fromString(uuid()), amount.money),
+    BillDebtor.withMemberIdAndAmount(MemberId.fromString(uuid()), amount.money),
   ];
 
   const date = BillDate.fromDate(new Date('2019-11-15T17:43:50'));
@@ -71,7 +59,16 @@ describe('RemoveBillHandler', () => {
   });
 
   it('should remove a bill', async () => {
-    const bill =  Bill.add(billId, groupId, name, amount, date, newPayers, newDebtors, creatorId);
+    const bill = Bill.add(
+      billId,
+      groupId,
+      name,
+      amount,
+      date,
+      newPayers,
+      newDebtors,
+      creatorId,
+    );
     bills.find = jest.fn().mockResolvedValue(bill);
 
     await command$.execute(new RemoveBillCommand(billId.value));
@@ -91,7 +88,16 @@ describe('RemoveBillHandler', () => {
   });
 
   it('should throw an error if bill was removed', async () => {
-    const bill =  Bill.add(billId, groupId, name, amount, date, newPayers, newDebtors, creatorId);
+    const bill = Bill.add(
+      billId,
+      groupId,
+      name,
+      amount,
+      date,
+      newPayers,
+      newDebtors,
+      creatorId,
+    );
 
     bill.remove();
     bills.find = jest.fn().mockResolvedValue(bill);

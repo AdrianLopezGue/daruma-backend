@@ -36,7 +36,7 @@ describe('DepositTransaction', () => {
 
   it('can be created', () => {
     depositTransaction = eventPublisher$.mergeObjectContext(
-        DepositTransaction.add(transactionId, memberId, billId, amount),
+      DepositTransaction.add(transactionId, memberId, billId, amount),
     );
     depositTransaction.commit();
 
@@ -66,7 +66,9 @@ describe('DepositTransaction', () => {
 
   it('has an amount', () => {
     expect(depositTransaction.amount.money.equals(amount.money)).toBeTruthy();
-    expect(depositTransaction.amount.currencyCode.equals(amount.currencyCode)).toBeTruthy();
+    expect(
+      depositTransaction.amount.currencyCode.equals(amount.currencyCode),
+    ).toBeTruthy();
   });
 
   it('can be removed', () => {
@@ -76,7 +78,11 @@ describe('DepositTransaction', () => {
 
     expect(eventBus$.publish).toHaveBeenCalledTimes(1);
     expect(eventBus$.publish).toHaveBeenCalledWith(
-      new DepositTransactionWasRemoved(transactionId.value, memberId.value, amount.money.value),
+      new DepositTransactionWasRemoved(
+        transactionId.value,
+        memberId.value,
+        amount.money.value,
+      ),
     );
 
     expect(depositTransaction.isRemoved).toBeTruthy();

@@ -17,7 +17,6 @@ import { ChangeBillDateCommand } from '../command/change-bill-date.command';
 import { Bill } from '../../domain/model/bill';
 import { BillIdNotFoundError } from '../../domain/exception/bill-id-not-found.error';
 
-
 describe('ChangeBillDateHandler', () => {
   let command$: ChangeBillDateHandler;
 
@@ -32,24 +31,12 @@ describe('ChangeBillDateHandler', () => {
   );
 
   const newPayers = [
-    BillPayer.withMemberIdAndAmount(
-      MemberId.fromString(uuid()),
-      amount.money,
-    ),
-    BillPayer.withMemberIdAndAmount(
-      MemberId.fromString(uuid()),
-      amount.money,
-    ),
+    BillPayer.withMemberIdAndAmount(MemberId.fromString(uuid()), amount.money),
+    BillPayer.withMemberIdAndAmount(MemberId.fromString(uuid()), amount.money),
   ];
   const newDebtors = [
-    BillDebtor.withMemberIdAndAmount(
-      MemberId.fromString(uuid()),
-      amount.money,
-    ),
-    BillDebtor.withMemberIdAndAmount(
-      MemberId.fromString(uuid()),
-      amount.money,
-    ),
+    BillDebtor.withMemberIdAndAmount(MemberId.fromString(uuid()), amount.money),
+    BillDebtor.withMemberIdAndAmount(MemberId.fromString(uuid()), amount.money),
   ];
 
   const date = BillDate.fromDate(new Date('2019-11-15T17:43:50'));
@@ -72,9 +59,17 @@ describe('ChangeBillDateHandler', () => {
   });
 
   it('should change bill date', async () => {
-    const bill =  Bill.add(billId, groupId, name, amount, date, newPayers, newDebtors, creatorId);
+    const bill = Bill.add(
+      billId,
+      groupId,
+      name,
+      amount,
+      date,
+      newPayers,
+      newDebtors,
+      creatorId,
+    );
     const newDate = BillDate.fromDate(new Date('2019-11-16T17:43:50'));
-
 
     bills.find = jest.fn().mockResolvedValue(bill);
     bill.changeDate(newDate);
@@ -89,7 +84,12 @@ describe('ChangeBillDateHandler', () => {
 
   it('should throw an error if bill does not exists', async () => {
     expect(
-      command$.execute(new ChangeBillDateCommand(billId.value, new Date('2019-11-16T17:43:50'))),
+      command$.execute(
+        new ChangeBillDateCommand(
+          billId.value,
+          new Date('2019-11-16T17:43:50'),
+        ),
+      ),
     ).rejects.toThrow(BillIdNotFoundError);
 
     expect(bills.save).toHaveBeenCalledTimes(0);

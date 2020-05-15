@@ -20,7 +20,7 @@ export class RecurringBillWasCreatedProjection
       billId: event.billId,
       groupId: event.groupId,
       nextCreationDate: nextDate,
-      period: event.period
+      period: event.period,
     });
 
     return recurringBillView.save();

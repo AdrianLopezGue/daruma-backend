@@ -25,7 +25,6 @@ describe('TransferTransaction', () => {
   );
   const groupId = GroupId.fromString(uuid());
 
-
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [CqrsModule],
@@ -38,7 +37,13 @@ describe('TransferTransaction', () => {
 
   it('can be created', () => {
     transferTransaction = eventPublisher$.mergeObjectContext(
-        TransferTransaction.add(transactionId, senderId, beneficiaryId, amount, groupId),
+      TransferTransaction.add(
+        transactionId,
+        senderId,
+        beneficiaryId,
+        amount,
+        groupId,
+      ),
     );
     transferTransaction.commit();
 
@@ -64,12 +69,16 @@ describe('TransferTransaction', () => {
   });
 
   it('has a beneficiary id', () => {
-    expect(transferTransaction.beneficiaryId.equals(beneficiaryId)).toBeTruthy();
+    expect(
+      transferTransaction.beneficiaryId.equals(beneficiaryId),
+    ).toBeTruthy();
   });
 
   it('has an amount', () => {
     expect(transferTransaction.amount.money.equals(amount.money)).toBeTruthy();
-    expect(transferTransaction.amount.currencyCode.equals(amount.currencyCode)).toBeTruthy();
+    expect(
+      transferTransaction.amount.currencyCode.equals(amount.currencyCode),
+    ).toBeTruthy();
   });
 
   it('has a group id', () => {
@@ -77,13 +86,20 @@ describe('TransferTransaction', () => {
   });
 
   it('can be removed', () => {
-    transferTransaction = eventPublisher$.mergeObjectContext(transferTransaction);
+    transferTransaction = eventPublisher$.mergeObjectContext(
+      transferTransaction,
+    );
     transferTransaction.remove();
     transferTransaction.commit();
 
     expect(eventBus$.publish).toHaveBeenCalledTimes(1);
     expect(eventBus$.publish).toHaveBeenCalledWith(
-      new TransferTransactionWasRemoved(transactionId.value, senderId.value, beneficiaryId.value, amount.money.value),
+      new TransferTransactionWasRemoved(
+        transactionId.value,
+        senderId.value,
+        beneficiaryId.value,
+        amount.money.value,
+      ),
     );
 
     expect(transferTransaction.isRemoved).toBeTruthy();

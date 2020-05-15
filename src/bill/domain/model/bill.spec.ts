@@ -34,24 +34,12 @@ describe('Bill', () => {
     GroupCurrencyCode.fromString('EUR'),
   );
   const payers = [
-    BillPayer.withMemberIdAndAmount(
-      MemberId.fromString(uuid()),
-      amount.money,
-    ),
-    BillPayer.withMemberIdAndAmount(
-      MemberId.fromString(uuid()),
-      amount.money,
-    ),
+    BillPayer.withMemberIdAndAmount(MemberId.fromString(uuid()), amount.money),
+    BillPayer.withMemberIdAndAmount(MemberId.fromString(uuid()), amount.money),
   ];
   const debtors = [
-    BillDebtor.withMemberIdAndAmount(
-      MemberId.fromString(uuid()),
-      amount.money,
-    ),
-    BillDebtor.withMemberIdAndAmount(
-      MemberId.fromString(uuid()),
-      amount.money,
-    ),
+    BillDebtor.withMemberIdAndAmount(MemberId.fromString(uuid()), amount.money),
+    BillDebtor.withMemberIdAndAmount(MemberId.fromString(uuid()), amount.money),
   ];
 
   const date = BillDate.fromDate(new Date('2019-11-15T17:43:50'));

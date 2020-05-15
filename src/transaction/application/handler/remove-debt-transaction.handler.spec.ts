@@ -37,37 +37,62 @@ describe('RemoveDebtTransactionHandler', () => {
           useValue: transactions,
         },
         {
-            provide: TransactionService,
-            useValue: transactionService,
+          provide: TransactionService,
+          useValue: transactionService,
         },
       ],
     }).compile();
 
-    command$ = module.get<RemoveDebtTransactionHandler>(RemoveDebtTransactionHandler);
+    command$ = module.get<RemoveDebtTransactionHandler>(
+      RemoveDebtTransactionHandler,
+    );
     transactions.findDebtTransaction = jest.fn().mockResolvedValue(null);
     transactions.saveDebtTransaction = jest.fn();
-    transactionService.getDebtTransactionByBillIdAndMemberId = jest.fn().mockResolvedValue(null);
+    transactionService.getDebtTransactionByBillIdAndMemberId = jest
+      .fn()
+      .mockResolvedValue(null);
   });
 
   it('should remove a debt transaction', async () => {
-    const debtTransaction = DebtTransaction.add(transactionId, memberId, billId, amount);
-    transactionService.getDebtTransactionByBillIdAndMemberId = jest.fn().mockResolvedValue(debtTransaction);
-    transactions.findDebtTransaction = jest.fn().mockResolvedValue(debtTransaction);
+    const debtTransaction = DebtTransaction.add(
+      transactionId,
+      memberId,
+      billId,
+      amount,
+    );
+    transactionService.getDebtTransactionByBillIdAndMemberId = jest
+      .fn()
+      .mockResolvedValue(debtTransaction);
+    transactions.findDebtTransaction = jest
+      .fn()
+      .mockResolvedValue(debtTransaction);
 
-    await command$.execute(new RemoveDebtTransactionCommand(billId.value, memberId.value));
+    await command$.execute(
+      new RemoveDebtTransactionCommand(billId.value, memberId.value),
+    );
 
     expect(transactions.saveDebtTransaction).toHaveBeenCalledTimes(1);
-    expect(transactions.saveDebtTransaction).toHaveBeenCalledWith(debtTransaction);
+    expect(transactions.saveDebtTransaction).toHaveBeenCalledWith(
+      debtTransaction,
+    );
   });
 
   it('should throw an error if transaction does not exists', async () => {
-    const debtTransaction = DebtTransaction.add(transactionId, memberId, billId, amount);
-    transactionService.getDebtTransactionByBillIdAndMemberId = jest.fn().mockResolvedValue(debtTransaction);
+    const debtTransaction = DebtTransaction.add(
+      transactionId,
+      memberId,
+      billId,
+      amount,
+    );
+    transactionService.getDebtTransactionByBillIdAndMemberId = jest
+      .fn()
+      .mockResolvedValue(debtTransaction);
     transactions.findDebtTransaction = jest.fn().mockResolvedValue(null);
 
-
     expect(
-      command$.execute(new RemoveDebtTransactionCommand(billId.value, memberId.value)),
+      command$.execute(
+        new RemoveDebtTransactionCommand(billId.value, memberId.value),
+      ),
     ).rejects.toThrow(TransactionIdNotFoundError);
 
     expect(transactions.saveDebtTransaction).toHaveBeenCalledTimes(0);

@@ -13,7 +13,6 @@ import { TRANSACTIONS } from '../../domain/repository/index';
 import { DebtTransaction } from '../../domain/model/debt-transaction';
 import { CreateDebtTransactionCommand } from '../command/create-debt-transaction.command';
 
-
 describe('CreateDebtTransactionHandler', () => {
   let command$: CreateDebtTransactionHandler;
 
@@ -38,10 +37,12 @@ describe('CreateDebtTransactionHandler', () => {
       ],
     }).compile();
 
-    command$ = module.get<CreateDebtTransactionHandler>(CreateDebtTransactionHandler);
+    command$ = module.get<CreateDebtTransactionHandler>(
+      CreateDebtTransactionHandler,
+    );
     transactions.findDebtTransaction = jest.fn().mockResolvedValue(null);
     transactions.saveDebtTransaction = jest.fn();
- });
+  });
 
   it('should creates a new debt transaction', async () => {
     await command$.execute(
