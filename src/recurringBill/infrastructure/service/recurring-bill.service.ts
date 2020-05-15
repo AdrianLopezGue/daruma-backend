@@ -72,10 +72,7 @@ export class RecurringBillService {
 
     const queryDateEnd: Date = new Date(Date.now());
     queryDateEnd.setHours(23,59,59,999);
-
-    console.debug(queryDateStart);
-    console.debug(queryDateEnd);
-
+    
     const result = await this.recurringBillModel
       .find({ 'nextCreationDate': { $gte: queryDateStart, $lt: queryDateEnd } })
       .exec();

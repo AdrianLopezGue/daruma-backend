@@ -3,7 +3,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { RecurringBillService } from './recurring-bill.service';
 import { BILLS, Bills } from '../../../bill/domain/repository/index';
 import { BillId } from '../../../bill/domain/model/bill-id';
-import { BillService, BILL_SERVICE } from '../../../bill/infrastructure/service/bill.service';
+import { BillService } from '../../../bill/infrastructure/service/bill.service';
 import { v4 } from 'uuid';
 import { ParticipantDto } from '../../../bill/infrastructure/dto/bill.dto';
 
@@ -17,7 +17,7 @@ export class TasksService {
     private readonly billService: BillService,
   ) {}
 
-  @Cron('41 21 * * *')
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async renovateRecurringBill() {
     this.logger.debug('Renovation Recurring Bills starts');
 
