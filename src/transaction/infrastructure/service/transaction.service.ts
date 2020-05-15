@@ -10,7 +10,7 @@ import {
   DEPOSIT_TRANSACTION_MODEL,
   DepositTransactionView,
 } from '../read-model/schema/deposit-transaction.schema';
-import { CreateDebtTransactionCommand } from '@app/transaction/application/command/create-debt-transaction.command';
+import { CreateDebtTransactionCommand } from '../../application/command/create-debt-transaction.command';
 import { CreateDepositTransactionCommand } from '../../application/command/create-deposit-transaction.command';
 import { CreateTransferTransactionCommand } from '../../application/command/create-transfer-transaction.command';
 import {

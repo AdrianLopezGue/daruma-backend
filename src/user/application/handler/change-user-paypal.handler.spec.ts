@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { v4 as uuid } from 'uuid';
 
 import { UserName, UserEmail, User, UserId } from '../../domain/model';
 import { USERS, Users } from '../../domain/repository';
@@ -13,7 +14,7 @@ describe('Change User Paypal', () => {
 
   const users: Partial<Users> = {};
 
-  const userId = UserId.fromString('1111111');
+  const userId = UserId.fromString(uuid());
   const username = UserName.fromString('john');
   const useremail = UserEmail.fromString('john@john.com');
 

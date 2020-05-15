@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { v4 as uuid } from 'uuid';
 
 import { UserId } from '../../../user/domain/model/user-id';
 import { CreateUserHandler } from './create-user.handler';
@@ -19,7 +20,7 @@ describe('CreateUserHandler', () => {
   const users: Partial<Users> = {};
   const checkUniqueUserEmail: Partial<CheckUniqueUserEmail> = {};
 
-  const userId = UserId.fromString('1111111');
+  const userId = UserId.fromString(uuid());
   const username = UserName.fromString('john');
   const useremail = UserEmail.fromString('john@john.com');
   const userPaypal = UserPaypal.fromString('johnDoe');

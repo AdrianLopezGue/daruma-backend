@@ -1,6 +1,6 @@
 import { CqrsModule, EventBus, EventPublisher } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
-import { v4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
 import { RecurringBill } from './recurring-bill';
 import { RecurringBillId } from './recurring-bill-id';
 import { BillId } from '../../../bill/domain/model/bill-id';
@@ -16,9 +16,9 @@ describe('RecurringBill', () => {
   let eventBus$: EventBus;
   let eventPublisher$: EventPublisher;
 
-  const recurringBillId = RecurringBillId.fromString(v4());
-  const billId = BillId.fromString(v4());
-  const groupId = GroupId.fromString(v4());
+  const recurringBillId = RecurringBillId.fromString(uuid());
+  const billId = BillId.fromString(uuid());
+  const groupId = GroupId.fromString(uuid());
   const date = BillDate.fromDate(new Date('2019-11-15T17:43:50'));
   const period = RecurringBillPeriod.daily();
 

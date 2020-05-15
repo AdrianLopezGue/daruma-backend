@@ -1,5 +1,4 @@
 import { GroupId } from '../../../group/domain/model/group-id';
-import { MemberId } from '../model/member-id';
 
 export interface GetMembersIdByGroupId {
   with(groupId: GroupId): Promise<string[]>;

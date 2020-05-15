@@ -1,5 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { v4 as uuid} from 'uuid';
+
 import { BILLS } from '../../domain/repository/index';
 import { BillId } from '../../domain/model/bill-id';
 import { GroupCurrencyCode } from '../../../group/domain/model/group-currency-code';
@@ -8,7 +10,6 @@ import { BillAmount } from '../../domain/model/bill-amount';
 import { BillCurrencyUnit } from '../../domain/model/bill-currency-unit';
 import { MemberId } from '../../../member/domain/model/member-id';
 import { TransactionId } from '../../../transaction/domain/model/transaction-id';
-import { v4 } from 'uuid';
 import { TRANSACTIONS } from '../../../transaction/domain/repository/index';
 import { Transactions } from '../../../transaction/domain/repository/transactions';
 import { BillIdNotFoundError } from '../../domain/exception/bill-id-not-found.error';
@@ -57,7 +58,7 @@ export class ChangeBillDebtorsHandler
     newDebtors.forEach(debtor => {
       debtTransactionsAdded.push(
         bill.addDebtTransaction(
-          TransactionId.fromString(v4()),
+          TransactionId.fromString(uuid()),
           debtor.memberId,
           BillAmount.withMoneyAndCurrencyCode(
             debtor.amount,

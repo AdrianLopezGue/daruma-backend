@@ -1,5 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { v4 as uuid } from 'uuid';
+
 import { CreateBillCommand } from '../command/create-bill.command';
 import { BILLS } from '../../domain/repository/index';
 import { BillId } from '../../domain/model/bill-id';
@@ -16,7 +18,6 @@ import { MemberId } from '../../../member/domain/model/member-id';
 import { CreatorIdNotFoundInGroup } from '../../domain/exception/creator-id-not-found-in-group.error';
 import { DepositTransaction } from '../../../transaction/domain/model/deposit-transaction';
 import { TransactionId } from '../../../transaction/domain/model/transaction-id';
-import { v4 } from 'uuid';
 import { TRANSACTIONS } from '../../../transaction/domain/repository/index';
 import { Transactions } from '../../../transaction/domain/repository/transactions';
 import { DebtTransaction } from '../../../transaction/domain/model/debt-transaction';
@@ -89,7 +90,7 @@ export class CreateBillHandler implements ICommandHandler<CreateBillCommand> {
     payers.forEach(payer => {
       depositTransactionsAdded.push(
         bill.addDepositTransaction(
-          TransactionId.fromString(v4()),
+          TransactionId.fromString(uuid()),
           payer.memberId,
           BillAmount.withMoneyAndCurrencyCode(
             payer.amount,
@@ -108,7 +109,7 @@ export class CreateBillHandler implements ICommandHandler<CreateBillCommand> {
     debtors.forEach(debtor => {
       debtTransactionsAdded.push(
         bill.addDebtTransaction(
-          TransactionId.fromString(v4()),
+          TransactionId.fromString(uuid()),
           debtor.memberId,
           BillAmount.withMoneyAndCurrencyCode(
             debtor.amount,

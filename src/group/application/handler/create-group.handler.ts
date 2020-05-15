@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { v4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 import {
   GroupNameAlreadyRegisteredError,
@@ -63,7 +63,7 @@ export class CreateGroupHandler implements ICommandHandler<CreateGroupCommand> {
 
     membersAdded.push(
       group.addMember(
-        MemberId.fromString(v4()),
+        MemberId.fromString(uuid()),
         MemberName.fromString(command.owner.name),
         UserId.fromString(command.owner._id),
       ),

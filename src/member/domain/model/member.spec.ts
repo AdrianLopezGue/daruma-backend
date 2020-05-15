@@ -1,6 +1,6 @@
 import { CqrsModule, EventBus, EventPublisher } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
-import { v4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
 import { Member } from './member';
 import { MemberId } from './member-id';
 import { MemberName } from './member-name';
@@ -9,16 +9,17 @@ import { MemberWasCreated } from '../event/member-was-created.event';
 import { UserId } from '../../../user/domain/model/user-id';
 import { MemberNameWasChanged } from '../event/member-name-was-changed.event';
 import { MemberWasRemoved } from '../event/member-was-removed.event';
+import { MemberWasRegisteredAsUser } from '../event/member-was-registered-as-user.event';
 
 describe('Member', () => {
   let member: Member;
   let eventBus$: EventBus;
   let eventPublisher$: EventPublisher;
 
-  const memberId = MemberId.fromString(v4());
-  const groupId = GroupId.fromString(v4());
+  const memberId = MemberId.fromString(uuid());
+  const groupId = GroupId.fromString(uuid());
   const name = MemberName.fromString('Member Name');
-  const userId = UserId.fromString('1111');
+  const userId = UserId.fromString('');
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -75,6 +76,20 @@ describe('Member', () => {
     );
 
     expect(member.name.equals(newName)).toBeTruthy();
+  });
+
+  it('can set User Id', () => {
+    const newUserId = UserId.fromString(uuid());
+    member = eventPublisher$.mergeObjectContext(member);
+    member.setUserId(newUserId);
+    member.commit();
+
+    expect(eventBus$.publish).toHaveBeenCalledTimes(1);
+    expect(eventBus$.publish).toHaveBeenCalledWith(
+      new MemberWasRegisteredAsUser(memberId.value, newUserId.value),
+    );
+
+    expect(member.userId.equals(newUserId)).toBeTruthy();
   });
 
   it('can be removed', () => {

@@ -1,6 +1,6 @@
 import { CqrsModule, EventBus, EventPublisher } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
-import { v4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 import { GroupWasCreated, GroupNameWasChanged } from '../event';
 import { Group } from './group';
@@ -16,8 +16,8 @@ describe('Group', () => {
   let eventBus$: EventBus;
   let eventPublisher$: EventPublisher;
 
-  const groupId = GroupId.fromString(v4());
-  const ownerId = UserId.fromString(v4());
+  const groupId = GroupId.fromString(uuid());
+  const ownerId = UserId.fromString(uuid());
   const name = GroupName.fromString('Group Name');
   const currencyCode = GroupCurrencyCode.fromString('EUR');
 

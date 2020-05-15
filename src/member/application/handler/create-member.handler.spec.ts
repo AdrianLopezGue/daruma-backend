@@ -6,7 +6,6 @@ import { Group } from '../../../group/domain/model/group';
 import { GroupId } from '../../../group/domain/model/group-id';
 import { GroupName } from '../../../group/domain/model/group-name';
 import { GROUPS, Groups } from '../../../group/domain/repository';
-import { OwnerDto } from '../../../group/infrastructure/dto/owner.dto';
 import { UserId } from '../../../user/domain/model/user-id';
 import { MemberIdAlreadyRegisteredError } from '../../domain/exception/member-id-already-registered.error';
 import { MemberNameAlreadyRegisteredError } from '../../domain/exception/member-name-in-group.error';
@@ -33,8 +32,6 @@ describe('CreateMemberHandler', () => {
   const groupId = GroupId.fromString(uuid());
   const name = MemberName.fromString('Member Name');
   const userId = UserId.fromString('1111');
-  const ownerId = UserId.fromString(uuid());
-  const owner = new OwnerDto(ownerId.value, 'Owner name');
   const groupName = GroupName.fromString('Group Name');
   const groupCurrencyCode = GroupCurrencyCode.fromString('EUR');
 

@@ -2,7 +2,7 @@ import { NegativeCurrencyUnitError } from '../exception/negative-currency-unit.e
 import { BillCurrencyUnit } from './bill-currency-unit';
 
 describe('BillCurrencyUnit', () => {
-  it('should be a big int', () => {
+  it('should be a int', () => {
     expect(BillCurrencyUnit.fromNumber(100).value).toBe(100);
   });
 

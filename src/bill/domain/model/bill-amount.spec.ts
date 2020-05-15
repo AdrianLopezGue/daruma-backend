@@ -3,7 +3,7 @@ import { BillCurrencyUnit } from './bill-currency-unit';
 import { BillAmount } from './bill-amount';
 
 describe('BillAmount', () => {
-  it('should return coordinates', () => {
+  it('should return amount', () => {
     const money = BillCurrencyUnit.fromNumber(100);
     const currencyCode = GroupCurrencyCode.fromString('EUR');
 

@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { v4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 import { UserId } from '../../../user/domain/model/';
 import { RegisterMemberAsUserCommand } from '../command/register-member-as-user.command';
@@ -16,8 +16,8 @@ describe('RegisterMemberAsUserHandler', () => {
 
   const members: Partial<Members> = {};
 
-  const memberId = MemberId.fromString(v4());
-  const groupId = GroupId.fromString(v4());
+  const memberId = MemberId.fromString(uuid());
+  const groupId = GroupId.fromString(uuid());
   const name = MemberName.fromString('Member Name');
   const userId = UserId.fromString('1111');
 
@@ -41,7 +41,7 @@ describe('RegisterMemberAsUserHandler', () => {
 
   it('should change user id', async () => {
     const member = Member.add(memberId, groupId, name, userId);
-    const newUserId = UserId.fromString('2222');
+    const newUserId = UserId.fromString(uuid());
 
     members.find = jest.fn().mockResolvedValue(member);
     member.setUserId(newUserId);
@@ -56,7 +56,7 @@ describe('RegisterMemberAsUserHandler', () => {
 
   it('should throw an error if group does not exists', async () => {
     expect(
-      command$.execute(new RegisterMemberAsUserCommand(groupId.value, '2222')),
+      command$.execute(new RegisterMemberAsUserCommand(groupId.value, uuid())),
     ).rejects.toThrow(MemberIdNotFoundError);
 
     expect(members.save).toHaveBeenCalledTimes(0);

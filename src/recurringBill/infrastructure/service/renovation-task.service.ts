@@ -4,7 +4,7 @@ import { RecurringBillService } from './recurring-bill.service';
 import { BILLS, Bills } from '../../../bill/domain/repository/index';
 import { BillId } from '../../../bill/domain/model/bill-id';
 import { BillService } from '../../../bill/infrastructure/service/bill.service';
-import { v4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
 import { ParticipantDto } from '../../../bill/infrastructure/dto/bill.dto';
 
 @Injectable()
@@ -25,8 +25,8 @@ export class TasksService {
 
     recurringBillToRenovate.map(async (recurringBill) => {
         const billToCopy = await this.bills.find(BillId.fromString(recurringBill.billId));
-        const newBillId = v4();
-        const newRecurringBillId = v4();
+        const newBillId = uuid();
+        const newRecurringBillId = uuid();
 
         try{
           await this.billService.createBill(
@@ -40,7 +40,7 @@ export class TasksService {
             new Date(Date.now()),
             billToCopy.creator.value
         )
-        } catch(e){
+        } catch (e){
           console.debug(e);
         }
 

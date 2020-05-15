@@ -1,5 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { v4 as uuid } from 'uuid';
+
 import { BILLS } from '../../domain/repository/index';
 import { BillId } from '../../domain/model/bill-id';
 import { GroupCurrencyCode } from '../../../group/domain/model/group-currency-code';
@@ -10,7 +12,6 @@ import { BillPayer } from '../../domain/model/bill-payer';
 import { MemberId } from '../../../member/domain/model/member-id';
 import { DepositTransaction } from '../../../transaction/domain/model/deposit-transaction';
 import { TransactionId } from '../../../transaction/domain/model/transaction-id';
-import { v4 } from 'uuid';
 import { TRANSACTIONS } from '../../../transaction/domain/repository/index';
 import { Transactions } from '../../../transaction/domain/repository/transactions';
 import { ChangeBillPayersCommand } from '../command/change-bill-payers.command';
@@ -57,7 +58,7 @@ export class ChangeBillPayersHandler
     newPayers.forEach(payer => {
       depositTransactionsAdded.push(
         bill.addDepositTransaction(
-          TransactionId.fromString(v4()),
+          TransactionId.fromString(uuid()),
           payer.memberId,
           BillAmount.withMoneyAndCurrencyCode(
             payer.amount,

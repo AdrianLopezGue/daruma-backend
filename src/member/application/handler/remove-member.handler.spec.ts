@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { v4 } from 'uuid';
+import { v4 as  uuid } from 'uuid';
 import { MemberId } from '../../domain/model/member-id';
 import { GroupId } from '../../../group/domain/model/group-id';
 import { MemberName } from '../../domain/model/member-name';
@@ -26,8 +26,8 @@ describe('RemoveMemberHandler', () => {
   const checkMemberMadeAnyTransaction: Partial<CheckMemberMadeAnyTransaction> = {};
   const getMembersIdByGroupId: Partial<GetMembersIdByGroupId> = {};
 
-  const memberId = MemberId.fromString(v4());
-  const groupId = GroupId.fromString(v4());
+  const memberId = MemberId.fromString(uuid());
+  const groupId = GroupId.fromString(uuid());
   const name = MemberName.fromString('Member Name');
   const userId = UserId.fromString('1111');
 
