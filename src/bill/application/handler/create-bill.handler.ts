@@ -48,7 +48,7 @@ export class CreateBillHandler implements ICommandHandler<CreateBillCommand> {
     }
 
     const billId = BillId.fromString(command.billId);
-    const groupId = BillId.fromString(command.groupId);
+    const groupId = GroupId.fromString(command.groupId);
     const name = BillName.fromString(command.name);
     const amount = BillAmount.withMoneyAndCurrencyCode(
       BillCurrencyUnit.fromNumber(command.money),
