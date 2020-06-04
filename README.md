@@ -23,6 +23,8 @@ This repository holds my final year project during my time at the University of 
 
 The purpose of this project is to learn new technologies like NestJS and Flutter and apply concepts about Software Desing like Domain-Driven-Desing, CQRS, Event Sourcing, Clean code, unit, integration and End-to-End testing, etc.
 
+Daruma allows users to easily manage shared expenses made in a group, including recurring expenses like Netflix, HBO, etc...
+
 ## Key Features
 
 * **Design**: Event modeling.
