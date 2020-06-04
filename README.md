@@ -9,15 +9,14 @@
 <h4 align="center">Shared expenses management system build on top of <a href="http://electron.atom.io" target="_blank" style="color:#FF0000;">NestJS</a>.</h4>
 
 ## Table of Contents
-<p align="center">
-  <a href="#key-features">About the project</a> •
-  <a href="#how-to-use">Key Features</a> •
-  <a href="#download">Install, build and run!</a> •
-  <a href="#built">Built With</a> •
-  <a href="#related">Related</a> •
-  <a href="#license">License</a> •
-   <a href="#contact">Contact</a>
-</p>
+* [About the Project](#about-the-project)
+* [Key Features](#key-features)
+* [Install, build and run!](#download)
+* [Built With](#build)
+* [Related](#related)
+* [License](#license)
+* [Contact](#contact)
+
 
 ## About the project
 This repository holds my final year project during my time at the University of Córdoba titled "Daruma, shared expenses management system" built with NestJS framework.
