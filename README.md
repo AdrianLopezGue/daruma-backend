@@ -1,75 +1,82 @@
+<h1 align="center">
+  <br>
+  <a href="https://github.com/AdrianLopezGue/daruma-backend"><img src="https://raw.githubusercontent.com/AdrianLopezGue/daruma-frontend/master/assets/daruma-logo-black.png" alt="Daruma Logo" width="200"></a>
+  <br>
+  🎎 Daruma - Backend 🎎
+  <br>
+</h1>
+
+<h4 align="center">Shared expenses management system build on top of <a href="http://electron.atom.io" target="_blank" style="color:#FF0000;">NestJS</a>.</h4>
+
+## Table of Contents
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
+  <a href="#key-features">About the project</a> •
+  <a href="#how-to-use">Key Features</a> •
+  <a href="#download">Install, build and run!</a> •
+  <a href="#built">Built With</a> •
+  <a href="#related">Related</a> •
+  <a href="#license">License</a> •
+   <a href="#contact">Contact</a>
 </p>
 
-[travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
-[travis-url]: https://travis-ci.org/nestjs/nest
-[linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
-[linux-url]: https://travis-ci.org/nestjs/nest
+## About the project
+This repository holds my final year project during my time at the University of Córdoba titled "Daruma, shared expenses management system" built with NestJS framework.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications, heavily inspired by <a href="https://angular.io" target="blank">Angular</a>.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/dm/@nestjs/core.svg" alt="NPM Downloads" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://api.travis-ci.org/nestjs/nest.svg?branch=master" alt="Travis" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://img.shields.io/travis/nestjs/nest/master.svg?label=linux" alt="Linux" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#5" alt="Coverage" /></a>
-<a href="https://gitter.im/nestjs/nestjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge"><img src="https://badges.gitter.im/nestjs/nestjs.svg" alt="Gitter" /></a>
-<a href="https://opencollective.com/nest#backer"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec"><img src="https://img.shields.io/badge/Donate-PayPal-dc3d53.svg"/></a>
-  <a href="https://twitter.com/nestframework"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+The purpose of this project is to learn new technologies like NestJS and to apply concepts about Software Desing like Domain-Driven-Desing, CQRS, Event Sourcing, Clean code, unit, integration and End-to-End testing, etc.
 
-## Description
+## Key Features
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+* **Design**: Event modeling.
+* **Arquitecture**: Hexagonal Arquitecture following Domain-Driven-Design concepts.
+* **Database management**: CQRS and Event Sourcing patterns.
+ - **Read model**: MongoDB.
+ - **Write model**: Event Store.
+* **Unit and integration testing**: Jest.
+* **End-to-End testing**: Cypress.
 
-## Installation
+## Install, build and run!
+
+To clone and run this application, you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
 
 ```bash
+# Clone this repository
+$ git clone https://github.com/AdrianLopezGue/daruma-backend
+
+# Go into the repository
+$ cd daruma-backend
+
+# Install dependencies
 $ npm install
-```
 
-## Running the app
+# Start docker containers (MongoDB and Event Store)
+$ docker-compose up  -d
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
+# Run the server app
 $ npm run start:prod
 ```
 
-## Test
+Note: If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
 
-```bash
-# unit tests
-$ npm run test
 
-# e2e tests
-$ npm run test:e2e
+## Built With
 
-# test coverage
-$ npm run test:cov
-```
+This software uses the following packages:
 
-## Support
+- [NestJS](https://nestjs.com/)
+- [Node.js](https://nodejs.org/)
+- [Typescript](https://www.typescriptlang.org/)
+- [Jest](https://jestjs.io/)
+- [Cypress](https://www.cypress.io/)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Related
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+[Daruma - Frontend](https://github.com/AdrianLopezGue/daruma-frontend) - Frontend part of Daruma.
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+[GNU Affero General Public License v3 (AGPL)](https://www.gnu.org/licenses/agpl-3.0.en.html)
+
+## Contact
+
+> GitHub - [@AdrianLopezGue](https://github.com/AdrianLopezGue) 
+> LinkedIn - [Adrián López Guerrero](https://www.linkedin.com/in/adrianlopezgue/)
