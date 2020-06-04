@@ -33,7 +33,7 @@ describe('POST /recurringbill', () => {
     });
   });
 
-  it('Validate cannot create existing bill', function() {
+  it('Validate cannot create existing recurrring bill', function() {
     cy.fixture('recurring-bills.json').then(recurringBills => {
       const recurringBill = newRecurringBill(
         recurringBills.body,

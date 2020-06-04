@@ -52,7 +52,7 @@ describe('PATCH /recurringbills/:id', () => {
     });
   });
 
-  it('Cannot set userId to unknown member', function() {
+  it('Cannot set period to unknown recurring bill', function() {
     cy.fixture('recurring-bills.json').then(recurringBills => {
       const anotherRecurringBillId = uuid.v4();
       recurringBills.bodyPeriodUpdated.period = 1;

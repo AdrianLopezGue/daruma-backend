@@ -44,7 +44,7 @@ describe('DELETE /recurringbill/:id', () => {
       .should('equal', 204);
   });
 
-  it('Check that cannot delete unknown member', function() {
+  it('Check that cannot delete unknown recurring bill', function() {
     const anotherRecurringBillId = uuid.v4();
 
     remove('recurringbill', anotherRecurringBillId, userId)
