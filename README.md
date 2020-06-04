@@ -28,8 +28,8 @@ The purpose of this project is to learn new technologies like NestJS and Flutter
 * **Design**: Event modeling.
 * **Arquitecture**: Hexagonal Arquitecture following Domain-Driven-Design concepts.
 * **Database management**: CQRS and Event Sourcing patterns.
- - **Read model**: MongoDB.
- - **Write model**: Event Store.
+  * **Read model**: MongoDB.
+  * **Write model**: Event Store.
 * **Unit and integration testing**: Jest.
 * **End-to-End testing**: Cypress.
 
