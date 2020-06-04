@@ -6,7 +6,7 @@
   <br>
 </h1>
 
-<h4 align="center">Shared expenses management system build on top of <a href="http://electron.atom.io" target="_blank" style="color:#FF0000;">NestJS</a>.</h4>
+<h4 align="center">Shared expenses management system build on top of <a href="https://nestjs.com/" target="_blank" style="color:#ED1543;">NestJS</a> and <a href="https://flutter.dev/" target="_blank" style="color:##0276E8;">Flutter</a>.</h4>
 
 ## Table of Contents
 * [About the Project](#about-the-project)
@@ -21,7 +21,7 @@
 ## About the project
 This repository holds my final year project during my time at the University of Córdoba titled "Daruma, shared expenses management system" built with NestJS framework.
 
-The purpose of this project is to learn new technologies like NestJS and to apply concepts about Software Desing like Domain-Driven-Desing, CQRS, Event Sourcing, Clean code, unit, integration and End-to-End testing, etc.
+The purpose of this project is to learn new technologies like NestJS and Flutter and apply concepts about Software Desing like Domain-Driven-Desing, CQRS, Event Sourcing, Clean code, unit, integration and End-to-End testing, etc.
 
 ## Key Features
 
