@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://github.com/AdrianLopezGue/daruma-backend"><img src="https://raw.githubusercontent.com/AdrianLopezGue/daruma-frontend/master/assets/daruma-logo-black.png" alt="Daruma Logo" width="200"></a>
+  <a href="https://github.com/AdrianLopezGue/daruma-backend"><img src="docs/daruma-logo-black.png" alt="Daruma Logo" width="350"></a>
   <br>
   🎎 Daruma - Backend 🎎
   <br>
