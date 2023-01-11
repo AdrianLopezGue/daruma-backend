@@ -47,7 +47,7 @@
     "@types/uuid": "^7.0.2",
     "@types/uuid-validate": "0.0.1",
     "class-transformer": "^0.3.1",
-    "class-validator": "^0.11.1",
+    "class-validator": "^0.14.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "firebase-admin": "^8.10.0",
