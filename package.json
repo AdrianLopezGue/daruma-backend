@@ -53,7 +53,7 @@
     "firebase-admin": "^8.10.0",
     "firebase-functions": "^3.5.0",
     "geteventstore-promise": "^3.2.1",
-    "lint": "^0.7.0",
+    "lint": "^0.8.19",
     "mongoose": "^5.9.7",
     "nestjs-config": "^1.4.5",
     "passport": "^0.4.1",
