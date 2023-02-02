@@ -54,7 +54,7 @@
     "firebase-functions": "^3.5.0",
     "geteventstore-promise": "^3.2.1",
     "lint": "^0.7.0",
-    "mongoose": "^5.9.7",
+    "mongoose": "^5.13.15",
     "nestjs-config": "^1.4.5",
     "passport": "^0.4.1",
     "passport-http-bearer": "^1.0.1",
